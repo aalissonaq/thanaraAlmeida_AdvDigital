@@ -1,0 +1,45 @@
+// System / Log files
+*.DS_Store
+*.log
+,._*
+
+// Archives
+*.zip
+
+// Sass Cache
+.sass-cache
+
+// Project files
+.idea
+nbproject
+nbproject/private
+.vscode/
+.vs/
+
+// Node / Bower
+node_modules/
+bower_components/
+upload/comporvantesDespesa/*.jpg
+upload/comporvantesDespesa/*.png
+upload/comporvantesDespesa/*.gif
+upload/comporvantesDespesa/*.pdf
+
+// Plugins
+/plugins/*/*.md
+/plugins/*/*.html
+/plugins/*/package.json
+
+
+// Docs
+Gemfile.lock
+docs/_site
+docs_html/
+.jekyll-cache/
+.jekyll-metadata
+
+// ETC
+TODO
+test.html
+ad.js
+vendor/
+upload/imgClientes/*.*
