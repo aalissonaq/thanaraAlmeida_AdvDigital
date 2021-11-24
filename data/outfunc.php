@@ -442,7 +442,7 @@ function upLoadFile($file, $tamanho, array $extensoes, $pasta, $largura = null)
   // Depois verifica se é possível mover o arquivo para a pasta escolhida
   elseif (move_uploaded_file($file['tmp_name'], $_UP['pasta'] . $nome_final)) {
     // Upload efetuado com sucesso, exibe uma mensagem e um link para o arquivo
-    echo "Upload efetuado com sucesso!";
+    // echo "Upload efetuado com sucesso!";
     return  $nome_final;
   } else {
     // Não foi possível fazer o upload, provavelmente a pasta está incorreta

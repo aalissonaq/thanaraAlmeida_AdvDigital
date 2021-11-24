@@ -89,6 +89,10 @@ if (!isset($_SESSION['USUARIO'])) {
   <link href="https://fonts.googleapis.com/css2?family=Advent+Pro:wght@100;200;300;400;500;600;700&family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css' rel='stylesheet' />
 
+  <!-- <link rel="stylesheet" href="plugins/sweetalert2/sweetalert2.min.css"/> -->
+
+  <script src="plugins/sweetalert2/sweetalert2.js"></script>
+
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       var calendarEl = document.getElementById('calendar');
@@ -215,6 +219,8 @@ if (!isset($_SESSION['USUARIO'])) {
   <script src="./plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 
   <script src="https://cdn.jsdelivr.net/combine/npm/fullcalendar@5.10.1,npm/fullcalendar@5.10.1/locales/pt-br.min.js"></script>
+
+  <script src="plugins/sweetalert2/sweetalert2.js"></script>
 
 
 

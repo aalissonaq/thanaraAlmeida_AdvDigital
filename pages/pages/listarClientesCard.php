@@ -30,12 +30,7 @@
           <i class="fa fa-plus-square fa-fw fa-2x"></i>
           Novo Clientes
         </a>
-        <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
-              title="Collapse">
-                <i class="fas fa-minus"></i>ttt</button>
-              <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip"
-                  title="Remove">
-              <i class="fas fa-times"></i></button> -->
+
       </div>
     </div>
     <div class="card-body">
@@ -123,10 +118,10 @@
                   <div class="col-5 text-center aligh">
                     <img src="
                     <?php
-                    if ($dados['imgCliente']) {
-                      echo " ./upload/imgClientes/{$dados['imgCliente']}";
+                    if ($dados['foto']) {
+                      echo "./upload/fotoPessoas/{$dados['foto']}";
                     } else {
-                      echo "./upload/imgClientes/default.png";
+                      echo "./upload/fotoPessoas/default.png";
                     } ?>" alt="
                   <?php echo $dados['nmPessoa'] ?>" class="img-circle img-fluid shadow " style="width:10rem; height:10rem; object-fit: cover;" />
                     <a class="btn btn-tool text-warning" href="" data-toggle="modal" data-target="#modal-edtFoto" data-id="<?= $dados['idPessoaCliente'] ?>" onclick="setaDadosModal(<?= $dados['idPessoaCliente'] ?> )" style="z-index: 9; top:-20px;" title="Mudar foto">
@@ -139,7 +134,8 @@
                         <div class="modal-content">
                           <div class="modal-header">
                             <h4 class="modal-title" style="font-family: 'Advent Pro', sans-serif; font-weight: 500; letter-spacing: 1px; color:#C77129">
-                              Nova Foto do Cliente</h4>
+                              Trocar Foto</h4>
+
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
                             </button>
@@ -147,16 +143,17 @@
                           <div class="modal-body">
                             <!-- form novo Usuário -->
 
-                            <form class="needs-validation" novalidate action="./pages/pages/acoes/editarFotoCliente.php" method="POST" enctype="multipart/form-data">
+                            <form class="needs-validation" novalidate action="./pages/pages/acoes/editarFoto.php" method="POST" enctype="multipart/form-data">
 
-                              <input type="hidden" name="idPessoaCliente" id="idPessoaCliente" value="">
+                              <input type="hidden" name="idPessoa" id="idPessoa" value="">
+                              <input type="hidden" name="nomePessoa" id="nomePessoa" value="<?= $dados['nmPessoa']; ?>">
 
                               <div class="form-row">
                                 <div class="col-md-12 mb-3">
-                                  <label for="nnTelefonePessoa">Foto/Logo do Cliente <span class="text-orange">*</span>
+                                  <label for="foto">Foto/Logo do Cliente <span class="text-orange">*</span>
 
                                   </label>
-                                  <input type="file" name="imgCliente" class="form-control-lg text-uppercase" id="imgCliente" placeholder="">
+                                  <input type="file" name="foto" class="form-control-lg text-uppercase" id="foto" placeholder="">
                                   <div class="invalid-feedback">
                                     Obrigatório !
                                   </div>
@@ -224,6 +221,7 @@
 
     <!-- /.card-footer-->
   </div>
+
   <!-- /.card -->
   <br />
 </section>
@@ -472,7 +470,7 @@
 
 <script>
   function setaDadosModal(valor) {
-    document.getElementById('idPessoaCliente').value = valor;
+    document.getElementById('idPessoa').value = valor;
 
   }
 </script>

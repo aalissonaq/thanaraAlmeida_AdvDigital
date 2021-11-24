@@ -29,6 +29,17 @@ if (isset($_POST['gravar']) && $_POST['gravar'] == 'gravar') {
   if ($isRegisteredPerson != 0) {
     echo "<script type='text/javascript'> alert('O Paciente {$dados['nmPessoa']} já possui cadastro!'); </script>";
   } else {
+
+    $pasta = "./../../../upload/fotoPessoas/";
+      $extensoes = array('jpg', 'jpeg', 'gif', 'png');
+
+      if ($_FILES['imgCliente']['name'] == '') {
+        $dados['foto'] = '';
+      } else {
+        // $dados['strComprovanteDespesa'] = $_FILES['strComprovanteDespesa'];
+        $dados['foto'] = upLoadFile($_FILES['imgCliente'], 1,  $extensoes, $pasta);
+      }
+
     $inserido = inseir('pessoa', $dados);
     $idRegisteredPerson = null;
     if ($inserido) {
@@ -46,15 +57,7 @@ if (isset($_POST['gravar']) && $_POST['gravar'] == 'gravar') {
       $cliente['idRespCadastroCliente'] = strip_tags(strip_tags(trim(strtoupper($_POST['idRespCadastroCliente']))));
 
 
-      $pasta = "./../../../upload/imgClientes";
-      $extensoes = array('jpg', 'jpeg', 'gif', 'png');
 
-      if ($_FILES['imgCliente']['name'] == '') {
-        $cliente['imgCliente'] = '';
-      } else {
-        // $dados['strComprovanteDespesa'] = $_FILES['strComprovanteDespesa'];
-        $cliente['imgCliente'] = upLoadFile($_FILES['imgCliente'], 1,  $extensoes, $pasta);
-      }
       $isRegistered = ler('clientes', '', "WHERE idPessoa = '{$idRegisteredPerson}'")->rowCount();
 
       if ($isRegistered != 0) {

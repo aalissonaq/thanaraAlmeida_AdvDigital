@@ -288,95 +288,39 @@
                 <!-- /.tab-pane -->
                 <div class="tab-pane" id="timeline">
                   <!-- The timeline -->
-                  <div class="timeline timeline-inverse">
-                    <!-- timeline time label -->
+
+                  <!-- Main node for this component -->
+                  <div class="timeline">
+                    <!-- Timeline time label -->
                     <div class="time-label">
-                      <span class="bg-danger">
-                        10 Feb. 2014
-                      </span>
+                      <span class="bg-green">23 Aug. 2019</span>
                     </div>
-                    <!-- /.timeline-label -->
-                    <!-- timeline item -->
                     <div>
-                      <i class="fas fa-envelope bg-primary"></i>
-
+                      <!-- Before each timeline item corresponds to one icon on the left scale -->
+                      <i class="fas fa-envelope bg-blue"></i>
+                      <!-- Timeline item -->
                       <div class="timeline-item">
-                        <span class="time"><i class="far fa-clock"></i> 12:05</span>
-
+                        <!-- Time -->
+                        <span class="time"><i class="fas fa-clock"></i> 12:05</span>
+                        <!-- Header. Optional -->
                         <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-
+                        <!-- Body -->
                         <div class="timeline-body">
                           Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
                           weebly ning heekya handango imeem plugg dopplr jibjab, movity
                           jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
                           quora plaxo ideeli hulu weebly balihoo...
                         </div>
+                        <!-- Placement of additional controls. Optional -->
                         <div class="timeline-footer">
-                          <a href="#" class="btn btn-primary btn-sm">Read more</a>
-                          <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                          <a class="btn btn-primary btn-sm">Read more</a>
+                          <a class="btn btn-danger btn-sm">Delete</a>
                         </div>
                       </div>
                     </div>
-                    <!-- END timeline item -->
-                    <!-- timeline item -->
+                    <!-- The last icon means the story is complete -->
                     <div>
-                      <i class="fas fa-user bg-info"></i>
-
-                      <div class="timeline-item">
-                        <span class="time"><i class="far fa-clock"></i> 5 mins ago</span>
-
-                        <h3 class="timeline-header border-0"><a href="#">Sarah Young</a> accepted your friend request
-                        </h3>
-                      </div>
-                    </div>
-                    <!-- END timeline item -->
-                    <!-- timeline item -->
-                    <div>
-                      <i class="fas fa-comments bg-warning"></i>
-
-                      <div class="timeline-item">
-                        <span class="time"><i class="far fa-clock"></i> 27 mins ago</span>
-
-                        <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-
-                        <div class="timeline-body">
-                          Take me to your leader!
-                          Switzerland is small and neutral!
-                          We are more like Germany, ambitious and misunderstood!
-                        </div>
-                        <div class="timeline-footer">
-                          <a href="#" class="btn btn-warning btn-flat btn-sm">View comment</a>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- END timeline item -->
-                    <!-- timeline time label -->
-                    <div class="time-label">
-                      <span class="bg-success">
-                        3 Jan. 2014
-                      </span>
-                    </div>
-                    <!-- /.timeline-label -->
-                    <!-- timeline item -->
-                    <div>
-                      <i class="fas fa-camera bg-purple"></i>
-
-                      <div class="timeline-item">
-                        <span class="time"><i class="far fa-clock"></i> 2 days ago</span>
-
-                        <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-
-                        <div class="timeline-body">
-                          <img src="http://placehold.it/150x100" alt="...">
-                          <img src="http://placehold.it/150x100" alt="...">
-                          <img src="http://placehold.it/150x100" alt="...">
-                          <img src="http://placehold.it/150x100" alt="...">
-                        </div>
-                      </div>
-                    </div>
-                    <!-- END timeline item -->
-                    <div>
-                      <i class="far fa-clock bg-gray"></i>
+                      <i class="fas fa-clock bg-gray"></i>
                     </div>
                   </div>
                 </div>
@@ -487,7 +431,7 @@
                               }; ?>
                             </td>
                             <td class="text-uppercase align-middle text-center">
-                              <?= isset($dadosProcesso['numprocesso']) && $dadosProcesso['numprocesso'] > 0 ? MascaraCNJ(str_pad($dadosProcesso['numprocesso'], 20, "0", STR_PAD_LEFT)) : 'Processo sem Número'; ?>
+                              <?= isset($dadosProcesso['numprocesso']) && $dadosProcesso['numprocesso'] > 0 ? MascaraCNJ(str_pad($dadosProcesso['numprocesso'], 19, "0", STR_PAD_LEFT)) : 'Processo sem Número'; ?>
                             </td>
                             <td class="text-uppercase align-middle d-flex justify-content-between align-items-center" style="font-size: .8rem; ">
                               <?php
@@ -538,7 +482,7 @@
                                       </a>
                                     </li>
                                     <li class="nav-item">
-                                      <a href="" class="btn btn-tool" target="" title="Histórico" rel="noopener noreferrer">
+                                      <a href="#timeline" class="btn btn-tool" target="" data-toggle="tab" title="Histórico" rel="noopener noreferrer">
                                         <i class="mdi mdi-calendar-clock-outline mdi-24px "></i>
                                       </a>
                                     </li>
@@ -565,101 +509,6 @@
                   </div>
                   <!-- /.processo -->
 
-                </div>
-                <!-- /.tab-pane -->
-                <div class="tab-pane" id="timeline">
-                  <!-- The timeline -->
-                  <div class="timeline timeline-inverse">
-                    <!-- timeline time label -->
-                    <div class="time-label">
-                      <span class="bg-danger">
-                        10 Feb. 2014
-                      </span>
-                    </div>
-                    <!-- /.timeline-label -->
-                    <!-- timeline item -->
-                    <div>
-                      <i class="fas fa-envelope bg-primary"></i>
-
-                      <div class="timeline-item">
-                        <span class="time"><i class="far fa-clock"></i> 12:05</span>
-
-                        <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-
-                        <div class="timeline-body">
-                          Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                          weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                          jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                          quora plaxo ideeli hulu weebly balihoo...
-                        </div>
-                        <div class="timeline-footer">
-                          <a href="#" class="btn btn-primary btn-sm">Read more</a>
-                          <a href="#" class="btn btn-danger btn-sm">Delete</a>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- END timeline item -->
-                    <!-- timeline item -->
-                    <div>
-                      <i class="fas fa-user bg-info"></i>
-
-                      <div class="timeline-item">
-                        <span class="time"><i class="far fa-clock"></i> 5 mins ago</span>
-
-                        <h3 class="timeline-header border-0"><a href="#">Sarah Young</a> accepted your friend request
-                        </h3>
-                      </div>
-                    </div>
-                    <!-- END timeline item -->
-                    <!-- timeline item -->
-                    <div>
-                      <i class="fas fa-comments bg-warning"></i>
-
-                      <div class="timeline-item">
-                        <span class="time"><i class="far fa-clock"></i> 27 mins ago</span>
-
-                        <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-
-                        <div class="timeline-body">
-                          Take me to your leader!
-                          Switzerland is small and neutral!
-                          We are more like Germany, ambitious and misunderstood!
-                        </div>
-                        <div class="timeline-footer">
-                          <a href="#" class="btn btn-warning btn-flat btn-sm">View comment</a>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- END timeline item -->
-                    <!-- timeline time label -->
-                    <div class="time-label">
-                      <span class="bg-success">
-                        3 Jan. 2014
-                      </span>
-                    </div>
-                    <!-- /.timeline-label -->
-                    <!-- timeline item -->
-                    <div>
-                      <i class="fas fa-camera bg-purple"></i>
-
-                      <div class="timeline-item">
-                        <span class="time"><i class="far fa-clock"></i> 2 days ago</span>
-
-                        <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-
-                        <div class="timeline-body">
-                          <img src="http://placehold.it/150x100" alt="...">
-                          <img src="http://placehold.it/150x100" alt="...">
-                          <img src="http://placehold.it/150x100" alt="...">
-                          <img src="http://placehold.it/150x100" alt="...">
-                        </div>
-                      </div>
-                    </div>
-                    <!-- END timeline item -->
-                    <div>
-                      <i class="far fa-clock bg-gray"></i>
-                    </div>
-                  </div>
                 </div>
                 <!-- /.tab-pane -->
 
@@ -996,10 +845,10 @@
 
               <div class="form-row">
                 <div class="col-md-12 mb-3">
-                  <label for="nnTelefonePessoa">Foto/Logo do Cliente <span class="text-orange">*</span>
+                  <label for="foto">Foto/Logo do Cliente <span class="text-orange">*</span>
 
                   </label>
-                  <input type="file" name="imgCliente" class="form-control-lg text-uppercase" id="imgCliente" placeholder="">
+                  <input type="file" name="foto" class="form-control-lg text-uppercase" id="foto" placeholder="">
                   <div class="invalid-feedback">
                     Obrigatório !
                   </div>
@@ -1188,6 +1037,167 @@
       <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+
+    <!-- MODAL NOVA HISTORICO -->
+    <div class="modal fade" id="modal-historico">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" style="font-family: 'Advent Pro', sans-serif; font-weight: 500; letter-spacing: 1px; color:orange">Historico do Processo
+            </h5>
+
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- form novo Usuário -->
+
+            <form class="needs-validation" novalidate action="./pages/pages/acoes/gravaNovaTarefa.php" method="POST" enctype="multipart/form-data">
+
+              <input type="hidden" name="idCreador" id="idCreador" value="<?= $_SESSION['ID']; ?>" />
+              <input type="hidden" name="idProcesso" id="idProcesso" value="" />
+              <input type="hidden" name="idpessoa" id="" value="<?= $_GET['id']; ?>" />
+
+              <div class="form-row">
+                <div class="col-md-12">
+                  <label for="idResponsavel">Responsavel
+                    <span class="text-orange">*</span>
+                  </label>
+
+                  <select class="form-control text-uppercase custom-select" name="idResponsavel" id="idResponsavel">
+                    <option value="" selected disabled>Selecione Responsavel </option>
+                    <?php
+                    foreach (ler('vw_pessoa_user', '', 'WHERE nivelUser > 0 and flStatusUser = 1')->fetchAll(PDO::FETCH_ASSOC) as $users) {
+                    ?>
+
+                      <option value="<?= $users['idPessoaPessoa'] ?>"><?= $users['nmPessoa'] . ' - ' ?>
+                        <?php
+                        switch ($users['nivelUser']) {
+                          case '1':
+                            echo 'Administrador';
+                            break;
+                          case '2':
+                            echo 'Secretário(a) / Atendente';
+                            break;
+                          case '3':
+                            echo 'Advogado(a) / Parceiro(a)';
+                            break;
+
+                          default:
+                            # code...
+                            break;
+                        }
+
+                        ?>
+                      </option>
+                    <?php } ?>
+
+
+                  </select>
+                  <div class="invalid-feedback">
+                    A seleção é Obrigatório !
+                  </div>
+
+                  <!-- <input type="text" name="objprocesso" class="form-control text-uppercase" disabled id="objprocesso" placeholder="Objeto do Processo" value="" required/>
+                  <div class="invalid-feedback">
+                    Obrigatório !
+                  </div> -->
+                </div>
+
+                <!-- <div class="col-md-6">
+                  <label for="contraparte">Processo
+                    <span class="text-orange">*</span>
+                  </label>
+                  <input type="text" name="contraparte" class="form-control text-uppercase  " id="contraparte" placeholder=" Parte Contraria" value="" >
+                  <div class="invalid-feedback">
+                    Obrigatório !
+                  </div>
+                </div> -->
+
+              </div>
+              <div class="form-row">
+                <div class="col-md-12">
+                  <label for="decricaoTarefa">O que deverá ser feito ?
+                    <span class="text-orange">*</span>
+                  </label>
+
+                  <textarea class="form-control" name="decricaoTarefa" id="decricaoTarefa" placeholder="Decrição da tarefa" name="validation" rows="4" required></textarea>
+
+                  <div class="invalid-feedback">
+                    Obrigatório !
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="col-md-3">
+                  <label for="dtTarefa">Data da tarefa
+                    <span class="text-orange">*</span>
+                  </label>
+                  <input type="date" maxlength="19" name="dtTarefa" class="form-control text-uppercase" id="dtTarefa" placeholder="" value="" required />
+                  <div class="invalid-feedback">
+                    Obrigatório !
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <label for="hora">Hora da tarefa</label>
+                  <input type="time" maxlength="19" name="hora" class="form-control text-uppercase" id="hora" placeholder="" value="">
+                  <div class="invalid-feedback">
+                    Obrigatório !
+                  </div>
+                </div>
+
+                <div class="col-md-7">
+                  <label for="statusprocesso">Local do Compromisso</label>
+
+                  </label>
+                  <input type="text" maxlength="19" name="local" class="form-control text-uppercase" id="local" placeholder="Local onde sera realizada a terefa" value="" />
+                  <div class="invalid-feedback">
+                    Obrigatório !
+                  </div>
+                </div>
+              </div>
+              <br />
+              <div class="form-row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <div class="icheck-primary d-inline ">
+                      <input type="checkbox" id="restingir" name="restingir" />
+                      <label for="restingir">
+                        Restrigir Tarefa ao Rsponsável
+                      </label>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+
+
+          </div>
+          <div class="modal-footer justify-content-between">
+            <input type="hidden" name="idcliente" value="<?= $id; ?>" />
+            <input type="hidden" name="idadvogado" value="0" />
+            <input type="hidden" name="nomeCliente" value="<?= $dcliente['nmPessoa']; ?>" />
+            <input type="hidden" name="userActionLog" value="<?= $_SESSION['USUARIO']; ?>" />
+            <input type="hidden" name="gravar" value="gravar" />
+            <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-times fa-fw fa-lg"></i>
+              Fechar </button>
+            <button class="btn btn-success btn-lg" type="submit">
+              <i class="far fa-save fa-fw fa-lg"></i>
+              Gravar Dados</button>
+            </form>
+            <!--/form novo Usuario -->
+            <!-- <button type="button" class="btn btn-success">Save changes</button> -->
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
     <!-- MODAL NOVO PROCESSO -->
     <div class="modal fade" id="modal-novoProdesso">
       <div class="modal-dialog modal-xl">

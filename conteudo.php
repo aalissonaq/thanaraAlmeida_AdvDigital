@@ -27,7 +27,10 @@ if (!isset($_GET['page']) || $_GET['page'] == null) {
 
       #GESTÃO DE CLIENTES
     case 'listarClientes':
-      include "./pages/pages/listarClientesCard.php";
+      include "./pages/pages/contactsClient.php";
+      break;
+    case 'cc':
+      include "./pages/pages/contactsClient.php";
       break;
     case 'listarClientesCard':
       include "./pages/pages/listarClientesCard.php";
