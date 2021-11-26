@@ -11,5 +11,4 @@ function sweetalert($title, $message, $type, $time)
     timer: $time
   });
   </script>";
-  echo ' ultil ok';
 }

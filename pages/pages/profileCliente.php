@@ -1,3 +1,24 @@
+<?php
+if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHistorico') {
+  $id_pessoa_cliente = $_POST['id_pessoa_cliente'];
+  $id_pessoa_responsavel = $_POST['id_pessoa_responsavel'];
+  $id_processo = $_POST['id_processo'];
+  $titulo_historico = $_POST['titulo_historico'];
+  $descricao_historico = $_POST['descricao_historico'];
+  $tipo_historico = $_POST['tipo_historico'];
+
+
+  $sql = "INSERT INTO historico_processo (id_pessoa_cliente,id_pessoa_responsavel,id_processo,titulo_historico,descricao_historico,tipo_historico)
+          VALUES ('$id_pessoa_cliente','$id_pessoa_responsavel','$id_processo','$titulo_historico','$descricao_historico','$tipo_historico')";
+
+  if ($conexao->exec($sql)) {
+    sweetalert('Sucesso', 'Histórico gravado com suscesso', 'success', 2000);
+  } else {
+    sweetalert('Ops !', ' Erro ao grava o Histórico, por favor tente novamente', 'error', 2000);
+  }
+}
+?>
+
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <div class="container-fluid">
@@ -288,41 +309,83 @@
                 <!-- /.tab-pane -->
                 <div class="tab-pane" id="timeline">
                   <!-- The timeline -->
+                  <div class="card">
+                    <div class="card-header">
+                      <!--
+      <h3 class="card-title" style="font-family:'Advent Pro', sans-serif; letter-spacing: 1px;">Lista de Clientes
+      </h3>
+      -->
+                      <div class="card-tools">
+                        <a href="" class="btn btn-tool text-primary align-middle" data-toggle="modal" data-target="#modal-novoHistorico" style="font-family:'Advent Pro', sans-serif; font-weight: bold; font-size: 1rem; letter-spacing: 1px;">
 
-                  <!-- Main node for this component -->
-                  <div class="timeline">
-                    <!-- Timeline time label -->
-                    <div class="time-label">
-                      <span class="bg-green">23 Aug. 2019</span>
-                    </div>
-                    <div>
-                      <!-- Before each timeline item corresponds to one icon on the left scale -->
-                      <i class="fas fa-envelope bg-blue"></i>
-                      <!-- Timeline item -->
-                      <div class="timeline-item">
-                        <!-- Time -->
-                        <span class="time"><i class="fas fa-clock"></i> 12:05</span>
-                        <!-- Header. Optional -->
-                        <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-                        <!-- Body -->
-                        <div class="timeline-body">
-                          Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                          weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                          jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                          quora plaxo ideeli hulu weebly balihoo...
-                        </div>
-                        <!-- Placement of additional controls. Optional -->
-                        <div class="timeline-footer">
-                          <a class="btn btn-primary btn-sm">Read more</a>
-                          <a class="btn btn-danger btn-sm">Delete</a>
-                        </div>
+                          <i class="fa fa-plus-square fa-fw fa-2x align-middle"></i>
+                          Novo Histórico
+                        </a>
+
                       </div>
                     </div>
-                    <!-- The last icon means the story is complete -->
-                    <div>
-                      <i class="fas fa-clock bg-gray"></i>
-                    </div>
                   </div>
+                  <!-- Main node for this component -->
+                  <input type="hidden" id="id_processoHistorico" />
+
+                  <script type="text/javascript">
+                    var input = document.querySelector("#id_processoHistorico");
+                    console.log(input);
+                  </script>
+
+                  <?php
+                  // echo $idp = '<p id="id_processoHistorico"></p>';
+                  $idp = 23;
+                  // $idp = strip_tags($idp);
+                  $sql = "SELECT * FROM historico_processo WHERE id_processo = $idp";
+                  $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+                  foreach ($resultado as $row) {
+
+
+                  ?>
+
+                    <div class="timeline">
+                      <!-- Timeline time label -->
+                      <div class="time-label">
+                        <span class="bg-green">
+                          <?= date("d M Y ", strtotime($row['data_cadastro'])); ?>
+                        </span>
+                      </div>
+                      <div>
+                        <!-- Before each timeline item corresponds to one icon on the left scale -->
+                        <i class="fas fa-envelope bg-blue"></i>
+                        <!-- Timeline item -->
+                        <div class="timeline-item">
+                          <!-- Time -->
+                          <span class="time"><i class="fas fa-clock"></i>
+                            <?= date("H:s", strtotime($row['data_cadastro'])); ?>
+                          </span>
+                          <!-- Header. Optional -->
+                          <h3 class="timeline-header">
+                            <a href="#">
+                              <?= $row['titulo_historico'] ?>
+                            </a> ...
+                          </h3>
+                          <!-- Body -->
+                          <div class="timeline-body">
+                            <?= $row['descricao_historico'] ?>
+                          </div>
+                          <!-- Placement of additional controls. Optional -->
+                          <!-- <div class="timeline-footer">
+                            <a class="btn btn-primary btn-sm">Read more</a>
+                            <a class="btn btn-danger btn-sm">Delete</a>
+                          </div> -->
+                        </div>
+
+                      </div>
+
+                      <!-- The last icon means the story is complete -->
+                      <div>
+                        <i class="fas fa-clock bg-gray"></i>
+                      </div>
+
+                    </div>
+                  <?php } ?>
                 </div>
                 <!-- /.tab-pane -->
 
@@ -357,7 +420,13 @@
                   </a>
                 </li>
 
-                <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a>
+                <li class="nav-item">
+                  <a class="nav-link" href="#timeline" data-toggle="tab">
+                    <i class="align-middle mdi mdi-calendar-clock mdi-24px fa fa-fw"></i> &nbsp;&nbsp;
+                    <span class="align-middle">
+                      Histórico
+                    </span>
+                  </a>
                 </li>
 
               </ul>
@@ -474,7 +543,11 @@
                               <ul class="nav justify-content-center d-flex justify-content-evenly">
                                 <?php
                                 switch ($_SESSION['NIVEL']) {
-                                  case '0':
+                                  case '-1':
+
+                                    break;
+
+                                  default:
                                 ?>
                                     <li class="nav-item">
                                       <a href="" class="btn btn-tool" target="" title="Visializar Processo" rel="noopener noreferrer">
@@ -482,7 +555,7 @@
                                       </a>
                                     </li>
                                     <li class="nav-item">
-                                      <a href="#timeline" class="btn btn-tool" target="" data-toggle="tab" title="Histórico" rel="noopener noreferrer">
+                                      <a href="?page=process_detail&idcli=<?= $_GET['id'] ?>&idprocess=<?= $dadosProcesso['idprocesso'] ?>" class="btn btn-tool" title="Histórico" rel="noopener noreferrer">
                                         <i class="mdi mdi-calendar-clock-outline mdi-24px "></i>
                                       </a>
                                     </li>
@@ -493,9 +566,6 @@
                                     </li>
 
                                 <?php
-                                    break;
-
-                                  default:
                                     //TESTE DE STATUS
                                     break;
                                 }
@@ -999,20 +1069,6 @@
                 </div>
               </div>
               <br />
-              <div class="form-row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <div class="icheck-primary d-inline ">
-                      <input type="checkbox" id="restingir" name="restingir" />
-                      <label for="restingir">
-                        Restrigir Tarefa ao Rsponsável
-                      </label>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-
 
 
           </div>
@@ -1039,11 +1095,11 @@
     <!-- /.modal -->
 
     <!-- MODAL NOVA HISTORICO -->
-    <div class="modal fade" id="modal-historico">
+    <div class="modal fade" id="modal-novoHistorico">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" style="font-family: 'Advent Pro', sans-serif; font-weight: 500; letter-spacing: 1px; color:orange">Historico do Processo
+            <h5 class="modal-title" style="font-family: 'Advent Pro', sans-serif; font-weight: 400; letter-spacing: 1px; ">Historico do Processo
             </h5>
 
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -1052,57 +1108,22 @@
           </div>
           <div class="modal-body">
             <!-- form novo Usuário -->
+            <form class="needs-validation" novalidate action="" method="POST" enctype="multipart/form-data">
 
-            <form class="needs-validation" novalidate action="./pages/pages/acoes/gravaNovaTarefa.php" method="POST" enctype="multipart/form-data">
-
-              <input type="hidden" name="idCreador" id="idCreador" value="<?= $_SESSION['ID']; ?>" />
-              <input type="hidden" name="idProcesso" id="idProcesso" value="" />
-              <input type="hidden" name="idpessoa" id="" value="<?= $_GET['id']; ?>" />
+              <input type="hidden" name="id_pessoa_responsavel" id="id_pessoa_responsavel" value="<?= $_SESSION['ID']; ?>" />
+              <input type="hidden" name="id_processo" id="id_processo" value="" />
+              <input type="hidden" name="id_pessoa_cliente" id="" value="<?= $_GET['id']; ?>" />
 
               <div class="form-row">
                 <div class="col-md-12">
-                  <label for="idResponsavel">Responsavel
+                  <label for="titulo_historico" requided>Titulo
                     <span class="text-orange">*</span>
                   </label>
 
-                  <select class="form-control text-uppercase custom-select" name="idResponsavel" id="idResponsavel">
-                    <option value="" selected disabled>Selecione Responsavel </option>
-                    <?php
-                    foreach (ler('vw_pessoa_user', '', 'WHERE nivelUser > 0 and flStatusUser = 1')->fetchAll(PDO::FETCH_ASSOC) as $users) {
-                    ?>
-
-                      <option value="<?= $users['idPessoaPessoa'] ?>"><?= $users['nmPessoa'] . ' - ' ?>
-                        <?php
-                        switch ($users['nivelUser']) {
-                          case '1':
-                            echo 'Administrador';
-                            break;
-                          case '2':
-                            echo 'Secretário(a) / Atendente';
-                            break;
-                          case '3':
-                            echo 'Advogado(a) / Parceiro(a)';
-                            break;
-
-                          default:
-                            # code...
-                            break;
-                        }
-
-                        ?>
-                      </option>
-                    <?php } ?>
-
-
-                  </select>
-                  <div class="invalid-feedback">
-                    A seleção é Obrigatório !
-                  </div>
-
-                  <!-- <input type="text" name="objprocesso" class="form-control text-uppercase" disabled id="objprocesso" placeholder="Objeto do Processo" value="" required/>
+                  <input type="text" name="titulo_historico" class="form-control text-uppercase" id="titulo_historico" placeholder="de um titulo para esse historico" value="" required />
                   <div class="invalid-feedback">
                     Obrigatório !
-                  </div> -->
+                  </div>
                 </div>
 
                 <!-- <div class="col-md-6">
@@ -1118,11 +1139,11 @@
               </div>
               <div class="form-row">
                 <div class="col-md-12">
-                  <label for="decricaoTarefa">O que deverá ser feito ?
+                  <label for="decricaoTarefa">Descreva o histórico
                     <span class="text-orange">*</span>
                   </label>
 
-                  <textarea class="form-control" name="decricaoTarefa" id="decricaoTarefa" placeholder="Decrição da tarefa" name="validation" rows="4" required></textarea>
+                  <textarea class="form-control" name="descricao_historico" id="descricao_historico" placeholder="Decrição da historico" name="validation" rows="4" required></textarea>
 
                   <div class="invalid-feedback">
                     Obrigatório !
@@ -1131,49 +1152,23 @@
               </div>
 
               <div class="form-row">
-                <div class="col-md-3">
-                  <label for="dtTarefa">Data da tarefa
+                <div class=" col-12 col-md-8">
+                  <label for="dtTarefa">Tipo de Historico
                     <span class="text-orange">*</span>
                   </label>
-                  <input type="date" maxlength="19" name="dtTarefa" class="form-control text-uppercase" id="dtTarefa" placeholder="" value="" required />
-                  <div class="invalid-feedback">
-                    Obrigatório !
-                  </div>
-                </div>
-                <div class="col-md-2">
-                  <label for="hora">Hora da tarefa</label>
-                  <input type="time" maxlength="19" name="hora" class="form-control text-uppercase" id="hora" placeholder="" value="">
+                  <select class="form-control text-uppercase" required name="tipo_historico" id="tipo_historico">
+                    <option value="" selected disabled> Escolha o tipo de Historico</option>
+                    <option value="at_status">Alteração de Status</option>
+                    <option value="contato">Comunicação</option>
+                    <option value="tarefa">Tarefa</option>
+                  </select>
                   <div class="invalid-feedback">
                     Obrigatório !
                   </div>
                 </div>
 
-                <div class="col-md-7">
-                  <label for="statusprocesso">Local do Compromisso</label>
-
-                  </label>
-                  <input type="text" maxlength="19" name="local" class="form-control text-uppercase" id="local" placeholder="Local onde sera realizada a terefa" value="" />
-                  <div class="invalid-feedback">
-                    Obrigatório !
-                  </div>
-                </div>
               </div>
               <br />
-              <div class="form-row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <div class="icheck-primary d-inline ">
-                      <input type="checkbox" id="restingir" name="restingir" />
-                      <label for="restingir">
-                        Restrigir Tarefa ao Rsponsável
-                      </label>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-
-
 
           </div>
           <div class="modal-footer justify-content-between">
@@ -1181,7 +1176,7 @@
             <input type="hidden" name="idadvogado" value="0" />
             <input type="hidden" name="nomeCliente" value="<?= $dcliente['nmPessoa']; ?>" />
             <input type="hidden" name="userActionLog" value="<?= $_SESSION['USUARIO']; ?>" />
-            <input type="hidden" name="gravar" value="gravar" />
+            <input type="hidden" name="gravarHistorico" value="gravarHistorico" />
             <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-times fa-fw fa-lg"></i>
               Fechar </button>
             <button class="btn btn-success btn-lg" type="submit">
@@ -1220,7 +1215,7 @@
               <input type="hidden" name="niprocesso" value="<?= nProcesso("processos", "{$_GET['id']}"); ?>" />
               <div class="form-row">
                 <div class="col-md-6">
-                  <label for="objprocesso">Objeto do Processo
+                  <label for="titulo_historico">Objeto do Processo
                     <span class="text-orange">*</span>
                   </label>
                   <input type="text" name="objprocesso" class="form-control text-uppercase  " id="objprocesso" placeholder="Objeto do Processo" value="" required>
@@ -1353,6 +1348,10 @@
 
   function modalIdProcesso(valor) {
     document.getElementById('idProcesso').value = valor;
+    document.getElementById('id_processo').value = valor;
+    document.getElementById('id_processoHistorico').value = valor;
+    // var currentUrl = window.location.href
+    // document.location.href = currentUrl + "&idp=" + valor;
   };
 
   function setaDadosModal(valor) {

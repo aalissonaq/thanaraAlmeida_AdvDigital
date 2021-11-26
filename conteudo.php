@@ -52,6 +52,9 @@ if (!isset($_GET['page']) || $_GET['page'] == null) {
     case 'processos':
       include "./pages/pages/processoCliente.php";
       break;
+    case 'process_detail':
+      include "./pages/pages/process_detail.php";
+      break;
 
 
       #SERVIÇOS

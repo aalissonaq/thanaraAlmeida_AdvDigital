@@ -42,7 +42,7 @@
         </h2>
 
         <div class="card-tools">
-          <a href="?page=listarClientes" class="btn btn-tool text-orange d-print-none">
+          <a href="?page=profileCliente&id=<?= $_GET["id"] ?>" class="btn btn-tool text-orange d-print-none">
             <!-- <i class="far fa-arrow-alt-circle-left fa-fw fa-lg"></i> -->
             <i class="mdi mdi-arrow-left-bold-circle-outline fa fa-2x align-middle "></i>
             Voltar para Lista de Cliente
@@ -51,7 +51,7 @@
       </div>
       <div class="card-body">
 
-        <input type="hidden" name="idEdit" value="<?= $_GET['idEdit']; ?>">
+        <input type="hidden" name="idEdit" value="<?= $_GET['id']; ?>" />
 
         <div class="form-row">
           <div class="col-md-10 mb-3 ">
@@ -121,13 +121,13 @@
             <div class="d-flex flex-row-reverse">
               <div class=" text-center">
                 <img src="
-                    <?php
-                    if ($dcliente['imgCliente']) {
-                      echo "./upload/imgClientes/{$dcliente['imgCliente']}";
-                    } else {
-                      echo "./upload/imgClientes/default.png";
-                    }
-                    ?>" alt="<?php echo $dcliente['nmPessoa'] ?>" class=" img-fluid img-thumbnail">
+                <?php
+                if ($dcliente['foto']) {
+                  echo "./upload/fotoPessoas/{$dcliente['foto']}";
+                } else {
+                  echo "./upload/fotoPessoas/default.png";
+                }
+                ?>" alt="<?php echo $dcliente['nmPessoa'] ?>" class=" img-fluid img-thumbnail">
               </div>
             </div>
           </div>

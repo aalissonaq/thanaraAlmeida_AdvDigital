@@ -19,9 +19,9 @@
 
       <!-- Default box -->
       <?php
-      include './util/util.php';
-      require_once './data/conexao.php';
-      $conexao = novaConexao();
+      // include './util/util.php';
+      // require_once './data/conexao.php';
+      // $conexao = novaConexao();
 
       if (isset($_GET['searchAll'])) {
         $sql = "SELECT * FROM pessoa
@@ -35,6 +35,7 @@
                 WHERE nmPessoa LIKE '" . $_GET['param'] . "%'";
 
         $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+
         if (count($resultado) == 0) {
           echo '<div class="alert alert-danger" role="alert">
                 Nenhum resultado encontrado!
@@ -537,7 +538,7 @@
 
       function setaDadosModal(valor) {
         document.getElementById('idPessoa').value = valor;
-            }
+      }
 
 
       (function() {
@@ -628,6 +629,3 @@
         }
       }
     </script>
-    </body>
-
-    </html>

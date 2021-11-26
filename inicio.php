@@ -1,6 +1,10 @@
 <?php
 session_start();
 require_once './data/dbasys.php';
+require_once './data/conexao.php';
+$conexao = novaConexao();
+
+require_once './util/util.php';
 require_once './data/outfunc.php';
 
 if (!isset($_SESSION['USUARIO'])) {
@@ -167,7 +171,7 @@ if (!isset($_SESSION['USUARIO'])) {
           </small>
         </a> | </strong> <i>Todos os direitos reservados.</i>
       <div class="float-right d-none d-sm-inline-block">
-        <b>Version</b> 0.5
+        <b>Version</b> 0.9
       </div>
     </footer>
   </div>
