@@ -189,6 +189,7 @@ if (!isset($_SESSION['USUARIO'])) {
 
   <!-- OPTIONAL SCRIPTS -->
   <script src="dist/js/demo.js"></script>
+  <script src="dist/js/app.js"></script>
 
   <!-- PAGE PLUGINS -->
   <!-- jQuery Mapael -->
