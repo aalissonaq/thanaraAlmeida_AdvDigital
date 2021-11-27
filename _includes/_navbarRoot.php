@@ -33,7 +33,7 @@
     <ul class="navbar-nav ml-auto">
         <li>
             <div class="info">
-                <a href="?acao=sair" class="d-block text-danger" title="Sair do Sistema">
+                <a href="?acao=sair" class="d-block text-white" title="Sair do Sistema">
                     <i class="fa fa-2x fa-fw mdi mdi-power"></i>
                     <!-- <i class="fa fa-power-off" aria-hidden="true"></i> -->
                 </a>
@@ -41,8 +41,8 @@
         </li>
 
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"><i class="fas fa-th-large"></i></a>
-        </li>
+        </li> -->
     </ul>
 </nav>

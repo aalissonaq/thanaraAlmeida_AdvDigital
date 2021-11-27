@@ -68,7 +68,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                 " class="profile-user-img img-fluid img-circle" alt="foto do Cliente <?= $dcliente['nmPessoa'] ?>" style="object-fit: cover;" />
               </div>
 
-              <h3 class="profile-username text-center text-primary" style="font-family:'Advent Pro', sans-serif; font-weight: 600; ">
+              <h3 class="profile-username text-center text-primary" style="font-family:'Advent Pro', sans-serif; font-weight: 600; font-size:1.4rem ">
                 <?php
                 if ($dcliente['nmPessoaSocial'] == '') {
                   $nome =  explode(' ', $dcliente['nmPessoa']);
@@ -104,12 +104,23 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                     <button data-toggle="modal" data-target="#modal-edtFoto" data-id="<?= $idEdit ?>" onclick="setaDadosModal(<?= $idEdit ?> )" class="btn btn-tool \" target="" title="Trocar Foto" rel="noopener noreferrer\">
                       <i class="mdi mdi-camera-flip-outline mdi-24px fa fa-fw"></i>
                     </button>
-                <?php
+                  <?php
                     break;
 
 
                   default:
-                    include '_includes/_toolsClientes.default.php';
+                  ?>
+                    <a href="?page=listarClientes" class="btn btn-tool " target="" title="Voltar" rel="noopener noreferrer">
+                      <i class="mdi mdi-arrow-left-circle-outline mdi-24px fa fa-fw"></i>
+                    </a>
+                    <a href="#settings" class="btn btn-tool" target="" data-toggle="tab" title="Editar Dados" rel="noopener noreferrer">
+                      <i class="mdi mdi-account-edit-outline mdi-24px fa fa-fw"></i>
+                    </a>
+
+                    <button data-toggle="modal" data-target="#modal-edtFoto" data-id="<?= $idEdit ?>" onclick="setaDadosModal(<?= $idEdit ?> )" class="btn btn-tool \" target="" title="Trocar Foto" rel="noopener noreferrer\">
+                      <i class="mdi mdi-camera-flip-outline mdi-24px fa fa-fw"></i>
+                    </button>
+                <?php
                     break;
                 }
                 ?>
@@ -306,88 +317,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                   <!-- /.tarefas -->
 
                 </div>
-                <!-- /.tab-pane -->
-                <div class="tab-pane" id="timeline">
-                  <!-- The timeline -->
-                  <div class="card">
-                    <div class="card-header">
-                      <!--
-      <h3 class="card-title" style="font-family:'Advent Pro', sans-serif; letter-spacing: 1px;">Lista de Clientes
-      </h3>
-      -->
-                      <div class="card-tools">
-                        <a href="" class="btn btn-tool text-primary align-middle" data-toggle="modal" data-target="#modal-novoHistorico" style="font-family:'Advent Pro', sans-serif; font-weight: bold; font-size: 1rem; letter-spacing: 1px;">
 
-                          <i class="fa fa-plus-square fa-fw fa-2x align-middle"></i>
-                          Novo Histórico
-                        </a>
-
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Main node for this component -->
-                  <input type="hidden" id="id_processoHistorico" />
-
-                  <script type="text/javascript">
-                    var input = document.querySelector("#id_processoHistorico");
-                    console.log(input);
-                  </script>
-
-                  <?php
-                  // echo $idp = '<p id="id_processoHistorico"></p>';
-                  $idp = 23;
-                  // $idp = strip_tags($idp);
-                  $sql = "SELECT * FROM historico_processo WHERE id_processo = $idp";
-                  $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-                  foreach ($resultado as $row) {
-
-
-                  ?>
-
-                    <div class="timeline">
-                      <!-- Timeline time label -->
-                      <div class="time-label">
-                        <span class="bg-green">
-                          <?= date("d M Y ", strtotime($row['data_cadastro'])); ?>
-                        </span>
-                      </div>
-                      <div>
-                        <!-- Before each timeline item corresponds to one icon on the left scale -->
-                        <i class="fas fa-envelope bg-blue"></i>
-                        <!-- Timeline item -->
-                        <div class="timeline-item">
-                          <!-- Time -->
-                          <span class="time"><i class="fas fa-clock"></i>
-                            <?= date("H:s", strtotime($row['data_cadastro'])); ?>
-                          </span>
-                          <!-- Header. Optional -->
-                          <h3 class="timeline-header">
-                            <a href="#">
-                              <?= $row['titulo_historico'] ?>
-                            </a> ...
-                          </h3>
-                          <!-- Body -->
-                          <div class="timeline-body">
-                            <?= $row['descricao_historico'] ?>
-                          </div>
-                          <!-- Placement of additional controls. Optional -->
-                          <!-- <div class="timeline-footer">
-                            <a class="btn btn-primary btn-sm">Read more</a>
-                            <a class="btn btn-danger btn-sm">Delete</a>
-                          </div> -->
-                        </div>
-
-                      </div>
-
-                      <!-- The last icon means the story is complete -->
-                      <div>
-                        <i class="fas fa-clock bg-gray"></i>
-                      </div>
-
-                    </div>
-                  <?php } ?>
-                </div>
-                <!-- /.tab-pane -->
 
                 <div class="tab-pane" id="allTasks">
                   Todas as Tarefas Agendadas
@@ -419,18 +349,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                     </span>
                   </a>
                 </li>
-
-                <li class="nav-item">
-                  <a class="nav-link" href="#timeline" data-toggle="tab">
-                    <i class="align-middle mdi mdi-calendar-clock mdi-24px fa fa-fw"></i> &nbsp;&nbsp;
-                    <span class="align-middle">
-                      Histórico
-                    </span>
-                  </a>
-                </li>
-
               </ul>
-
 
             </div><!-- /.card-header -->
             <div class="card-body">
@@ -443,8 +362,8 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                     Novo Processos</a>
 
 
-                  <div class="table-responsive ">
-                    <table id="tabela" class="tableP table-sm table-striped table-hover">
+                  <div class="table-responsive col-12 ">
+                    <table id="tabela" class="tableP table-sm table-striped table-hover col-12">
                       <thead class="" style="font-family: 'Advent Pro', sans-serif;">
                         <tr>
                           <th class="col-md-1 text-center align-middle">
@@ -549,18 +468,14 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
 
                                   default:
                                 ?>
+
                                     <li class="nav-item">
-                                      <a href="" class="btn btn-tool" target="" title="Visializar Processo" rel="noopener noreferrer">
+                                      <a href="?page=process_detail&idcli=<?= $_GET['id'] ?>&idprocess=<?= $dadosProcesso['idprocesso'] ?>" class="btn btn-tool d-flex justify-content-between align-content-around flex-wrap" title="Detalhes do Projeto" rel="noopener noreferrer">
                                         <i class="mdi mdi-file-eye-outline mdi-24px "></i>
                                       </a>
                                     </li>
                                     <li class="nav-item">
-                                      <a href="?page=process_detail&idcli=<?= $_GET['id'] ?>&idprocess=<?= $dadosProcesso['idprocesso'] ?>" class="btn btn-tool" title="Histórico" rel="noopener noreferrer">
-                                        <i class="mdi mdi-calendar-clock-outline mdi-24px "></i>
-                                      </a>
-                                    </li>
-                                    <li class="nav-item">
-                                      <a href="" class="btn btn-tool" target="" title="Adicionar Tarefas" rel="noopener noreferrer" data-toggle="modal" data-target="#modal-novaTarefa" onclick="modalIdProcesso(<?= $dadosProcesso['idprocesso'] ?>)">
+                                      <a href="" class="btn btn-tool d-flex justify-content-between align-content-around flex-wrap" target="" title="Adicionar Tarefas" rel="noopener noreferrer" data-toggle="modal" data-target="#modal-novaTarefa" onclick="modalIdProcesso(<?= $dadosProcesso['idprocesso'] ?>)">
                                         <i class="mdi mdi-book-cog-outline mdi-24px"></i>
                                       </a>
                                     </li>
