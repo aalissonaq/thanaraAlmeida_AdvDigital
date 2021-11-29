@@ -8,7 +8,7 @@ switch ($_SESSION['NIVEL']) {
         include_once 'dashboards/_adm.php';
         break;
     case 2:
-        include_once 'dash/dashAtentente.php';
+        include_once './pages/pages/contactsClient.php';
         break;
     case 3:
         include_once 'dash/dashMedico.php';
