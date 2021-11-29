@@ -280,7 +280,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                             </td>
 
                             <td class="text-uppercase align-middle text-center">
-                              <?= date("d/m/Y ", strtotime($dadosTarefa['hora'])); ?>
+                              <?= date("d/m/Y ", strtotime($dadosTarefa['dtTarefa'])); ?>
                               as
                               <?= date(" H:i", strtotime($dadosTarefa['hora'])); ?>
                             </td>

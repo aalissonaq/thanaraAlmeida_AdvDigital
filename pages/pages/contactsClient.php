@@ -16,20 +16,15 @@
 
     <!-- Main content -->
     <section class="content">
-
       <!-- Default box -->
       <?php
-      // include './util/util.php';
-      // require_once './data/conexao.php';
-      // $conexao = novaConexao();
-
       if (isset($_GET['searchAll'])) {
         $sql = "SELECT * FROM pessoa
         INNER JOIN clientes ON pessoa.idPessoa = clientes.idPessoa ORDER BY pessoa.nmPessoa ASC";
         $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
       }
 
-      if (isset($_GET['search'])) {
+      if (isset($_GET['search']) && $_GET['search'] ==  "latter") {
         $sql = "SELECT * FROM pessoa
                 INNER JOIN clientes ON pessoa.idPessoa = clientes.idPessoa
                 WHERE nmPessoa LIKE '" . $_GET['param'] . "%'";
@@ -41,6 +36,18 @@
                 Nenhum resultado encontrado!
                 </div>';
         }
+      } elseif (isset($_GET['search']) && $_GET['search'] ==  "name") {
+        $sql = "SELECT * FROM pessoa
+        INNER JOIN clientes ON pessoa.idPessoa = clientes.idPessoa
+        WHERE nmPessoa LIKE '%" . $_GET['param'] . "%'";
+
+        $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($resultado) == 0) {
+          echo '<div class="alert alert-danger" role="alert">
+        Nenhum resultado encontrado!
+        </div>';
+        }
       } else {
         $sql = "SELECT * FROM pessoa
                 INNER JOIN clientes ON pessoa.idPessoa = clientes.idPessoa ORDER BY pessoa.nmPessoa ASC";
@@ -51,45 +58,54 @@
       <div class="container-fluid">
 
         <div class="row d-flex justify-content-between">
-          <span class="mt-2">
+          <!-- <span class="mt-2">
             <i class="fa fa-search fa-lg fa-fw"> </i>
             <a href="?page=cc&searchAll" class="h4">TODOS </a>
-          </span>
 
-          <div class="col-12 col-sm-8 col-md-8 my-2 d-flex justify-content-around">
+          </span> -->
 
-
-            <a href="?page=cc&search=latter&param=a" class="btn btn-outline-primary">A</a>
-            <a href="?page=cc&search=latter&param=b" class="btn btn-outline-primary">B</a>
-            <a href="?page=cc&search=latter&param=c" class="btn btn-outline-primary">C</a>
-            <a href="?page=cc&search=latter&param=d" class="btn btn-outline-primary">D</a>
-            <a href="?page=cc&search=latter&param=e" class="btn btn-outline-primary">E</a>
-            <a href="?page=cc&search=latter&param=f" class="btn btn-outline-primary">F</a>
-            <a href="?page=cc&search=latter&param=g" class="btn btn-outline-primary">G</a>
-            <a href="?page=cc&search=latter&param=h" class="btn btn-outline-primary">H</a>
-            <a href="?page=cc&search=latter&param=i" class="btn btn-outline-primary">I</a>
-            <a href="?page=cc&search=latter&param=j" class="btn btn-outline-primary">J</a>
-            <a href="?page=cc&search=latter&param=k" class="btn btn-outline-primary">K</a>
-            <a href="?page=cc&search=latter&param=l" class="btn btn-outline-primary">L</a>
-            <a href="?page=cc&search=latter&param=m" class="btn btn-outline-primary">M</a>
-            <a href="?page=cc&search=latter&param=n" class="btn btn-outline-primary">N</a>
-            <a href="?page=cc&search=latter&param=o" class="btn btn-outline-primary">O</a>
-            <a href="?page=cc&search=latter&param=p" class="btn btn-outline-primary">P</a>
-            <a href="?page=cc&search=latter&param=q" class="btn btn-outline-primary">Q</a>
-            <a href="?page=cc&search=latter&param=r" class="btn btn-outline-primary">R</a>
-            <a href="?page=cc&search=latter&param=s" class="btn btn-outline-primary">S</a>
-            <a href="?page=cc&search=latter&param=t" class="btn btn-outline-primary">T</a>
-            <a href="?page=cc&search=latter&param=u" class="btn btn-outline-primary">U</a>
-            <a href="?page=cc&search=latter&param=v" class="btn btn-outline-primary">V</a>
-            <a href="?page=cc&search=latter&param=w" class="btn btn-outline-primary">W</a>
-            <a href="?page=cc&search=latter&param=x" class="btn btn-outline-primary">X</a>
-            <a href="?page=cc&search=latter&param=y" class="btn btn-outline-primary">Y</a>
-            <a href="?page=cc&search=latter&param=z" class="btn btn-outline-primary">Z</a>
+          <form class="form-inline col-12" method="get">
+            <input type="hidden" name="page" value="listarClientes">
+            <input type="hidden" name="search" value="name">
+            <input class="form-control mr-sm-2 mr-2 col-9 col-md-10" type="text" placeholder="Pesquisar pelo nome do cliente" name="param" autofocus />
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Pesquisar</button>
+          </form>
+          <div class="d-none d-lg-block">
+            <div class="col-8 my-2 d-flex justify-content-between btn-group btn-group-sm" role="group">
+              <a href="?page=listarClientes&searchAll" class="btn btn-outline-primary">TODOS </a>
+              <a href="?page=listarClientes&search=latter&param=a" class="btn btn-outline-primary  ">A</a>
+              <a href="?page=listarClientes&search=latter&param=b" class="btn btn-outline-primary">B</a>
+              <a href="?page=listarClientes&search=latter&param=c" class="btn btn-outline-primary">C</a>
+              <a href="?page=listarClientes&search=latter&param=d" class="btn btn-outline-primary">D</a>
+              <a href="?page=listarClientes&search=latter&param=e" class="btn btn-outline-primary">E</a>
+              <a href="?page=listarClientes&search=latter&param=f" class="btn btn-outline-primary">F</a>
+              <a href="?page=listarClientes&search=latter&param=g" class="btn btn-outline-primary">G</a>
+              <a href="?page=listarClientes&search=latter&param=h" class="btn btn-outline-primary">H</a>
+              <a href="?page=listarClientes&search=latter&param=i" class="btn btn-outline-primary">I</a>
+              <a href="?page=listarClientes&search=latter&param=j" class="btn btn-outline-primary">J</a>
+              <a href="?page=listarClientes&search=latter&param=k" class="btn btn-outline-primary">K</a>
+              <a href="?page=listarClientes&search=latter&param=l" class="btn btn-outline-primary">L</a>
+              <a href="?page=listarClientes&search=latter&param=m" class="btn btn-outline-primary">M</a>
+              <a href="?page=listarClientes&search=latter&param=n" class="btn btn-outline-primary">N</a>
+              <a href="?page=listarClientes&search=latter&param=o" class="btn btn-outline-primary">O</a>
+              <a href="?page=listarClientes&search=latter&param=p" class="btn btn-outline-primary">P</a>
+              <a href="?page=listarClientes&search=latter&param=q" class="btn btn-outline-primary">Q</a>
+              <a href="?page=listarClientes&search=latter&param=r" class="btn btn-outline-primary">R</a>
+              <a href="?page=listarClientes&search=latter&param=s" class="btn btn-outline-primary">S</a>
+              <a href="?page=listarClientes&search=latter&param=t" class="btn btn-outline-primary">T</a>
+              <a href="?page=listarClientes&search=latter&param=u" class="btn btn-outline-primary">U</a>
+              <a href="?page=listarClientes&search=latter&param=v" class="btn btn-outline-primary">V</a>
+              <a href="?page=listarClientes&search=latter&param=w" class="btn btn-outline-primary">W</a>
+              <a href="?page=listarClientes&search=latter&param=x" class="btn btn-outline-primary">X</a>
+              <a href="?page=listarClientes&search=latter&param=y" class="btn btn-outline-primary">Y</a>
+              <a href="?page=listarClientes&search=latter&param=z" class="btn btn-outline-primary">Z</a>
+            </div>
           </div>
         </div>
       </div>
 
       <div class="card-header">
+
         <!--
       <h3 class="card-title" style="font-family:'Advent Pro', sans-serif; letter-spacing: 1px;">Lista de Clientes
       </h3>
@@ -190,8 +206,8 @@
                   </div>
                   <div class="card-footer">
                     <div class="text-right">
-                      <button data-toggle="modal" data-target="#modal-edtFoto" onclick="setaDadosModal(<?= $cliente['idPessoa'] ?>)" ; class="btn btn-sm bg-teal">
-                        <i class="mdi mdi-camera-flip-outline mdi-18px"></i>
+                      <button data-toggle="modal" data-target="#modal-edtFoto" onclick="setaDadosModal(<?= $cliente['idPessoa'] ?>)" ; class="btn btn-sm bg-outline-secondary">
+                        <i class="mdi mdi-camera-flip-outline mdi-24px "></i>
                       </button>
                       <a href="?page=profileCliente&id=<?= $cliente['idPessoa'] ?>" class="btn btn-sm btn-primary">
                         <i class="mdi mdi-account mdi-18px"></i> Perfil do Cliente

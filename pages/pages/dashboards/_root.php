@@ -28,7 +28,13 @@
 
           <div class="small-box bg-default">
             <div class="inner mx-3">
-              <h3>0000</h3>
+              <?php
+              $today = date("Y-m-d", time());
+              $sql = "SELECT * FROM tarefas WHERE dtTarefa = '$today'";
+              $resultado = $conexao->query($sql);
+              ?>
+
+              <h3><?= str_pad($resultado->rowCount(), 3, "0", STR_PAD_LEFT); ?></h3>
               <p>Tarefas para hoje</p>
             </div>
             <div class="icon">
@@ -42,10 +48,16 @@
       </div>
       <!-- /.col -->
       <div class="col-12 col-sm-6 col-md-4">
+
+
         <a href="">
           <div class="small-box bg-gradient-default">
             <div class="inner mx-3">
-              <h3>0000</h3>
+              <?php
+              $sql = "SELECT * FROM tarefas WHERE finalizada = 0";
+              $resultado = $conexao->query($sql);
+              ?>
+              <h3><?= str_pad($resultado->rowCount(), 3, "0", STR_PAD_LEFT); ?></h3>
               <p>Tarefas pendentes</p>
             </div>
             <div class="icon ">
@@ -65,7 +77,11 @@
         <a href="">
           <div class="small-box bg-gradient-default">
             <div class="inner mx-3">
-              <h3>0000</h3>
+              <?php
+              $sql = "SELECT * FROM tarefas WHERE finalizada = 1";
+              $resultado = $conexao->query($sql);
+              ?>
+              <h3><?= str_pad($resultado->rowCount(), 3, "0", STR_PAD_LEFT); ?></h3>
               <p>Tarefas Concluidas</p>
             </div>
             <div class="icon ">
@@ -106,6 +122,5 @@
 
 
 <script>
-
   document.getElementById('inicio').classList.add("active");
 </script>
