@@ -290,36 +290,39 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
               </div>
               <div class="col-5">
                 <p class="text-sm">Etapa do Processo
-                  <span class="d-block text-muted" style="font-size:.8rem">
-                    <?php
-                    switch ($dadoProcesso['statusprocesso']) {
-                      case 'aguardando':
-                        echo 'Aguardando Documento';
-                        break;
-                      case 'pericia':
-                        echo 'Perícia ou Agendamento';
-                        break;
-                      case 'prorrogacao':
-                        echo 'Prorrogação';
-                        break;
-                      case 'exigencia':
-                        echo 'Exigência';
-                        break;
-                      case 'aguardandoINSS':
-                        echo 'Aguardando Resposta do INSS';
-                        break;
-                      case 'justFederal':
-                        echo 'Justiça Federal';
-                        break;
-                      case 'concluido':
-                        echo 'Concluído';
-                        break;
-                      default:
-                        echo 'Aguardando Documento';
-                        break;
-                    };
-                    ?>
-                  </span>
+                  <a href="" class=" mr-4 " data-toggle="modal" data-target="#modal-edtEtapa">
+                    <span class="d-block text-muted" style="font-size:.8rem">
+                      <?php
+                      switch ($dadoProcesso['statusprocesso']) {
+                        case 'aguardando':
+                          echo 'Aguardando Documento';
+                          break;
+                        case 'pericia':
+                          echo 'Perícia ou Agendamento';
+                          break;
+                        case 'prorrogacao':
+                          echo 'Prorrogação';
+                          break;
+                        case 'exigencia':
+                          echo 'Exigência';
+                          break;
+                        case 'aguardandoINSS':
+                          echo 'Aguardando Resposta do INSS';
+                          break;
+                        case 'justFederal':
+                          echo 'Justiça Federal';
+                          break;
+                        case 'concluido':
+                          echo 'Concluído';
+                          break;
+                        default:
+                          echo 'Aguardando Documento';
+                          break;
+                      };
+                      ?>
+                      <i class="mdi mdi-rotate-3d-variant"></i>
+                    </span>
+                  </a>
                 </p>
               </div>
               <div class="col-2">
@@ -454,9 +457,146 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
 <!-- /.content-wrapper -->
 
 
+<!-- MODAL EDITAR ETAPA -->
+<div class="modal fade" id="modal-edtEtapa">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" style="font-family: 'Advent Pro', sans-serif; font-weight: 400; letter-spacing: 1px;">Editar Etapa</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- form novo Usuário -->
+        <form class="needs-validation" novalidate action="" method="POST" enctype="multipart/form-data" />
+
+        <input type="hidden" name="id_pessoa_responsavel" id="id_pessoa_responsavel" value="<?= $_SESSION['ID']; ?>" />
+        <input type="hidden" name="id_processo" id="id_processo" value="" />
+        <input type="hidden" name="id_pessoa_cliente" id="" value="<?= $_GET['idcli']; ?>" />
+
+        <div class="form-row">
+          <div class=" col-12">
+            <label for="statusprocesso">Etapa
+              <span class="text-orange">*</span>
+            </label>
+            <select class="form-control text-uppercase" required name="statusprocesso" id="statusprocesso">
+              <?php
+
+
+              switch ($status['statusprocesso']) {
+                case 'aguardando': ?>
+                  <option value="aguardando" selected>Aguardando Documento</option>
+                  <option value="pericia">Perícia ou Agendamento</option>
+                  <option value="prorrogacao">Prorrogação</option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="justFederal">Justiça Federal </option>
+                  <option value="concluido">Concluído </option>
+
+                <?php
+                  break;
+                case 'pericia': ?>
+                  <option value="aguardando">Aguardando Documento</option>
+                  <option value="pericia" selected>Perícia ou Agendamento</option>
+                  <option value="prorrogacao">Prorrogação</option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="justFederal">Justiça Federal </option>
+                  <option value="concluido">Concluído </option>
+                <?php
+                  break;
+                case 'prorrogacao': ?>
+                  <option value="aguardando">Aguardando Documento</option>
+                  <option value="pericia">Perícia ou Agendamento</option>
+                  <option value="prorrogacao" selected>Prorrogação</option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="justFederal">Justiça Federal </option>
+                  <option value="concluido">Concluído </option>
+                <?php
+                  break;
+                case 'exigencia': ?>
+                  <option value="aguardando">Aguardando Documento</option>
+                  <option value="pericia">Perícia ou Agendamento</option>
+                  <option value="prorrogacao">Prorrogação</option>
+                  <option value="exigencia" selected>Exigência</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="justFederal">Justiça Federal </option>
+                  <option value="concluido">Concluído </option>
+                <?php
+                  break;
+                case 'aguardandoINSS': ?>
+                  <option value="aguardando">Aguardando Documento</option>
+                  <option value="pericia">Perícia ou Agendamento</option>
+                  <option value="prorrogacao">Prorrogação</option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="aguardandoINSS" selected>Aguardando Resposta do INSS</option>
+                  <option value="justFederal">Justiça Federal </option>
+                  <option value="concluido">Concluído </option>
+                <?php
+                  break;
+                case 'justFederal': ?>
+                  <option value="aguardando">Aguardando Documento</option>
+                  <option value="pericia">Perícia ou Agendamento</option>
+                  <option value="prorrogacao">Prorrogação</option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="justFederal" selected>Justiça Federal </option>
+                  <option value="concluido">Concluído </option>
+                <?php
+                  break;
+                case 'concluido': ?>
+                  <option value="aguardando">Aguardando Documento</option>
+                  <option value="pericia">Perícia ou Agendamento</option>
+                  <option value="prorrogacao">Prorrogação</option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="justFederal">Justiça Federal </option>
+                  <option value="concluido" selected>Concluído </option>
+              <?php
+                  break;
+                default:
+                  # code...
+                  break;
+              }
+              ?>
+            </select>
+            <div class="invalid-feedback">
+              Obrigatório !
+            </div>
+          </div>
+        </div>
+        <br />
+
+      </div>
+      <div class="modal-footer justify-content-between">
+        <input type="hidden" name="idcliente" value="<?= $id; ?>" />
+        <input type="hidden" name="idadvogado" value="0" />
+        <input type="hidden" name="nomeCliente" value="<?= $dcliente['nmPessoa']; ?>" />
+        <input type="hidden" name="userActionLog" value="<?= $_SESSION['USUARIO']; ?>" />
+        <input type="hidden" name="gravarHistorico" value="gravarHistorico" />
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-times fa-fw fa-lg"></i>
+          Fechar </button>
+        <button class="btn btn-success btn-lg" type="submit">
+          <i class="far fa-save fa-fw fa-lg"></i>
+          Gravar Dados</button>
+        </form>
+        <!--/form novo Usuario -->
+        <!-- <button type="button" class="btn btn-success">Save changes</button> -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
 <!-- MODAL NOVA HISTORICO -->
 <div class="modal fade" id="modal-novoHistorico">
-  <div class="modal-dialog modal-xl">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" style="font-family: 'Advent Pro', sans-serif; font-weight: 400; letter-spacing: 1px; ">Historico do Processo

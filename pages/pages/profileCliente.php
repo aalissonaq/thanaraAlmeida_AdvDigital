@@ -1190,7 +1190,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                   </div>
                 </div>
                 <div class="col-md-4">
-                  <label for="statusprocesso">Status
+                  <label for="statusprocesso">Etapa
                     <span class="text-orange">*</span>
                   </label>
                   <select class="form-control text-uppercase" required name="statusprocesso" id="statusprocesso">
@@ -1201,8 +1201,6 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                     <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
                     <option value="justFederal">Justiça Federal </option>
                     <option value="concluido">Concluído </option>
-
-
                   </select>
                   <div class="invalid-feedback">
                     Obrigatório !
