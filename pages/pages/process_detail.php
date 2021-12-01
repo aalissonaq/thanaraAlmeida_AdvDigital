@@ -18,7 +18,56 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
   } else {
     sweetalert('Ops !', ' Erro ao grava o Histórico, por favor tente novamente', 'error', 2000);
   }
+} elseif (isset($_POST['acao']) && $_POST['acao'] == 'edtEtapa') {
+
+  $update = "UPDATE processos SET statusprocesso = '$_POST[statusprocesso]' WHERE idprocesso = '$idProcess'";
+
+  if ($conexao->exec($update)) {
+    sweetalert('Sucesso', 'Etapa atualizada com suscesso', 'success', 2000);
+  } else {
+    sweetalert('Ops !', ' Erro ao atualizar a Etapa, por favor tente novamente', 'error', 2000);
+  }
+
+  $id_pessoa_cliente = trim(strip_tags($_GET['idcli']));
+  $id_pessoa_responsavel = $_SESSION['ID'];
+  $id_processo = trim(strip_tags($_GET['idprocess']));
+  $titulo_historico = 'Atualização da Etapa do Processo';
+
+  switch ($_POST['statusprocesso']) {
+    case 'aguardando':
+      $novaEtapa = 'Aguardando Documento';
+      break;
+    case 'pericia':
+      $novaEtapa =  'Perícia ou Agendamento';
+      break;
+    case 'prorrogacao':
+      $novaEtapa =  'Prorrogação';
+      break;
+    case 'exigencia':
+      $novaEtapa = 'Exigência';
+      break;
+    case 'aguardandoINSS':
+      $novaEtapa = 'Aguardando Resposta do INSS';
+      break;
+    case 'justFederal':
+      $novaEtapa = 'Justiça Federal';
+      break;
+    case 'concluido':
+      $novaEtapa = 'Concluído';
+      break;
+    default:
+      $novaEtapa =  'Aguardando Documento';
+      break;
+  };
+
+  $descricao_historico = "Etapa atualizada para: " . $novaEtapa;
+  $tipo_historico = 'at_status';
+
+  $sql = "INSERT INTO historico_processo (id_pessoa_cliente,id_pessoa_responsavel,id_processo,titulo_historico,descricao_historico,tipo_historico)
+          VALUES ('$id_pessoa_cliente','$id_pessoa_responsavel','$id_processo','$titulo_historico','$descricao_historico','$tipo_historico')";
+  $conexao->exec($sql);
 }
+
 ?>
 
 <!-- Content Header (Page header) -->
@@ -55,14 +104,13 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
         </a>
         <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
               <i class="fas fa-minus"></i></button>
-            <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
-              <i class="fas fa-times"></i></button> -->
+            <buttn type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+              <i class="fas fa-times"></i></buttn> -->
       </div>
     </div>
     <div class="card-body">
       <div class="row">
-        <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
-          <!-- info box -->
+        <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1" <!-- info box -->
           <div class="row mr-2">
             <div class="col-12 col-sm-4 col-md-4">
               <a href="#">
@@ -204,7 +252,26 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                           </div>
                           <div>
                             <!-- Before each timeline item corresponds to one icon on the left scale -->
-                            <i class="fas fa-envelope bg-blue"></i>
+
+                            <?php
+                            switch ($row['tipo_historico']) {
+                              case 'at_status':
+                                $icon = 'sync';
+                                break;
+                              case 'contato':
+                                $icon =  'comment-dots';
+                                break;
+                              case 'tarefa':
+                                $icon =  'tasks';
+                                break;
+
+                              default:
+                                $icon =  'history';
+                                break;
+                            };
+                            ?>
+
+                            <i class="fas fa-<?= $icon ?> bg-blue"></i>
                             <!-- Timeline item -->
                             <div class="timeline-item ">
                               <!-- Time -->
@@ -483,9 +550,12 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
             </label>
             <select class="form-control text-uppercase" required name="statusprocesso" id="statusprocesso">
               <?php
+              //               $process = $_GET['idprocess'];
+              //               $sql = "SELECT * FROM processos WHERE idprocesso ='$process' ";
+              //               $result = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+              // foreach ($result as ) {
 
-
-              switch ($status['statusprocesso']) {
+              switch ($dadoProcesso['statusprocesso']) {
                 case 'aguardando': ?>
                   <option value="aguardando" selected>Aguardando Documento</option>
                   <option value="pericia">Perícia ou Agendamento</option>
@@ -576,7 +646,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
         <input type="hidden" name="idadvogado" value="0" />
         <input type="hidden" name="nomeCliente" value="<?= $dcliente['nmPessoa']; ?>" />
         <input type="hidden" name="userActionLog" value="<?= $_SESSION['USUARIO']; ?>" />
-        <input type="hidden" name="gravarHistorico" value="gravarHistorico" />
+        <input type="hidden" name="acao" value="edtEtapa" />
         <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-times fa-fw fa-lg"></i>
           Fechar </button>
         <button class="btn btn-success btn-lg" type="submit">
