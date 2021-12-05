@@ -4,7 +4,7 @@ function novaConexao($banco = 'meb')
 {
   $servidor = 'localhost';
   $usuario = 'root';
-  $senha = '';
+  $senha = 't5r4e3w2q1';
 
   try {
     $conexao = new PDO(

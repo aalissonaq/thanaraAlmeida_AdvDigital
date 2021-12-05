@@ -96,17 +96,8 @@ if (!isset($_SESSION['USUARIO'])) {
   <!-- <link rel="stylesheet" href="plugins/sweetalert2/sweetalert2.min.css"/> -->
 
   <script src="plugins/sweetalert2/sweetalert2.js"></script>
+  <script src="./pages/js/calendario.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var calendarEl = document.getElementById('calendar');
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        locale: 'pt-br',
-        initialView: 'dayGridMonth'
-      });
-      calendar.render();
-    });
-  </script>
 
   <style type="text/css">
     input {
@@ -119,6 +110,10 @@ if (!isset($_SESSION['USUARIO'])) {
   <div class="wrapper">
     <!-- Navbar -->
     <?php
+    $_SESSION['LOGIN'] == 0 ?
+      sweetalert("Olá, {$_SESSION['USUARIO']}", 'Bem vindo ao sistema de gestão de clientes.', 'success', 2800, 'center') : '';
+    $_SESSION['LOGIN'] = 1;
+
     require_once './_includes/_navbarRoot.php';
     ?>
     <!-- /.navbar -->

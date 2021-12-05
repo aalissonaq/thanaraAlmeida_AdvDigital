@@ -3,6 +3,9 @@
 *.log
 ,._*
 
+//bd
+data/conexao.php
+
 // Archives
 *.zip
 

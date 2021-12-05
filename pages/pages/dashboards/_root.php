@@ -23,9 +23,8 @@
 
 
     <div class="row">
-      <div class="col-12 col-sm-6 col-md-4">
+      <div class="col-12 col-sm-4 col-md-4">
         <a class="nav-link" href="#todayTask" data-toggle="tab" onclick="window.getElementById('todayTask').classList.add(' active');">
-
           <div class="small-box bg-default">
             <div class="inner mx-3">
               <?php
@@ -47,9 +46,7 @@
         <!-- /.info-box -->
       </div>
       <!-- /.col -->
-      <div class="col-12 col-sm-6 col-md-4">
-
-
+      <div class="col-12 col-sm-4 col-md-4">
         <a class="nav-link" href="#allTask" data-toggle="tab" onclick="window.getElementById('todayTask').classList.add(' active');">
           <div class="small-box bg-gradient-default">
             <div class="inner mx-3">
@@ -69,12 +66,8 @@
         <!-- /.info-box -->
       </div>
       <!-- /.col -->
-
-      <!-- fix for small devices only -->
-      <div class="clearfix hidden-md-up"></div>
-
-      <div class="col-12 col-sm-6 col-md-4">
-        <a href="">
+      <div class="col-12 col-sm-4 col-md-4">
+        <a class="nav-link" href="#allTask" data-toggle="tab" onclick="window.getElementById('todayTask').classList.add(' active');">
           <div class="small-box bg-gradient-default">
             <div class="inner mx-3">
               <?php
@@ -85,16 +78,16 @@
               <p>Tarefas Concluidas</p>
             </div>
             <div class="icon ">
-              <i class="mdi mdi-calendar-multiple-check "></i>
+              <i class="mdi mdi-calendar-alert "></i>
             </div>
-
           </div>
         </a>
         <!-- /.info-box -->
       </div>
-
       <!-- /.col -->
-
+      <!-- fix for small devices only -->
+      <div class="clearfix hidden-md-up"></div>
+      <!-- /.col -->
       <!-- /.col -->
       </a>
     </div>
@@ -102,15 +95,16 @@
     <!-- Main row -->
     <div class="row">
       <!-- Left col -->
-      <div class="col-md-4">
-        <div id='calendar'></div>
+      <div class="col-12 col-sm-5 col-md-3">
+        <div class="" id='calendar'></div>
       </div>
       <!-- /.col -->
-      <div class="col-md-8">
+      <div class="col-9">
         <div class="">
           <!-- <h4>Tarefas</h4> -->
           <ul class="nav nav-pills mt-3 mb-1">
-            <li class="nav-item"><a class="nav-link" href="#todayTask" data-toggle="tab">
+            <li class="nav-item ">
+              <a class="nav-link" href="#todayTask" data-toggle="tab">
                 <i class="align-middle mdi mdi-calendar-multiple mdi-24px fa fa-fw"> </i>&nbsp;&nbsp;
                 <span class="align-middle">
                   Tarefas de hoje
@@ -118,9 +112,8 @@
               </a>
             </li>
 
-
             <li class="nav-item">
-              <a class="nav-link " href="#allTask" data-toggle="tab">
+              <a class="nav-link" href="#allTask" data-toggle="tab">
                 <i class="align-middle mdi mdi-calendar-clock mdi-24px fa fa-fw"></i>&nbsp;&nbsp;
                 <span class="align-middle">
                   Tarefas Agendadas
@@ -133,7 +126,7 @@
 
           </ul>
         </div>
-        <div class="card">
+        <div class="card ">
           <div class="card-tools">
             <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
               </button> -->
@@ -159,9 +152,7 @@
                       <table id="tabela" class="table table-sm table-striped table-hover">
                         <thead class="" style="font-family: 'Advent Pro', sans-serif;">
                           <tr>
-                            <th class="col-md-1 text-center align-middle">
-                              <i class="fas fa-hashtag fa-fw"></i>
-                            </th>
+                            <th class="col-md-1 text-center align-middle">Prioridade</th>
                             <th class="col-md-4 text-center align-middle ">Tarefa</th>
                             <th class="col-md-2 text-center align-middle ">status</th>
                             <th class="col-md-3 text-center align-middle ">Responsável</th>
@@ -173,15 +164,33 @@
                         </thead>
                         <tbody>
                           <?php
-                          $sql = "SELECT * FROM tarefas WHERE finalizada = 0 AND dtTarefa = CURDATE() OR dtTarefa < CURDATE()  ORDER BY dtTarefa ASC";
+                          $sql = "SELECT * FROM tarefas WHERE  dtTarefa = CURDATE() OR dtTarefa < CURDATE() AND finalizada = 0   ORDER BY dtTarefa ASC";
                           $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                           $count = 1;
                           foreach ($resultado as $task) {
                           ?>
-                            <tr class="">
-                              <td class=" text-uppercase align-middle text-center" style="font-size: .9rem;">
-                                <?php echo str_pad($count, 3, "0", STR_PAD_LEFT);
-                                $count++;
+                            <tr scope="row" class="">
+                              <td class=" text-uppercase align-middle" style="font-size: .9rem;">
+                                <?php
+                                switch ($task['prioridade']) {
+                                  case 'baixa':
+                                    echo '<span class="badge badge-success px-2"><i class="mdi mdi-alert-circle-outline mdi-24px align-middle"></i> BAIXA&nbsp;</span>';
+                                    break;
+
+                                  case 'media':
+                                    echo '<span class="badge badge-warning px-2"><i class="mdi mdi-alert-octagon-outline mdi-24px align-middle"></i> MÉDIA</span>';
+                                    break;
+
+                                  case 'alta':
+                                    echo '<span class="badge badge-danger px-2"><i class="mdi mdi-car-brake-alert mdi-24px align-middle"></i> &nbsp;ALTA &nbsp;&nbsp;</span>';
+                                    break;
+
+                                  default:
+                                    echo '<span class="badge badge-info px-2"><i class="mdi mdi-alert-box-outline mdi-18px align-middle"></i></span>';
+                                    break;
+                                }
+                                // echo str_pad($count, 3, "0", STR_PAD_LEFT);
+                                // $count++;
                                 ?>
                               </td>
                               <td class="text-uppercase align-middle">
@@ -239,22 +248,19 @@
                     <!-- /.tarefas -->
 
                   </div>
-                  <div class="tab-pane fade" id="allTask" role="tabpanel" aria-labelledby="allTask-tab">
+                  <div class="tab-pane fade  " id="allTask" role="tabpanel" aria-labelledby="allTask-tab">
 
                     <!-- Todas as Tarefas  -->
-                    <div class="table-responsive ">
+                    <div class="table-responsive">
                       <table id="tabela" class="table table-sm table-striped table-hover">
                         <thead class="" style="font-family: 'Advent Pro', sans-serif;">
                           <tr>
-                            <th class="col-md-1 text-center align-middle">
-                              <i class="fas fa-hashtag fa-fw"></i>
-                            </th>
-                            <th class="col-md-4 text-center align-middle ">Tarefa</th>
-                            <th class="col-md-2 text-center align-middle ">status</th>
-                            <th class="col-md-3 text-center align-middle ">Responsável</th>
-                            <th class="col-md-2 text-center align-middle ">Data e Hora</th>
-
-                            <th class="col-md-auto text-center align-middle">
+                            <th class="col-1 text- align-middle">Prioridade</th>
+                            <th class="col-4 text-center align-middle">Tarefa</th>
+                            <th class="col-2 text-center align-middle">status</th>
+                            <th class="col-3 text-center align-middle">Responsável</th>
+                            <th class="col-2 text-center align-middle">Data e Hora</th>
+                            <th class="col-auto text-center align-middle">
                               <i class="fab fa-lg fa-fw fa-whmcs" title="Ações"></i>
                             </th>
                           </tr>
@@ -266,10 +272,28 @@
                           $count = 1;
                           foreach ($resultado as $task) {
                           ?>
-                            <tr class="">
-                              <td class=" text-uppercase align-middle text-center" style="font-size: .9rem;">
-                                <?php echo str_pad($count, 3, "0", STR_PAD_LEFT);
-                                $count++;
+                            <tr scope="row" class="">
+                              <td class=" text-uppercase align-middle  col-auto" style="font-size: .9rem;">
+                                <?php
+                                switch ($task['prioridade']) {
+                                  case 'baixa':
+                                    echo '<span class="badge badge-success px-2"><i class="mdi mdi-alert-circle-outline mdi-24px align-middle"></i> BAIXA&nbsp;</span>';
+                                    break;
+
+                                  case 'media':
+                                    echo '<span class="badge badge-warning px-2"><i class="mdi mdi-alert-octagon-outline mdi-24px align-middle"></i> MÉDIA</span>';
+                                    break;
+
+                                  case 'alta':
+                                    echo '<span class="badge badge-danger px-2"><i class="mdi mdi-car-brake-alert mdi-24px align-middle"></i> &nbsp;ALTA &nbsp;&nbsp;</span>';
+                                    break;
+
+                                  default:
+                                    echo '<span class="badge badge-info px-2"><i class="mdi mdi-alert-box-outline mdi-18px align-middle"></i></span>';
+                                    break;
+                                }
+                                // echo str_pad($count, 3, "0", STR_PAD_LEFT);
+                                // $count++;
                                 ?>
                               </td>
                               <td class="text-uppercase align-middle">
@@ -280,15 +304,13 @@
                                 $today = date("Y-m-d", time());
                                 if ($task['dtTarefa'] < $today) {
                                   echo "<span class='badge badge-pill badge-danger px-2 py-1'>Atrasada</span>";
-                                } elseif ($task['dtTarefa'] == $today) {
-                                  echo "<span class='badge badge-pill badge-orange  px-2 py-1'>Hoje</span>";
                                 } else {
-                                  echo "<span class='badge badge-pill badge-success px-2 py-1'>Futura</span>";
+                                  echo "<span class='badge badge-pill badge- px-2 py-1'>Hoje</span>";
                                 }
                                 ?>
                               </td>
 
-                              <td class="text-uppercase align-middle" style="font-size: .8rem; ">
+                              <td class=" text-uppercase align-middle" style="font-size: .8rem; ">
                                 <?php
                                 $sql = "SELECT * FROM pessoa WHERE idPessoa = '" . $task['idResponsavel'] . "'";
                                 $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
@@ -305,6 +327,8 @@
                                 echo " AS ";
                                 echo date('H:i', strtotime($task['hora']));
                                 ?>
+
+
                               </td>
 
                               <td class="text-uppercase align-middle  ">
