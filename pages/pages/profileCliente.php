@@ -27,7 +27,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
         <!-- <h1 style="font-family:'Advent Pro', sans-serif; font-weight: bold; color: #C77129">Profile</h1> -->
       </div>
       <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-right" style="font-family:'Advent Pro', sans-serif;">
+        <ol class="breadcrumb float-sm-right" style="font-family:'Advent Pro', sans-serif; letter-spacing: .06rem;">
           <li class="breadcrumb-item"><a href="inicio.php"><i class="mdi mdi-home-outline fa fa-fw"></i>Inicio</a></li>
           <li class="breadcrumb-item"><a href="?page=listarClientes"><i class="mdi mdi-account-outline fa fa-fw"></i>Cliente</a></li>
           <li class="breadcrumb-item active"><i class="mdi mdi-file-account-outline fa fa-fw"></i>Perfil do Cliente</li>
@@ -236,83 +236,105 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
               <div class="tab-content">
                 <div class="active tab-pane" id="toayTask">
                   <!-- Tarefas -->
-
                   <div class="table-responsive ">
                     <table id="tabela" class="table table-sm table-striped table-hover">
-                      <thead class="" style="font-family: 'Advent Pro', sans-serif;">
+                      <thead class="" style="font-family: 'Advent Pro', sans-serif; font-weight: 100;">
                         <tr>
-                          <th class="col-md-1 text-center align-middle">
-                            <i class="fas fa-hashtag fa-fw"></i>
-                          </th>
-                          <th class="col-mb-2 text-center align-middle ">Tarefa</th>
-                          <th class="col-mb-2 text-center align-middle ">Responsável</th>
-                          <th class="col-mb-2 text-center align-middle ">Data e Hora</th>
-
+                          <th class="col-md-1 text-center align-middle">Prioridade</th>
+                          <th class="col-md-4 text-center align-middle ">Tarefa</th>
+                          <th class="col-md-2 text-center align-middle ">status</th>
+                          <th class="col-md-3 text-center align-middle ">Responsável</th>
+                          <th class="col-md-2 text-center align-middle ">Data e Hora</th>
                           <th class="col-md-auto text-center align-middle">
                             <i class="fab fa-lg fa-fw fa-whmcs" title="Ações"></i>
                           </th>
                         </tr>
                       </thead>
                       <tbody>
-
                         <?php
-                        $id = $_GET['id'];
-                        $count = 0;
-                        foreach (ler('tarefas', '', "WHERE idpessoa = {$id}")->fetchAll(PDO::FETCH_ASSOC) as $dadosTarefa) {
-                          $count++;
+                        $idpessoa = $_GET['id'];
+                        $sql = "SELECT * FROM tarefas WHERE  dtTarefa = CURDATE() OR dtTarefa < CURDATE() AND finalizada = 0 and idpessoa = '$idpessoa'    ORDER BY dtTarefa ASC";
+                        $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+                        $count = 1;
+                        foreach ($resultado as $task) {
                         ?>
-                          <tr class="">
-                            <td class=" text-uppercase align-middle text-center" style="font-size: .9rem;">
-                              <!-- //str_pad($count, 2, "0", STR_PAD_LEFT); -->
-
-                            </td>
-
-                            <td class="text-uppercase align-middle text-center">
-                              <?= $dadosTarefa['decricaoTarefa']; ?>
-                            </td>
-
-                            <td class="text-uppercase align-middle text-center" style="font-size: .9rem; ">
+                          <tr scope="row" class="">
+                            <td class=" text-uppercase align-middle" style="font-size: .9rem;">
                               <?php
-                              foreach (ler('pessoa', '', "WHERE idPessoa ={$dadosTarefa['idResponsavel']} ")->fetchAll(PDO::FETCH_ASSOC) as $dadosPessoa) {
-                                echo $dadosPessoa['nmPessoa'];
+                              switch ($task['prioridade']) {
+                                case 'baixa':
+                                  echo '<span class="badge badge-success px-2"><i class="mdi mdi-alert-circle-outline mdi-24px align-middle"></i> BAIXA&nbsp;</span>';
+                                  break;
+
+                                case 'media':
+                                  echo '<span class="badge badge-warning px-2"><i class="mdi mdi-alert-octagon-outline mdi-24px align-middle"></i> MÉDIA</span>';
+                                  break;
+
+                                case 'alta':
+                                  echo '<span class="badge badge-danger px-2"><i class="mdi mdi-car-brake-alert mdi-24px align-middle"></i> &nbsp;ALTA &nbsp;&nbsp;</span>';
+                                  break;
+
+                                default:
+                                  echo '<span class="badge badge-info px-2"><i class="mdi mdi-alert-box-outline mdi-18px align-middle"></i></span>';
+                                  break;
+                              }
+                              // echo str_pad($count, 3, "0", STR_PAD_LEFT);
+                              // $count++;
+                              ?>
+                            </td>
+                            <td class="text-uppercase align-middle">
+                              <?= $task['decricaoTarefa']; ?>
+                            </td>
+                            <td class="text-uppercase align-middle text-center" style="font-weight: 300;">
+                              <?php
+                              $today = date("Y-m-d", time());
+                              if ($task['dtTarefa'] < $today) {
+                                echo "<span class='badge badge-pill badge-danger px-2 py-1'>Atrasada</span>";
+                              } else {
+                                echo "<span class='badge badge-pill badge- px-2 py-1'>Hoje</span>";
                               }
                               ?>
                             </td>
 
+                            <td class=" text-uppercase align-middle" style="font-size: .8rem; ">
+                              <?php
+                              $sql = "SELECT * FROM pessoa WHERE idPessoa = '" . $task['idResponsavel'] . "'";
+                              $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+                              foreach ($resultado as $pessoa) {
+                                echo $pessoa['nmPessoa'];
+                              }
+                              ?>
+
+                            </td>
+
                             <td class="text-uppercase align-middle text-center">
-                              <?= date("d/m/Y ", strtotime($dadosTarefa['dtTarefa'])); ?>
-                              as
-                              <?= date(" H:i", strtotime($dadosTarefa['hora'])); ?>
+                              <?php
+                              echo date('d/m/Y', strtotime($task['dtTarefa']));
+                              echo " AS ";
+                              echo date('H:i', strtotime($task['hora']));
+                              ?>
+
+
                             </td>
 
                             <td class="text-uppercase align-middle  ">
                               <ul class="nav justify-content-center d-flex justify-content-evenly">
-                                <?php
-                                switch ($_SESSION['NIVEL']) {
-                                  case '0':
-                                ?>
-                                    <li class="nav-item">
-                                      <a href="" class="btn btn-tool" target="" title="Visializar Processo" rel="noopener noreferrer">
-                                        <i class="mdi mdi-file-eye-outline mdi-24px "></i>
-                                      </a>
-                                    </li>
 
+                                <li class="nav-item">
+                                  <a href="?page=task_detail&task=<?= $task['idtarefas'] ?>" class="btn btn-tool" target="" title="Visializar Processo" rel="noopener noreferrer">
+                                    <i class="mdi mdi-file-eye-outline mdi-24px "></i>
+                                  </a>
+                                </li>
 
-                                <?php
-                                    break;
-
-                                  default:
-                                    //TESTE DE STATUS
-                                    break;
-                                }
-                                ?>
                               </ul>
                             </td>
                           </tr>
                         <?php } ?>
+
                       </tbody>
                     </table>
                   </div>
+
 
                   <!-- /.tarefas -->
 
@@ -320,7 +342,97 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
 
 
                 <div class="tab-pane" id="allTasks">
-                  Todas as Tarefas Agendadas
+                  <!-- Todas as Tarefas  -->
+                  <div class="table-responsive">
+                    <table id="tabela" class="table table-sm table-striped table-hover">
+                      <thead class="" style="font-weight: 300; font-family: 'Advent Pro', sans-serif;">
+                        <tr>
+                          <th class="col-1 text- align-middle">Prioridade</th>
+                          <th class="col-4 text-center align-middle">Tarefa</th>
+                          <th class="col-2 text-center align-middle">status</th>
+                          <th class="col-3 text-center align-middle">Responsável</th>
+                          <th class="col-2 text-center align-middle">Data e Hora</th>
+                          <th class="col-auto text-center align-middle">
+                            <i class="fab fa-lg fa-fw fa-whmcs" title="Ações"></i>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php
+                        $sql = "SELECT * FROM tarefas WHERE finalizada = 0 ORDER BY dtTarefa ASC";
+                        $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+                        $count = 1;
+                        foreach ($resultado as $task) {
+                        ?>
+                          <tr scope="row" class="">
+                            <td class=" text-uppercase align-middle  col-auto" style="font-size: .9rem;">
+                              <?php
+                              switch ($task['prioridade']) {
+                                case 'baixa':
+                                  echo '<span class="badge badge-success px-2"><i class="mdi mdi-alert-circle-outline mdi-24px align-middle"></i> BAIXA&nbsp;</span>';
+                                  break;
+
+                                case 'media':
+                                  echo '<span class="badge badge-warning px-2"><i class="mdi mdi-alert-octagon-outline mdi-24px align-middle"></i> MÉDIA</span>';
+                                  break;
+
+                                case 'alta':
+                                  echo '<span class="badge badge-danger px-2"><i class="mdi mdi-car-brake-alert mdi-24px align-middle"></i> &nbsp;ALTA &nbsp;&nbsp;</span>';
+                                  break;
+
+                                default:
+                                  echo '<span class="badge badge-info px-2"><i class="mdi mdi-alert-box-outline mdi-18px align-middle"></i></span>';
+                                  break;
+                              }
+                              // echo str_pad($count, 3, "0", STR_PAD_LEFT);
+                              // $count++;
+                              ?>
+                            </td>
+                            <td class="text-uppercase align-middle">
+                              <?= $task['decricaoTarefa']; ?>
+                            </td>
+                            <td class="text-uppercase align-middle text-center" style="font-weight: 300;">
+                              <?php
+                              $today = date("Y-m-d", time());
+                              if ($task['dtTarefa'] < $today) {
+                                echo "<span class='badge badge-pill badge-danger px-2 py-1'>Atrasada</span>";
+                              } else {
+                                echo "<span class='badge badge-pill badge- px-2 py-1'>Hoje</span>";
+                              }
+                              ?>
+                            </td>
+                            <td class=" text-uppercase align-middle" style="font-size: .8rem; ">
+                              <?php
+                              $sql = "SELECT * FROM pessoa WHERE idPessoa = '" . $task['idResponsavel'] . "'";
+                              $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+                              foreach ($resultado as $pessoa) {
+                                echo $pessoa['nmPessoa'];
+                              }
+                              ?>
+                            </td>
+                            <td class="text-uppercase align-middle text-center">
+                              <?php
+                              echo date('d/m/Y', strtotime($task['dtTarefa']));
+                              echo " AS ";
+                              echo date('H:i', strtotime($task['hora']));
+                              ?>
+                            </td>
+                            <td class="text-uppercase align-middle  ">
+                              <ul class="nav justify-content-center d-flex justify-content-evenly">
+                                <li class="nav-item">
+                                  <a href="?page=task_detail&task=<?= $task['idtarefas'] ?> " class="btn btn-tool" target="" title="Visializar Processo" rel="noopener noreferrer">
+                                    <i class="mdi mdi-file-eye-outline mdi-24px "></i>
+                                  </a>
+                                </li>
+                              </ul>
+                            </td>
+                          </tr>
+                        <?php } ?>
+
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- /.tarefas -->
                 </div>
                 <!-- /.tab-pane -->
               </div>

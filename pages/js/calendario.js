@@ -5,7 +5,18 @@ document.addEventListener('DOMContentLoaded', function () {
     themeSystem: 'bootstrap',
     locale: 'pt-br',
     timeZone: 'America/Fortaleza',
+    contentHeight: 400,
     initialView: 'dayGridMonth',
+
+    events: [
+      {
+        start: '2021-12-01T10:00:00',
+        end: '2021-12-10T16:00:00',
+        display: 'background'
+      }
+    ]
+
+
     // initialDate: '2021-11-07',
     // headerToolbar: {
     //   left: 'prev,next today',

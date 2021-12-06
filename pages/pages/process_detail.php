@@ -75,13 +75,13 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1>Detalhamento do Processo</h1>
+        <h1 style="font-family:'Advent Pro', sans-serif; letter-spacing: .06rem; font-weight: 300;">Detalhamento do Processo</h1>
       </div>
       <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-right">
+        <ol class="breadcrumb float-sm-right" style="font-family:'Advent Pro', sans-serif; letter-spacing: .06rem;">
           <li class="breadcrumb-item"><a href="?page=inicio">Home</a></li>
-          <li class="breadcrumb-item"><a href="?page=profileCliente&id=<?= $_GET["idcli"] ?>">Perfil do Usuarios</a></li>
-          <li class="breadcrumb-item active">Project Detail</li>
+          <li class="breadcrumb-item"><a href="?page=profileCliente&id=<?= $_GET["idcli"] ?>">Perfil do Usuários</a></li>
+          <li class="breadcrumb-item active">Datalhes do Processo</li>
         </ol>
       </div>
     </div>

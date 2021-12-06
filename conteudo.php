@@ -56,6 +56,10 @@ if (!isset($_GET['page']) || $_GET['page'] == null) {
       include "./pages/pages/process_detail.php";
       break;
 
+      #TAREFAS
+    case 'task_detail':
+      include "./pages/pages/task_detail.php";
+      break;
 
       #SERVIÇOS
     case 'listarServicos':

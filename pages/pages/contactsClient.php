@@ -5,7 +5,7 @@
             <h1 style="font-family:'Advent Pro', sans-serif; font-weight: 400; ">Clientes</h1>
           </div>
           <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
+            <ol class="breadcrumb float-sm-right" style="font-family:'Advent Pro', sans-serif; letter-spacing: .06rem;" >
               <li class="breadcrumb-item"><a href="?page=inicio">Home</a></li>
               <li class="breadcrumb-item active">Clientes</li>
             </ol>

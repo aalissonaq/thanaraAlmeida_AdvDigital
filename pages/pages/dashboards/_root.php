@@ -7,9 +7,9 @@
           Painel</h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-right" style="font-family:'Advent Pro', sans-serif; ">
+        <ol class="breadcrumb float-sm-right" style="font-family:'Advent Pro', sans-serif;  letter-spacing:.06rem">
           <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard </li>
+          <li class="breadcrumb-item active">Dashboard</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -136,9 +136,6 @@
           </div>
           <!-- <div class="card-header">
             <h3 class="card-title"></h3>
-
-
-
           </div> -->
           <!-- /.card-header -->
           <div class="card-body">
@@ -150,7 +147,7 @@
                     <!-- Tarefas de hoje -->
                     <div class="table-responsive ">
                       <table id="tabela" class="table table-sm table-striped table-hover">
-                        <thead class="" style="font-family: 'Advent Pro', sans-serif;">
+                        <thead class="" style="font-family: 'Advent Pro', sans-serif; font-weight: 100;">
                           <tr>
                             <th class="col-md-1 text-center align-middle">Prioridade</th>
                             <th class="col-md-4 text-center align-middle ">Tarefa</th>
@@ -232,7 +229,7 @@
                                 <ul class="nav justify-content-center d-flex justify-content-evenly">
 
                                   <li class="nav-item">
-                                    <a href="" class="btn btn-tool" target="" title="Visializar Processo" rel="noopener noreferrer">
+                                    <a href="?page=task_detail&task=<?= $task['idtarefas'] ?>" class="btn btn-tool" target="" title="Visializar Processo" rel="noopener noreferrer">
                                       <i class="mdi mdi-file-eye-outline mdi-24px "></i>
                                     </a>
                                   </li>
@@ -253,7 +250,7 @@
                     <!-- Todas as Tarefas  -->
                     <div class="table-responsive">
                       <table id="tabela" class="table table-sm table-striped table-hover">
-                        <thead class="" style="font-family: 'Advent Pro', sans-serif;">
+                        <thead class="" style="font-weight: 300; font-family: 'Advent Pro', sans-serif;">
                           <tr>
                             <th class="col-1 text- align-middle">Prioridade</th>
                             <th class="col-4 text-center align-middle">Tarefa</th>
@@ -304,7 +301,10 @@
                                 $today = date("Y-m-d", time());
                                 if ($task['dtTarefa'] < $today) {
                                   echo "<span class='badge badge-pill badge-danger px-2 py-1'>Atrasada</span>";
-                                } else {
+                                }
+                                elseif ($task['dtTarefa'] > $today) {
+                                  echo "<span class='badge badge-pill badge-info px-2 py-1'>Futura</span>";
+                                }else {
                                   echo "<span class='badge badge-pill badge- px-2 py-1'>Hoje</span>";
                                 }
                                 ?>
@@ -335,7 +335,7 @@
                                 <ul class="nav justify-content-center d-flex justify-content-evenly">
 
                                   <li class="nav-item">
-                                    <a href="" class="btn btn-tool" target="" title="Visializar Processo" rel="noopener noreferrer">
+                                    <a href="?page=task_detail&task=<?= $task['idtarefas'] ?>" class="btn btn-tool" target="" title="Visializar Processo" rel="noopener noreferrer">
                                       <i class="mdi mdi-file-eye-outline mdi-24px "></i>
                                     </a>
                                   </li>
