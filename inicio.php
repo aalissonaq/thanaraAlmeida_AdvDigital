@@ -58,6 +58,7 @@ if (!isset($_SESSION['USUARIO'])) {
 
   <title>Dra Thanara Almeida | SISTEMA</title>
   <link rel="shortcut icon" href="./image/icon.png" type="image/x-icon" />
+<link rel="stylesheet" href="./plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css"/>
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css" />

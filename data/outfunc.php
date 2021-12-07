@@ -105,7 +105,7 @@ function sendMail($assunto, $mensagem, $remetente, $nomeRemetente, $destino, $no
   FORMATA DATA EM TIMESTAMP
  * *************************** */
 
-function formDate($data)
+function formatDate($data)
 {
   $timestamp = explode(" ", $data);
   $getData = $timestamp[0];

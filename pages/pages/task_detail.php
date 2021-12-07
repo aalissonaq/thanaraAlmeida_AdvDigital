@@ -100,16 +100,16 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
   <?php
   switch ($task['prioridade']) {
     case 'baixa':
-      $colorCard = 'card-success';
+      $color = 'success';
       break;
     case 'media':
-      $colorCard = 'card-warning';
+      $color = 'warning';
       break;
     case 'alta':
-      $colorCard = 'card-danger';
+      $color = 'danger';
       break;
     default:
-      $colorCard = 'card-secondary';
+      $color = 'secondary';
       break;
   }
   ?>
@@ -147,7 +147,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
           </div>
 
           <div class="row pr-3">
-            <div class="card col-12 col-md-12  <?= $colorCard ?>">
+            <div class="card col-12 col-md-12 card-<?= $color ?>">
               <div class="card-header">
                 <h2 class="card-title text-uppercase h3">Tarefa</h2>
                 <div class="card-tools">
@@ -250,6 +250,71 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                         </div>
                       </div>
                     </div>
+
+                    <form method="post" action="" enctype="multipart/form-data">
+                      <div class="row mb-2">
+                        <div class="col-3 text-primary">
+                          <span class="text-lead">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            Prioridade:
+                          </span>
+                          <div class="h5">
+                            <span class="text-lead text-uppercase text-primary">
+                              <select class="form-control text-uppercase text-<?= $color ?>" style="border: none;" required name="prioridade" id="">
+                                <?php
+                                switch ($task['prioridade']) {
+                                  case 'baixa':
+                                    echo '<option value="baixa" class="text-success" selected>Baixa</option>';
+                                    echo '<option value="media" class="text-warning">Média</option>';
+                                    echo '<option value="alta" class="text-danger">Alta</option>';
+                                    break;
+                                  case 'media':
+                                    echo '<option value="baixa" class="text-success">Baixa</option>';
+                                    echo '<option value="media" class="text-warning" selected>Média</option>';
+                                    echo '<option value="alta" class="text-danger">Alta</option>';
+                                    break;
+                                  case 'alta':
+                                    echo '<option value="baixa" class="text-success">Baixa</option>';
+                                    echo '<option value="media" class="text-warning">Média</option>';
+                                    echo '<option value="alta" class="text-danger" selected>Alta</option>';
+                                    break;
+                                }
+                                ?>
+                              </select>
+
+                          </div>
+                        </div>
+                        <div class="col-3 text-primary">
+                          <span class="text-lead">
+                            <i class="fas fa-check mr-1"></i>
+                            Finalizar Tarefa:
+                          </span>
+                          <div class="">
+                            <div class="custom-control custom-switch">
+                              <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                              <label class="custom-control-label" for="customSwitch1"></label>
+                            </div>
+
+
+                          </div>
+                        </div>
+                        <div class="col-6 text-primary">
+                          <span class="text-lead">
+                            <i class="fas fa-map-marker-alt mr-1"></i>
+                            Local da Tarefa:
+                          </span>
+                          <div class="h5">
+                            <span class="text-lead text-uppercase ">
+                              <?= $task['local'] ?>
+                          </div>
+                        </div>
+                      </div>
+
+                    </form>
+
+
+
+
                   </div>
                 </div>
               </div>

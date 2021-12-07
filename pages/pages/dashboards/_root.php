@@ -191,7 +191,7 @@
                                 ?>
                               </td>
                               <td class="text-uppercase align-middle">
-                                <?= $task['decricaoTarefa']; ?>
+                                <?= lmWord($task['decricaoTarefa'], 70); ?>
                               </td>
                               <td class="text-uppercase align-middle text-center" style="font-weight: 300;">
                                 <?php
@@ -294,17 +294,16 @@
                                 ?>
                               </td>
                               <td class="text-uppercase align-middle">
-                                <?= $task['decricaoTarefa']; ?>
+                                <?= lmWord($task['decricaoTarefa'], 70); ?>
                               </td>
                               <td class="text-uppercase align-middle text-center" style="font-weight: 300;">
                                 <?php
                                 $today = date("Y-m-d", time());
                                 if ($task['dtTarefa'] < $today) {
                                   echo "<span class='badge badge-pill badge-danger px-2 py-1'>Atrasada</span>";
-                                }
-                                elseif ($task['dtTarefa'] > $today) {
+                                } elseif ($task['dtTarefa'] > $today) {
                                   echo "<span class='badge badge-pill badge-info px-2 py-1'>Futura</span>";
-                                }else {
+                                } else {
                                   echo "<span class='badge badge-pill badge- px-2 py-1'>Hoje</span>";
                                 }
                                 ?>
