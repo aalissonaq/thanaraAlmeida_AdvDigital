@@ -12,6 +12,7 @@ if (isset($_POST['gravar']) && $_POST['gravar'] == 'gravar') {
   $dados['dtTarefa'] = strip_tags(strip_tags(trim($_POST['dtTarefa'])));
   $dados['hora'] = strip_tags(strip_tags(trim($_POST['hora'])));
   $dados['local'] = strip_tags(strip_tags(trim($_POST['local'])));
+  $dados['prioridade'] = strip_tags(strip_tags(trim($_POST['prioridade'])));
 
   $dados['restingir'] = $_POST['restingir'] == 'on' ? 1 : 0;
   $dados['idpessoa'] = strip_tags(strip_tags(trim($_POST['idpessoa'])));

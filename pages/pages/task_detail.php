@@ -7,6 +7,32 @@ $task = $resultQueryTask[0];
 
 $idClient = $task['idpessoa'];
 $idProcess = $task['idProcesso'];
+
+if (isset($_POST['edtTarefa']) && $_POST['edtTarefa'] == 'edtTarefa') {
+
+  $idCreador = strip_tags((trim($_POST['idCreador'])));
+  $idResponsavel = strip_tags((trim($_POST['idResponsavel'])));
+  $idProcesso = strip_tags((trim($_POST['idProcesso'])));
+  $decricaoTarefa = strip_tags((trim($_POST['decricaoTarefa'])));
+  $dtTarefa = strip_tags(strip_tags(trim($_POST['dtTarefa'])));
+  $hora = strip_tags(strip_tags(trim($_POST['hora'])));
+  $local = strip_tags(strip_tags(trim($_POST['local'])));
+  $prioridade = strip_tags(strip_tags(trim($_POST['prioridade'])));
+
+  $restingir = $_POST['restingir'] == 'on' ? 1 : 0;
+  $idpessoa = strip_tags(strip_tags(trim($_POST['idpessoa'])));
+
+  $sql = "UPDATE `tarefas` SET `idpessoa` = '$idpessoa', `idCreador` = '$idCreador', `idResponsavel` = '$idResponsavel', `idProcesso` = '$idProcesso', `decricaoTarefa` = '$decricaoTarefa', `dtTarefa` = '$dtTarefa', `hora` = '$hora', `local` = '$local', `prioridade` = '$prioridade', `restingir` = '$restingir' WHERE idtarefas = '$task_id'";
+  $resultQueryTask = $conexao->exec($sql);
+  if ($resultQueryTask) {
+    sweetalert('', 'Tarefa editada com sucesso!', 'success', 2000, 'top-end');
+
+    echo "<script>window.location.href = 'inicio.php?page=task_detail&task=$task_id';</script>";
+  } else {
+    sweetalert('', 'Erro ao editar tarefa!', 'error', 2000, 'top-end');
+  }
+}
+
 if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHistorico') {
   $id_pessoa_cliente = $_POST['id_pessoa_cliente'];
   $id_pessoa_responsavel = $_POST['id_pessoa_responsavel'];
@@ -251,66 +277,40 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                       </div>
                     </div>
 
-                    <form method="post" action="" enctype="multipart/form-data">
-                      <div class="row mb-2">
-                        <div class="col-3 text-primary">
-                          <span class="text-lead">
-                            <i class="fas fa-exclamation-circle mr-1"></i>
-                            Prioridade:
-                          </span>
-                          <div class="h5">
-                            <span class="text-lead text-uppercase text-primary">
-                              <select class="form-control text-uppercase text-<?= $color ?>" style="border: none;" required name="prioridade" id="">
-                                <?php
-                                switch ($task['prioridade']) {
-                                  case 'baixa':
-                                    echo '<option value="baixa" class="text-success" selected>Baixa</option>';
-                                    echo '<option value="media" class="text-warning">Média</option>';
-                                    echo '<option value="alta" class="text-danger">Alta</option>';
-                                    break;
-                                  case 'media':
-                                    echo '<option value="baixa" class="text-success">Baixa</option>';
-                                    echo '<option value="media" class="text-warning" selected>Média</option>';
-                                    echo '<option value="alta" class="text-danger">Alta</option>';
-                                    break;
-                                  case 'alta':
-                                    echo '<option value="baixa" class="text-success">Baixa</option>';
-                                    echo '<option value="media" class="text-warning">Média</option>';
-                                    echo '<option value="alta" class="text-danger" selected>Alta</option>';
-                                    break;
-                                }
-                                ?>
-                              </select>
-
-                          </div>
+                    <div class="row mb-2">
+                      <div class="col-3 text-primary">
+                        <span class="text-lead">
+                          <i class="fas fa-exclamation-circle mr-1"></i>
+                          Prioridade:
+                        </span>
+                        <div class="h5">
+                          <span class="text-lead text-uppercase text-<?= $color ?>">
+                            <?= $task['prioridade'] ?>
                         </div>
-                        <div class="col-3 text-primary">
-                          <span class="text-lead">
-                            <i class="fas fa-check mr-1"></i>
-                            Finalizar Tarefa:
-                          </span>
-                          <div class="">
-                            <div class="custom-control custom-switch">
-                              <input type="checkbox" class="custom-control-input" id="customSwitch1">
-                              <label class="custom-control-label" for="customSwitch1"></label>
-                            </div>
+                      </div>
+                      <div class="col-3 text-primary">
+                        <span class="text-lead">
+                          <i class="fas fa-check mr-1"></i>
+                          Finalizar Tarefa:
+                        </span>
+                        <div class="">
+                          <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                            <label class="custom-control-label" for="customSwitch1"></label>
+                          </div>
 
 
-                          </div>
-                        </div>
-                        <div class="col-6 text-primary">
-                          <span class="text-lead">
-                            <i class="fas fa-map-marker-alt mr-1"></i>
-                            Local da Tarefa:
-                          </span>
-                          <div class="h5">
-                            <span class="text-lead text-uppercase ">
-                              <?= $task['local'] ?>
-                          </div>
                         </div>
                       </div>
 
+                    </div>
+
                     </form>
+
+                    <a href="" class="btn btn-outline-primary " target="" title="Adicionar Tarefas" rel="noopener noreferrer" data-toggle="modal" data-target="#modal-editTarefa">
+                      <i class="mdi mdi-book-cog-outline mdi-24px align-middle"></i>
+                      Editar Tarefa
+                    </a>
 
 
 
@@ -523,6 +523,194 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
 </div>
 <!-- /.content-wrapper -->
 
+<!-- MODAL EDITAR TAREFA -->
+<div class="modal fade" id="modal-editTarefa">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" style="font-family: 'Advent Pro', sans-serif; font-weight: 500; letter-spacing: 1px;">Editar Tarefa&nbsp;
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <!-- form novo Usuário -->
+        <form class="needs-validation" novalidate action="" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="edtTarefa" value="edtTarefa">
+          <input type="hidden" name="restingir" id="idTarefa" value="<?= $task['restingir']; ?>">
+          <input type="hidden" name="idCreador" id="idCreador" value="<?= $task['idCreador']; ?>" />
+          <input type="hidden" name="idProcesso" id="idProcesso" value="<?= $task['idProcesso'] ?>" />
+          <input type="hidden" name="idpessoa" id="" value="<?= $task['idpessoa'] ?>" />
+
+          <div class="form-row">
+            <div class="col-md-12">
+              <label for="idResponsavel">Responsavel
+                <span class="text-orange">*</span>
+              </label>
+
+              <select class="form-control text-uppercase custom-select" name="idResponsavel" id="idResponsavel">
+                <option value="" selected disabled>Selecione Responsavel </option>
+                <?php
+
+                $sql = "SELECT * FROM pessoa  WHERE idPessoa = '" . $task['idResponsavel'] . "'";
+                $result = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($result as $pessoa) {
+
+                  switch ($pessoa['nivelUser']) {
+                    case '1':
+                      $nivel = 'Administrador';
+                      break;
+                    case '2':
+                      $nivel = 'Secretário(a) / Atendente';
+                      break;
+                    case '3':
+                      $nivel = 'Advogado(a) / Parceiro(a)';
+                      break;
+                  }
+
+                  echo "<option value='" . $pessoa['idPessoa'] . "' selected>" . $pessoa['nmPessoa'] . ' - ' . $nivel . "</option>";
+                }
+
+                foreach (ler('vw_pessoa_user', '', "WHERE nivelUser > 0 and flStatusUser = 1 and idPessoaPessoa != '{$task['idResponsavel']}'")->fetchAll(PDO::FETCH_ASSOC) as $users) {
+                ?>
+                  <option value="<?= $users['idPessoaPessoa'] ?>"><?= $users['nmPessoa'] . ' - ' ?>
+                    <?php
+                    switch ($users['nivelUser']) {
+                      case '1':
+                        echo 'Administrador';
+                        break;
+                      case '2':
+                        echo 'Secretário(a) / Atendente';
+                        break;
+                      case '3':
+                        echo 'Advogado(a) / Parceiro(a)';
+                        break;
+
+                      default:
+                        # code...
+                        break;
+                    }
+
+                    ?>
+                  </option>
+                <?php } ?>
+
+              </select>
+              <div class="invalid-feedback">
+                A seleção é Obrigatório !
+              </div>
+              <!-- <input type="text" name="objprocesso" class="form-control text-uppercase" disabled id="objprocesso" placeholder="Objeto do Processo" value="" required/>
+                  <div class="invalid-feedback">
+                    Obrigatório !
+                  </div> -->
+            </div>
+
+            <!-- <div class="col-md-6">
+                  <label for="contraparte">Processo
+                    <span class="text-orange">*</span>
+                  </label>
+                  <input type="text" name="contraparte" class="form-control text-uppercase  " id="contraparte" placeholder=" Parte Contraria" value="" >
+                  <div class="invalid-feedback">
+                    Obrigatório !
+                  </div>
+                </div> -->
+
+          </div>
+          <div class="form-row">
+            <div class="col-md-12">
+              <label for="decricaoTarefa">O que deverá ser feito ?
+                <span class="text-orange">*</span>
+              </label>
+              <textarea class="form-control" name="decricaoTarefa" id="decricaoTarefa" placeholder="Decrição da tarefa" name="validation" rows="4" required>
+              <?= $task['decricaoTarefa']; ?>
+              </textarea>
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="col-md-3">
+              <label for="dtTarefa">Data da tarefa
+                <span class="text-orange">*</span>
+              </label>
+              <input type="date" maxlength="19" name="dtTarefa" class="form-control text-uppercase" id="dtTarefa" placeholder="" value="<?= $task['dtTarefa']; ?>" required />
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label for="hora">Hora da tarefa</label>
+              <input type="time" maxlength="19" name="hora" class="form-control text-uppercase" id="hora" value="<?= $task['hora']; ?>">
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+
+            <div class="col-md-5">
+              <label for="statusprocesso">Local do Compromisso</label>
+              <input type="text" maxlength="19" name="local" class="form-control text-uppercase" id="local" placeholder="Local onde sera realizada a terefa" value="<?= $task['local']; ?>" />
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label for="prioridade">Prioridade</label>
+              <select class="form-control text-uppercase custom-select" name="prioridade" id="prioridade">
+                <?php
+                switch ($task['prioridade']) {
+                  case 'baixa':
+                    echo "<option value='baixa' class='text-success' selected>Baixa</option>";
+                    echo "<option value='media' class='text-warning'>Média</option>";
+                    echo "<option value='alta' class='text-danger'>Alta</option>";
+                    break;
+                  case 'media':
+                    echo "<option value='baixa' class='text-success'>Baixa</option>";
+                    echo "<option value='media' class='text-warning' selected>Média</option>";
+                    echo "<option value='alta' class='text-danger'>Alta</option>";
+                    break;
+                  case 'alta':
+                    echo "<option value='baixa' class='text-success'>Baixa</option>";
+                    echo "<option value='media' class='text-warning'>Média</option>";
+                    echo "<option value='alta' class='text-danger' selected>Alta</option>";
+                    break;
+                }
+                ?>
+
+                <div class="invalid-feedback">
+                  Obrigatório !
+                </div>
+              </select>
+            </div>
+          </div>
+          <br />
+
+
+      </div>
+      <div class="modal-footer justify-content-between">
+        <input type="hidden" name="idcliente" value="<?= $id; ?>" />
+        <input type="hidden" name="idadvogado" value="0" />
+        <input type="hidden" name="nomeCliente" value="<?= $dcliente['nmPessoa']; ?>" />
+        <input type="hidden" name="userActionLog" value="<?= $_SESSION['USUARIO']; ?>" />
+        <input type="hidden" name="gravar" value="gravar" />
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-times fa-fw fa-lg"></i>
+          Fechar </button>
+        <button class="btn btn-success btn-lg" type="submit">
+          <i class="far fa-save fa-fw fa-lg"></i>
+          Gravar Dados</button>
+        </form>
+        <!--/form novo Usuario -->
+        <!-- <button type="button" class="btn btn-success">Save changes</button> -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
 <!-- MODAL EDITAR ETAPA -->
 <div class="modal fade" id="modal-edtEtapa">

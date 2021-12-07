@@ -227,10 +227,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
 
                 <!-- <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a>
                 </li> -->
-
               </ul>
-
-
             </div><!-- /.card-header -->
             <div class="card-body">
               <div class="tab-content">
@@ -980,16 +977,14 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" style="font-family: 'Advent Pro', sans-serif; font-weight: 500; letter-spacing: 1px; color:orange">Nova Tarefa&nbsp;
+            <h5 class="modal-title" style="font-family: 'Advent Pro', sans-serif; font-weight: 500; letter-spacing: 1px;">Nova Tarefa&nbsp;
             </h5>
-
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <!-- form novo Usuário -->
-
+                      <!-- form novo Usuário -->
             <form class="needs-validation" novalidate action="./pages/pages/acoes/gravaNovaTarefa.php" method="POST" enctype="multipart/form-data">
 
               <input type="hidden" name="idCreador" id="idCreador" value="<?= $_SESSION['ID']; ?>" />
@@ -1007,7 +1002,6 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                     <?php
                     foreach (ler('vw_pessoa_user', '', 'WHERE nivelUser > 0 and flStatusUser = 1')->fetchAll(PDO::FETCH_ASSOC) as $users) {
                     ?>
-
                       <option value="<?= $users['idPessoaPessoa'] ?>"><?= $users['nmPessoa'] . ' - ' ?>
                         <?php
                         switch ($users['nivelUser']) {
@@ -1030,12 +1024,10 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                       </option>
                     <?php } ?>
 
-
                   </select>
                   <div class="invalid-feedback">
                     A seleção é Obrigatório !
                   </div>
-
                   <!-- <input type="text" name="objprocesso" class="form-control text-uppercase" disabled id="objprocesso" placeholder="Objeto do Processo" value="" required/>
                   <div class="invalid-feedback">
                     Obrigatório !
@@ -1058,9 +1050,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                   <label for="decricaoTarefa">O que deverá ser feito ?
                     <span class="text-orange">*</span>
                   </label>
-
                   <textarea class="form-control" name="decricaoTarefa" id="decricaoTarefa" placeholder="Decrição da tarefa" name="validation" rows="4" required></textarea>
-
                   <div class="invalid-feedback">
                     Obrigatório !
                   </div>
@@ -1085,7 +1075,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                   </div>
                 </div>
 
-                <div class="col-md-7">
+                <div class="col-md-5">
                   <label for="statusprocesso">Local do Compromisso</label>
 
                   </label>
@@ -1093,6 +1083,17 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                   <div class="invalid-feedback">
                     Obrigatório !
                   </div>
+                </div>
+                <div class="col-md-2">
+                  <label for="prioridade">Prioridade</label>
+                  <select class="form-control text-uppercase custom-select" name="prioridade" id="prioridade">
+                    <option value="baixa" class="text-success">Baixa</option>
+                    <option value="media" class="text-warning">Média</option>
+                    <option value="alta" class="text-danger">Alta</option>
+                    <div class="invalid-feedback">
+                      Obrigatório !
+                    </div>
+                  </select>
                 </div>
               </div>
               <br />
@@ -1319,8 +1320,6 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                   </div>
                 </div>
               </div>
-
-
           </div>
           <div class="modal-footer justify-content-between">
             <input type="hidden" name="idcliente" value="<?= $id; ?>">
