@@ -554,6 +554,16 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                                 case 'concluido':
                                   echo 'Concluído';
                                   break;
+                                case 'analise':
+                                  echo 'Análise';
+                                  break;
+                                case 'justComum':
+                                  echo 'Justiça Comum';
+                                  break;
+                                case 'concluso':
+                                  echo 'Concluso';
+                                  break;
+
                                 default:
                                   echo 'Aguardando Documento';
                                   break;
@@ -984,7 +994,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
             </button>
           </div>
           <div class="modal-body">
-                      <!-- form novo Usuário -->
+            <!-- form novo Usuário -->
             <form class="needs-validation" novalidate action="./pages/pages/acoes/gravaNovaTarefa.php" method="POST" enctype="multipart/form-data">
 
               <input type="hidden" name="idCreador" id="idCreador" value="<?= $_SESSION['ID']; ?>" />
@@ -1308,12 +1318,15 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                   </label>
                   <select class="form-control text-uppercase" required name="statusprocesso" id="statusprocesso">
                     <option value="aguardando">Aguardando Documento</option>
+                    <option value="analise">Análise</option>
+                    <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                    <option value="concluso">Concluso </option>
+                    <option value="concluido">Concluído </option>
+                    <option value="exigencia">Exigência</option>
+                    <option value="justComum">Justiça Comum</option>
+                    <option value="justFederal">Justiça Federal </option>
                     <option value="pericia">Perícia ou Agendamento</option>
                     <option value="prorrogacao">Prorrogação</option>
-                    <option value="exigencia">Exigência</option>
-                    <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
-                    <option value="justFederal">Justiça Federal </option>
-                    <option value="concluido">Concluído </option>
                   </select>
                   <div class="invalid-feedback">
                     Obrigatório !
@@ -1367,7 +1380,6 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
 <script>
   function setaDadosModalProcesso(valor) {
     document.getElementById('idPessoaCliente').value = valor;
-
   };
 
   function modalIdProcesso(valor) {
@@ -1386,8 +1398,6 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
   //document.getElementById('gestaoMenu').classList.add("menu-open");
   //document.getElementById('gestaoMenuActive').classList.add("active");
   document.getElementById('menuClientes').classList.add("active");
-
-
   // Example starter JavaScript for disabling form submissions if there are invalid fields
   (function() {
     'use strict';

@@ -285,7 +285,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                                 </a> ...
                               </h3>
                               <!-- Body -->
-                              <div class="timeline-body ">
+                              <div class="timeline-body text-justify px-4 ">
                                 <?= $row['descricao_historico'] ?>
                               </div>
                               <!-- Placement of additional controls. Optional -->
@@ -293,7 +293,11 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                                 <?php
                                 if ($row['id_pessoa_responsavel'] == $_SESSION['ID'] || $_SESSION['NIVEL'] <= 1) {
                                 ?>
-                                  <a class="btn btn-primary btn-sm float-right" style="border-radius: 7px;">
+                                  <!-- <button type="button" class="btn btn-sm btn-outline-primary mr-1 float-right" data-toggle="modal" data-target="#modal-edtHistorico" onclick="setIdHistoric(<?= $row['id_historico'] ?>)" style="margin-top:-1.7rem;">
+                                    <i class="mdi mdi-pencil-outline "></i>
+                                    Editar
+                                  </button> -->
+                                  <a class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#modal-edtHistorico" style="border-radius: 7px;">
                                     <i class="mdi mdi-pencil-outline "></i>
                                     Editar</a>
                                   <!-- <a class="btn btn-danger btn-sm">Delete</a> -->
@@ -523,7 +527,6 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
 </div>
 <!-- /.content-wrapper -->
 
-
 <!-- MODAL EDITAR ETAPA -->
 <div class="modal fade" id="modal-edtEtapa">
   <div class="modal-dialog modal-md">
@@ -663,7 +666,6 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
 </div>
 <!-- /.modal -->
 
-
 <!-- MODAL NOVA HISTORICO -->
 <div class="modal fade" id="modal-novoHistorico">
   <div class="modal-dialog modal-lg">
@@ -762,6 +764,124 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
   <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+<!-- MODAL EDITAR HISTORICO -->
+<div class="modal fade" id="modal-edtHistorico">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" style="font-family: 'Advent Pro', sans-serif; font-weight: 400; letter-spacing: 1px; ">Editar Historico do Processo
+        </h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <script>
+          document.write(variavelphp);
+          console.log(variavelphp);
+        </script>
+
+        <?php
+        $variavelphp = "<script>document.write(variavelphp)</script>";
+        var_dump($variavelphp);
+
+        $idprocess = $_GET['idprocess'];
+        // $id_historico = "<input type=\"text\" class=\"text-danger\" id=\"id_historico\">";
+        $sql = "SELECT * FROM historico_processo WHERE id_processo = '$idprocess' ORDER BY data_cadastro DESC";
+        $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($resultado as $row) {
+        }
+
+        ?>
+
+
+        <!-- form novo Usuário -->
+        <form class="needs-validation" novalidate action="" method="POST" enctype="multipart/form-data" />
+
+        <input type="hidden" name="id_pessoa_responsavel" id="id_pessoa_responsavel" value="<?= $_SESSION['ID']; ?>" />
+        <input type="hidden" name="id_processo" id="id_processo" value="" />
+        <input type="hidden" name="id_pessoa_cliente" id="" value="<?= $_GET['idcli']; ?>" />
+
+        <div class="form-row">
+          <div class="col-md-12">
+            <label for="titulo_historico" requided>Titulo
+              <span class="text-orange">*</span>
+            </label>
+
+            <input type="text" name="titulo_historico" class="form-control text-uppercase" id="titulo_historico" placeholder="de um titulo para esse historico" value="" required />
+            <div class="invalid-feedback">
+              Obrigatório !
+            </div>
+          </div>
+
+          <!-- <div class="col-md-6">
+                  <label for="contraparte">Processo
+                    <span class="text-orange">*</span>
+                  </label>
+                  <input type="text" name="contraparte" class="form-control text-uppercase  " id="contraparte" placeholder=" Parte Contraria" value="" >
+                  <div class="invalid-feedback">
+                    Obrigatório !
+                  </div>
+                </div> -->
+
+        </div>
+        <div class="form-row">
+          <div class="col-md-12">
+            <label for="decricaoTarefa">Descreva o histórico
+              <span class="text-orange">*</span>
+            </label>
+
+            <textarea class="form-control" name="descricao_historico" id="descricao_historico" placeholder="Decrição da historico" name="validation" rows="4" required></textarea>
+
+            <div class="invalid-feedback">
+              Obrigatório !
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class=" col-12 col-md-8">
+            <label for="dtTarefa">Tipo de Historico
+              <span class="text-orange">*</span>
+            </label>
+            <select class="form-control text-uppercase" required name="tipo_historico" id="tipo_historico">
+              <option value="" selected disabled> Escolha o tipo de Historico</option>
+              <option value="at_status">Alteração de Status</option>
+              <option value="contato">Comunicação</option>
+              <option value="tarefa">Tarefa</option>
+            </select>
+            <div class="invalid-feedback">
+              Obrigatório !
+            </div>
+          </div>
+
+        </div>
+        <br />
+
+      </div>
+      <div class="modal-footer justify-content-between">
+        <input type="hidden" name="idcliente" value="<?= $id; ?>" />
+        <input type="hidden" name="idadvogado" value="0" />
+        <input type="hidden" name="nomeCliente" value="<?= $dcliente['nmPessoa']; ?>" />
+        <input type="hidden" name="userActionLog" value="<?= $_SESSION['USUARIO']; ?>" />
+        <input type="hidden" name="gravarHistorico" value="gravarHistorico" />
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-times fa-fw fa-lg"></i>
+          Fechar </button>
+        <button class="btn btn-success btn-lg" type="submit">
+          <i class="far fa-save fa-fw fa-lg"></i>
+          Gravar Dados</button>
+        </form>
+        <!--/form novo Usuario -->
+        <!-- <button type="button" class="btn btn-success">Save changes</button> -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
 <!-- Control Sidebar -->
 <aside class="control-sidebar control-sidebar-dark">
@@ -771,7 +891,31 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
 </div>
 <!-- ./wrapper -->
 
+<script>
+  function setIdHistoric(valor) {
 
+    var currentLocation = window.location;
+    alert(currentLocation);
+    // $.ajax({
+    //   type: "GET",
+    //   url: "caminho/para/ficheiro.php",
+    //   data: dadosFormulario,
+    //   success: function(resposta) {
+    //     // variável "resposta" contém o que o servidor envia
+    //     // aqui código a executar quando correu tudo bem
+    //   },
+    //   error: function() {
+    //     // correu mal, agir em conformidade
+    //   }
+    // });
+
+
+    var variavelphp = valor;
+    console.log(variavelphp);
+
+    //document.getElementById('id_historico').value = valor;
+  };
+</script>
 </body>
 
 </html>
