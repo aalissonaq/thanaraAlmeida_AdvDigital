@@ -133,8 +133,6 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                   <a href="tel:<?= tiraMascara($dcliente['nnTelefonePessoa']) ?>" class="" style="font-size:1rem">
                     <?= $dcliente['nnTelefonePessoa'] ?>
                   </a>
-
-
                   <span class="float-right">
                     <b>
                       <i class="fab fa-lg fa-whatsapp text-success"></i>
@@ -215,7 +213,6 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                   </a>
                 </li>
 
-
                 <li class="nav-item">
                   <a class="nav-link " href="#allTasks" data-toggle="tab">
                     <i class="align-middle mdi mdi-calendar-clock mdi-24px fa fa-fw"></i>&nbsp;&nbsp;
@@ -250,7 +247,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                       <tbody>
                         <?php
                         $idpessoa = $_GET['id'];
-                        $sql = "SELECT * FROM tarefas WHERE  dtTarefa = CURDATE() OR dtTarefa < CURDATE() AND finalizada = 0 and idpessoa = '$idpessoa'    ORDER BY dtTarefa ASC";
+                        $sql = "SELECT * FROM tarefas WHERE idpessoa = '$idpessoa' AND (dtTarefa = CURDATE() OR dtTarefa < CURDATE()) AND finalizada = 0 ORDER BY dtTarefa ASC";
                         $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                         $count = 1;
                         foreach ($resultado as $task) {
@@ -288,7 +285,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                               if ($task['dtTarefa'] < $today) {
                                 echo "<span class='badge badge-pill badge-danger px-2 py-1'>Atrasada</span>";
                               } else {
-                                echo "<span class='badge badge-pill badge- px-2 py-1'>Hoje</span>";
+                                echo "<span class='badge badge-pill badge-warning px-4 py-1'>Hoje</span>";
                               }
                               ?>
                             </td>
@@ -356,7 +353,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                       </thead>
                       <tbody>
                         <?php
-                        $sql = "SELECT * FROM tarefas WHERE finalizada = 0 ORDER BY dtTarefa ASC";
+                        $sql = "SELECT * FROM tarefas WHERE idpessoa = '$idpessoa'  ORDER BY dtTarefa ASC";
                         $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                         $count = 1;
                         foreach ($resultado as $task) {
@@ -390,11 +387,24 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                             </td>
                             <td class="text-uppercase align-middle text-center" style="font-weight: 300;">
                               <?php
-                              $today = date("Y-m-d", time());
-                              if ($task['dtTarefa'] < $today) {
-                                echo "<span class='badge badge-pill badge-danger px-2 py-1'>Atrasada</span>";
-                              } else {
-                                echo "<span class='badge badge-pill badge- px-2 py-1'>Hoje</span>";
+                              switch ($task['finalizada']) {
+                                case '1':
+                                  echo "<span class='badge badge-pill badge-success px-2 py-1'>Finalizada <i class='mdi mdi-checkbox-marked-circle-outline'></i></span>";
+                                  break;
+
+                                case '0':
+                                  $today = date("Y-m-d", time());
+                                  if ($task['dtTarefa'] < $today) {
+                                    echo "<span class='badge badge-pill badge-danger px-2 py-1'>Atrasada</span>";
+                                  } elseif ($task['dtTarefa'] > $today) {
+                                    echo "<span class='badge badge-pill badge-info px-2 py-1'>Futura</span>";
+                                  } else {
+                                    echo "<span class='badge badge-pill badge-warning px-4 py-1'>Hoje</span>";
+                                  }
+                                  break;
+                                default:
+
+                                  break;
                               }
                               ?>
                             </td>

@@ -7,6 +7,7 @@ $conexao = novaConexao();
 require_once './util/util.php';
 require_once './data/outfunc.php';
 
+date_default_timezone_set('America/Sao_Paulo');
 if (!isset($_SESSION['USUARIO'])) {
   header("Location: index.php");
 } else if (isset($_GET['acao']) && $_GET['acao'] === 'sair') {

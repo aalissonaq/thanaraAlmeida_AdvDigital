@@ -161,7 +161,7 @@
                         </thead>
                         <tbody>
                           <?php
-                          $sql = "SELECT * FROM tarefas WHERE  dtTarefa = CURDATE() OR dtTarefa < CURDATE() AND finalizada = 0   ORDER BY dtTarefa ASC";
+                          $sql = "SELECT * FROM tarefas WHERE  (dtTarefa = CURDATE() OR dtTarefa < CURDATE()) AND finalizada = 0   ORDER BY dtTarefa ASC";
                           $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                           $count = 1;
                           foreach ($resultado as $task) {
@@ -196,10 +196,10 @@
                               <td class="text-uppercase align-middle text-center" style="font-weight: 300;">
                                 <?php
                                 $today = date("Y-m-d", time());
-                                if ($task['dtTarefa'] < $today) {
-                                  echo "<span class='badge badge-pill badge-danger px-2 py-1'>Atrasada</span>";
+                                if ($task['dtTarefa'] == $today) {
+                                  echo "<span class='badge badge-pill badge-warning px-4 py-1'>Hoje</span>";
                                 } else {
-                                  echo "<span class='badge badge-pill badge- px-2 py-1'>Hoje</span>";
+                                  echo "<span class='badge badge-pill badge-danger px-2 py-1'>Atrasada</span>";
                                 }
                                 ?>
                               </td>
@@ -264,7 +264,7 @@
                         </thead>
                         <tbody>
                           <?php
-                          $sql = "SELECT * FROM tarefas WHERE finalizada = 0 ORDER BY dtTarefa ASC";
+                          $sql = "SELECT * FROM tarefas ORDER BY dtTarefa ASC";
                           $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                           $count = 1;
                           foreach ($resultado as $task) {
@@ -295,17 +295,31 @@
                               </td>
                               <td class="text-uppercase align-middle">
                                 <?= lmWord($task['decricaoTarefa'], 70); ?>
+
                               </td>
                               <td class="text-uppercase align-middle text-center" style="font-weight: 300;">
                                 <?php
-                                $today = date("Y-m-d", time());
-                                if ($task['dtTarefa'] < $today) {
-                                  echo "<span class='badge badge-pill badge-danger px-2 py-1'>Atrasada</span>";
-                                } elseif ($task['dtTarefa'] > $today) {
-                                  echo "<span class='badge badge-pill badge-info px-2 py-1'>Futura</span>";
-                                } else {
-                                  echo "<span class='badge badge-pill badge- px-2 py-1'>Hoje</span>";
+                                switch ($task['finalizada']) {
+                                  case '1':
+                                    echo "<span class='badge badge-pill badge-success px-2 py-1'>Finalizada <i class='mdi mdi-checkbox-marked-circle-outline'></i></span>";
+                                    break;
+
+                                  case '0':
+                                    $today = date("Y-m-d", time());
+                                    if ($task['dtTarefa'] < $today) {
+                                      echo "<span class='badge badge-pill badge-danger px-2 py-1'>Atrasada</span>";
+                                    } elseif ($task['dtTarefa'] > $today) {
+                                      echo "<span class='badge badge-pill badge-info px-2 py-1'>Futura</span>";
+                                    } else {
+                                      echo "<span class='badge badge-pill badge-warning px-4 py-1'>Hoje</span>";
+                                    }
+                                    break;
+                                  default:
+
+                                    break;
                                 }
+
+
                                 ?>
                               </td>
 

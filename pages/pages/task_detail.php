@@ -4,12 +4,10 @@ $sql = "SELECT * FROM `tarefas` WHERE `idtarefas` = '$task_id'";
 $resultQueryTask = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 $task = $resultQueryTask[0];
 
-
 $idClient = $task['idpessoa'];
 $idProcess = $task['idProcesso'];
 
 if (isset($_POST['edtTarefa']) && $_POST['edtTarefa'] == 'edtTarefa') {
-
   $idCreador = strip_tags((trim($_POST['idCreador'])));
   $idResponsavel = strip_tags((trim($_POST['idResponsavel'])));
   $idProcesso = strip_tags((trim($_POST['idProcesso'])));
@@ -20,9 +18,21 @@ if (isset($_POST['edtTarefa']) && $_POST['edtTarefa'] == 'edtTarefa') {
   $prioridade = strip_tags(strip_tags(trim($_POST['prioridade'])));
 
   $restingir = $_POST['restingir'] == 'on' ? 1 : 0;
+  $finalizada = $_POST['finalizada'] == 'on' ? 1 : 0;
   $idpessoa = strip_tags(strip_tags(trim($_POST['idpessoa'])));
 
-  $sql = "UPDATE `tarefas` SET `idpessoa` = '$idpessoa', `idCreador` = '$idCreador', `idResponsavel` = '$idResponsavel', `idProcesso` = '$idProcesso', `decricaoTarefa` = '$decricaoTarefa', `dtTarefa` = '$dtTarefa', `hora` = '$hora', `local` = '$local', `prioridade` = '$prioridade', `restingir` = '$restingir' WHERE idtarefas = '$task_id'";
+  $sql = "UPDATE `tarefas` SET
+  `idpessoa` = '$idpessoa',
+  `idCreador` = '$idCreador',
+  `idResponsavel` = '$idResponsavel',
+  `idProcesso` = '$idProcesso',
+  `decricaoTarefa` = '$decricaoTarefa',
+  `dtTarefa` = '$dtTarefa',
+  `hora` = '$hora',
+  `local` = '$local',
+  `prioridade` = '$prioridade',
+  `finalizada` = '$finalizada',
+  WHERE idtarefas = '$task_id'";
   $resultQueryTask = $conexao->exec($sql);
   if ($resultQueryTask) {
     sweetalert('', 'Tarefa editada com sucesso!', 'success', 2000, 'top-end');
@@ -60,9 +70,9 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
     sweetalert('Ops !', ' Erro ao atualizar a Etapa, por favor tente novamente', 'error', 2000);
   }
 
-  $id_pessoa_cliente = trim(strip_tags($_GET['idcli']));
+  $id_pessoa_cliente = trim(strip_tags($idClient));
   $id_pessoa_responsavel = $_SESSION['ID'];
-  $id_processo = trim(strip_tags($_GET['idprocess']));
+  $id_processo = trim(strip_tags($idProcess));
   $titulo_historico = 'Atualização da Etapa do Processo';
 
   switch ($_POST['statusprocesso']) {
@@ -293,28 +303,20 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                           <i class="fas fa-check mr-1"></i>
                           Finalizar Tarefa:
                         </span>
-                        <div class="">
-                          <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="customSwitch1">
-                            <label class="custom-control-label" for="customSwitch1"></label>
-                          </div>
-
-
+                        <div class="h5">
+                          <span class="text-lead text-uppercase">
+                            <?= $task['finalizada'] == 1
+                              ? '<span class="text-success">SIM</span><i class="mdi mdi-checkbox-marked-circle-outline text-success"></i>'
+                              : '<span class="text-danger">NÃo</span><i class="mdi mdi-close-circle-outline text-danger"></i>' ?>
                         </div>
+
                       </div>
-
                     </div>
-
                     </form>
-
                     <a href="" class="btn btn-outline-primary " target="" title="Adicionar Tarefas" rel="noopener noreferrer" data-toggle="modal" data-target="#modal-editTarefa">
                       <i class="mdi mdi-book-cog-outline mdi-24px align-middle"></i>
                       Editar Tarefa
                     </a>
-
-
-
-
                   </div>
                 </div>
               </div>
@@ -381,6 +383,15 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                           break;
                         case 'concluido':
                           echo 'Concluído';
+                          break;
+                        case 'analise':
+                          echo 'Análise';
+                          break;
+                        case 'justComum':
+                          echo 'Justiça Comum';
+                          break;
+                        case 'concluso':
+                          echo 'Concluso';
                           break;
                         default:
                           echo 'Aguardando Documento';
@@ -650,7 +661,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
               </div>
             </div>
 
-            <div class="col-md-5">
+            <div class="col-md-4">
               <label for="statusprocesso">Local do Compromisso</label>
               <input type="text" maxlength="19" name="local" class="form-control text-uppercase" id="local" placeholder="Local onde sera realizada a terefa" value="<?= $task['local']; ?>" />
               <div class="invalid-feedback">
@@ -685,6 +696,36 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                 </div>
               </select>
             </div>
+            <div class="col-md-1">
+              <label for="checkboxDanger1" class="center">
+                <?= $task['finalizada'] == 1 ? 'Finalizada' : 'Finalizar ?' ?>
+              </label>
+              <select class="form-control text-uppercase custom-select" name="prioridade" id="prioridade">
+                <?php
+                switch ($task['finalizada']) {
+                  case '1':
+                    echo "<option value='1' class='text-success' selected>SIM</option>";
+                    echo "<option value='0' class='text-warning'>NÃO</option>";
+                    break;
+                  case '0':
+                    echo "<option value='1' class='text-success'>SIM</option>";
+                    echo "<option value='0' class='text-warning' selected>NÃO</option>";
+                    break;
+                }
+                ?>
+
+                <div class="invalid-feedback">
+                  Obrigatório !
+                </div>
+              </select>
+
+              <!--<div class="icheck-danger d-flex justify-content-center">
+                <input type="checkbox" name="finalizada" <? //$task['finalizada'] == 1 ? 'checked' : ''
+                                                          ?> id="checkboxDanger1">
+                <label for="checkboxDanger1"></label>
+              </div> -->
+            </div>
+
           </div>
           <br />
 
@@ -729,7 +770,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
 
         <input type="hidden" name="id_pessoa_responsavel" id="id_pessoa_responsavel" value="<?= $_SESSION['ID']; ?>" />
         <input type="hidden" name="id_processo" id="id_processo" value="" />
-        <input type="hidden" name="id_pessoa_cliente" id="" value="<?= $_GET['idcli']; ?>" />
+        <input type="hidden" name="id_pessoa_cliente" id="" value="<?= $idClient; ?>" />
 
         <div class="form-row">
           <div class=" col-12">
@@ -746,73 +787,132 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
               switch ($dadoProcesso['statusprocesso']) {
                 case 'aguardando': ?>
                   <option value="aguardando" selected>Aguardando Documento</option>
+                  <option value="analise">Análise</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="concluso">Concluso </option>
+                  <option value="concluido">Concluído </option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="justComum">Justiça Comum</option>
+                  <option value="justFederal">Justiça Federal </option>
                   <option value="pericia">Perícia ou Agendamento</option>
                   <option value="prorrogacao">Prorrogação</option>
-                  <option value="exigencia">Exigência</option>
-                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
-                  <option value="justFederal">Justiça Federal </option>
-                  <option value="concluido">Concluído </option>
-
                 <?php
                   break;
-                case 'pericia': ?>
+                case 'analise': ?>
                   <option value="aguardando">Aguardando Documento</option>
-                  <option value="pericia" selected>Perícia ou Agendamento</option>
-                  <option value="prorrogacao">Prorrogação</option>
-                  <option value="exigencia">Exigência</option>
+                  <option value="analise" selected>Análise</option>
                   <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
-                  <option value="justFederal">Justiça Federal </option>
+                  <option value="concluso">Concluso </option>
                   <option value="concluido">Concluído </option>
-                <?php
-                  break;
-                case 'prorrogacao': ?>
-                  <option value="aguardando">Aguardando Documento</option>
-                  <option value="pericia">Perícia ou Agendamento</option>
-                  <option value="prorrogacao" selected>Prorrogação</option>
                   <option value="exigencia">Exigência</option>
-                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="justComum">Justiça Comum</option>
                   <option value="justFederal">Justiça Federal </option>
-                  <option value="concluido">Concluído </option>
-                <?php
-                  break;
-                case 'exigencia': ?>
-                  <option value="aguardando">Aguardando Documento</option>
                   <option value="pericia">Perícia ou Agendamento</option>
                   <option value="prorrogacao">Prorrogação</option>
-                  <option value="exigencia" selected>Exigência</option>
-                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
-                  <option value="justFederal">Justiça Federal </option>
-                  <option value="concluido">Concluído </option>
                 <?php
                   break;
                 case 'aguardandoINSS': ?>
                   <option value="aguardando">Aguardando Documento</option>
+                  <option value="analise">Análise</option>
+                  <option value="aguardandoINSS" selected>Aguardando Resposta do INSS</option>
+                  <option value="concluso">Concluso </option>
+                  <option value="concluido">Concluído </option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="justComum">Justiça Comum</option>
+                  <option value="justFederal">Justiça Federal </option>
                   <option value="pericia">Perícia ou Agendamento</option>
                   <option value="prorrogacao">Prorrogação</option>
-                  <option value="exigencia">Exigência</option>
-                  <option value="aguardandoINSS" selected>Aguardando Resposta do INSS</option>
-                  <option value="justFederal">Justiça Federal </option>
-                  <option value="concluido">Concluído </option>
                 <?php
                   break;
-                case 'justFederal': ?>
+                case 'concluso': ?>
                   <option value="aguardando">Aguardando Documento</option>
+                  <option value="analise">Análise</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="concluso" selected>Concluso </option>
+                  <option value="concluido">Concluído </option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="justComum">Justiça Comum</option>
+                  <option value="justFederal">Justiça Federal </option>
                   <option value="pericia">Perícia ou Agendamento</option>
                   <option value="prorrogacao">Prorrogação</option>
-                  <option value="exigencia">Exigência</option>
-                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
-                  <option value="justFederal" selected>Justiça Federal </option>
-                  <option value="concluido">Concluído </option>
                 <?php
                   break;
                 case 'concluido': ?>
                   <option value="aguardando">Aguardando Documento</option>
+                  <option value="analise">Análise</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="concluso">Concluso </option>
+                  <option value="concluido" selected>Concluído </option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="justComum">Justiça Comum</option>
+                  <option value="justFederal">Justiça Federal </option>
                   <option value="pericia">Perícia ou Agendamento</option>
                   <option value="prorrogacao">Prorrogação</option>
-                  <option value="exigencia">Exigência</option>
+                <?php
+                  break;
+                case 'exigencia': ?>
+                  <option value="aguardando">Aguardando Documento</option>
+                  <option value="analise">Análise</option>
                   <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="concluso">Concluso </option>
+                  <option value="concluido">Concluído </option>
+                  <option value="exigencia" selected>Exigência</option>
+                  <option value="justComum">Justiça Comum</option>
                   <option value="justFederal">Justiça Federal </option>
-                  <option value="concluido" selected>Concluído </option>
+                  <option value="pericia">Perícia ou Agendamento</option>
+                  <option value="prorrogacao">Prorrogação</option>
+                <?php
+                  break;
+                case 'justComum': ?>
+                  <option value="aguardando">Aguardando Documento</option>
+                  <option value="analise">Análise</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="concluso">Concluso </option>
+                  <option value="concluido">Concluído </option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="justComum" selected>Justiça Comum</option>
+                  <option value="justFederal">Justiça Federal </option>
+                  <option value="pericia">Perícia ou Agendamento</option>
+                  <option value="prorrogacao">Prorrogação</option>
+                <?php
+                  break;
+                case 'justFederal': ?>
+                  <option value="aguardando">Aguardando Documento</option>
+                  <option value="analise">Análise</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="concluso">Concluso </option>
+                  <option value="concluido">Concluído </option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="justComum">Justiça Comum</option>
+                  <option value="justFederal" selected>Justiça Federal </option>
+                  <option value="pericia">Perícia ou Agendamento</option>
+                  <option value="prorrogacao">Prorrogação</option>
+                <?php
+                  break;
+                case 'pericia': ?>
+                  <option value="aguardando">Aguardando Documento</option>
+                  <option value="analise">Análise</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="concluso">Concluso </option>
+                  <option value="concluido">Concluído </option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="justComum">Justiça Comum</option>
+                  <option value="justFederal">Justiça Federal </option>
+                  <option value="pericia" selected>Perícia ou Agendamento</option>
+                  <option value="prorrogacao">Prorrogação</option>
+                <?php
+                  break;
+                case 'prorrogacao': ?>
+                  <option value="aguardando">Aguardando Documento</option>
+                  <option value="analise">Análise</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="concluso">Concluso </option>
+                  <option value="concluido">Concluído </option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="justComum">Justiça Comum</option>
+                  <option value="justFederal">Justiça Federal </option>
+                  <option value="pericia">Perícia ou Agendamento</option>
+                  <option value="prorrogacao" selected>Prorrogação</option>
               <?php
                   break;
                 default:

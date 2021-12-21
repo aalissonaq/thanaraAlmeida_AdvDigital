@@ -108,6 +108,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
               <i class="fas fa-times"></i></buttn> -->
       </div>
     </div>
+
     <div class="card-body">
       <div class="row">
         <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1" <!-- info box -->
@@ -164,8 +165,16 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
               <a href="#">
                 <div class="small-box bg-gradient-default">
                   <div class="inner mx-3">
-                    <h3>0000</h3>
-                    <h6>...</h6>
+                    <?php
+
+                    $sql = "SELECT * FROM tarefas WHERE idProcesso = '$idProcess' AND finalizada = '1'";
+                    $resultado = $conexao->query($sql);
+                    // print_r($resultado);
+                    // print_r(get_class_methods($resultado));
+                    ?>
+
+                    <h3><?= str_pad($resultado->rowCount(), 3, "0", STR_PAD_LEFT); ?></h3>
+                    <h6>Tarefas Finalizadas</h6>
                   </div>
                   <div class="icon">
                     <!-- <i class="far fa-clock"></i> -->
@@ -189,6 +198,284 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
           <div class="row pr-3">
 
 
+            <!-- TAREFA DO PROCESSO -->
+            <div class="card col-12 col-md-12 ">
+              <div class="card-header">
+                <h2 class="card-title text-uppercase h3">Tarefas do Processo</h2>
+
+                <div class="card-tools">
+                  <button type="button" class="btn btn-sm btn-outline-primary mr-4 " data-toggle="modal" data-target="#modal-novoHistorico">
+                    <i class="fas fa-plus"></i>
+                    Adicionar Tarefa
+                  </button>
+
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+
+                </div>
+                <!-- /.card-tools -->
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-12">
+
+                    <ul class="nav nav-pills mt-3 mb-1">
+                      <li class="nav-item ">
+                        <a class="nav-link" href="#todayTask" data-toggle="tab">
+                          <i class="align-middle mdi mdi-calendar-multiple mdi-24px fa fa-fw"> </i>&nbsp;&nbsp;
+                          <span class="align-middle">
+                            Tarefas de hoje
+                          </span>
+                        </a>
+                      </li>
+
+                      <li class="nav-item">
+                        <a class="nav-link" href="#allTask" data-toggle="tab">
+                          <i class="align-middle mdi mdi-calendar-clock mdi-24px fa fa-fw"></i>&nbsp;&nbsp;
+                          <span class="align-middle">
+                            Tarefas Agendadas
+                          </span>
+                        </a>
+                      </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                      <div class="tab-pane fade show active" id="todayTask" role="tabpanel" aria-labelledby="todayTask-tab">
+                        <!-- Tarefas de hoje -->
+                        <div class="table-responsive ">
+                          <table id="tabela" class="table table-sm table-striped table-hover">
+                            <thead class="" style="font-family: 'Advent Pro', sans-serif; font-weight: 100;">
+                              <tr>
+                                <th class="col-md-1 text-center align-middle">Prioridade</th>
+                                <th class="col-md-4 text-center align-middle ">Tarefa</th>
+                                <th class="col-md-2 text-center align-middle ">status</th>
+                                <th class="col-md-3 text-center align-middle ">Responsável</th>
+                                <th class="col-md-2 text-center align-middle ">Data e Hora</th>
+                                <th class="col-md-auto text-center align-middle">
+                                  <i class="fab fa-lg fa-fw fa-whmcs" title="Ações"></i>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <?php
+                              $sql = "SELECT * FROM tarefas WHERE idProcesso = {$_GET['idprocess']} AND  (dtTarefa = CURDATE() OR dtTarefa < CURDATE()) AND finalizada = 0 ORDER BY dtTarefa ASC";
+                              $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+                              $count = 1;
+                              foreach ($resultado as $task) {
+                              ?>
+                                <tr scope="row" class="">
+                                  <td class=" text-uppercase align-middle" style="font-size: .9rem;">
+                                    <?php
+                                    switch ($task['prioridade']) {
+                                      case 'baixa':
+                                        echo '<span class="badge badge-success px-2"><i class="mdi mdi-alert-circle-outline mdi-24px align-middle"></i> BAIXA&nbsp;</span>';
+                                        break;
+
+                                      case 'media':
+                                        echo '<span class="badge badge-warning px-2"><i class="mdi mdi-alert-octagon-outline mdi-24px align-middle"></i> MÉDIA</span>';
+                                        break;
+
+                                      case 'alta':
+                                        echo '<span class="badge badge-danger px-2"><i class="mdi mdi-car-brake-alert mdi-24px align-middle"></i> &nbsp;ALTA &nbsp;&nbsp;</span>';
+                                        break;
+
+                                      default:
+                                        echo '<span class="badge badge-info px-2"><i class="mdi mdi-alert-box-outline mdi-18px align-middle"></i></span>';
+                                        break;
+                                    }
+                                    // echo str_pad($count, 3, "0", STR_PAD_LEFT);
+                                    // $count++;
+                                    ?>
+                                  </td>
+                                  <td class="text-uppercase align-middle">
+                                    <?= lmWord($task['decricaoTarefa'], 70) . '-' . $task['idProcesso']; ?>
+                                  </td>
+                                  <td class="text-uppercase align-middle text-center" style="font-weight: 300;">
+                                    <?php
+                                    $today = date("Y-m-d", time());
+                                    if ($task['dtTarefa'] < $today) {
+                                      echo "<span class='badge badge-pill badge-danger px-2 py-1'>Atrasada</span>";
+                                    } else {
+                                      echo "<span class='badge badge-pill badge-warning px-4 py-1'>Hoje</span>";
+                                    }
+                                    ?>
+                                  </td>
+
+                                  <td class=" text-uppercase align-middle" style="font-size: .8rem; ">
+                                    <?php
+                                    $sql = "SELECT * FROM pessoa WHERE idPessoa = '" . $task['idResponsavel'] . "'";
+                                    $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+                                    foreach ($resultado as $pessoa) {
+                                      echo $pessoa['nmPessoa'];
+                                    }
+                                    ?>
+
+                                  </td>
+
+                                  <td class="text-uppercase align-middle text-center">
+                                    <?php
+                                    echo date('d/m/Y', strtotime($task['dtTarefa']));
+                                    echo " AS ";
+                                    echo date('H:i', strtotime($task['hora']));
+                                    ?>
+
+
+                                  </td>
+
+                                  <td class="text-uppercase align-middle  ">
+                                    <ul class="nav justify-content-center d-flex justify-content-evenly">
+
+                                      <li class="nav-item">
+                                        <a href="?page=task_detail&task=<?= $task['idtarefas'] ?>" class="btn btn-tool" target="" title="Visializar Processo" rel="noopener noreferrer">
+                                          <i class="mdi mdi-file-eye-outline mdi-24px "></i>
+                                        </a>
+                                      </li>
+
+                                    </ul>
+                                  </td>
+                                </tr>
+                              <?php } ?>
+
+                            </tbody>
+                          </table>
+                        </div>
+                        <!-- /.tarefas -->
+
+                      </div>
+                      <div class="tab-pane fade  " id="allTask" role="tabpanel" aria-labelledby="allTask-tab">
+
+                        <!-- Todas as Tarefas  -->
+                        <div class="table-responsive">
+                          <table id="tabela" class="table table-sm table-striped table-hover">
+                            <thead class="" style="font-weight: 300; font-family: 'Advent Pro', sans-serif;">
+                              <tr>
+                                <th class="col-1 text- align-middle">Prioridade</th>
+                                <th class="col-4 text-center align-middle">Tarefa</th>
+                                <th class="col-2 text-center align-middle">status</th>
+                                <th class="col-3 text-center align-middle">Responsável</th>
+                                <th class="col-2 text-center align-middle">Data e Hora</th>
+                                <th class="col-auto text-center align-middle">
+                                  <i class="fab fa-lg fa-fw fa-whmcs" title="Ações"></i>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <?php
+                              $sql = "SELECT * FROM tarefas WHERE idProcesso = {$_GET['idprocess']} ORDER BY dtTarefa ASC";
+                              $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+                              $count = 1;
+                              foreach ($resultado as $task) {
+                              ?>
+                                <tr scope="row" class="">
+                                  <td class=" text-uppercase align-middle  col-auto" style="font-size: .9rem;">
+                                    <?php
+                                    switch ($task['prioridade']) {
+                                      case 'baixa':
+                                        echo '<span class="badge badge-success px-2"><i class="mdi mdi-alert-circle-outline mdi-24px align-middle"></i> BAIXA&nbsp;</span>';
+                                        break;
+
+                                      case 'media':
+                                        echo '<span class="badge badge-warning px-2"><i class="mdi mdi-alert-octagon-outline mdi-24px align-middle"></i> MÉDIA</span>';
+                                        break;
+
+                                      case 'alta':
+                                        echo '<span class="badge badge-danger px-2"><i class="mdi mdi-car-brake-alert mdi-24px align-middle"></i> &nbsp;ALTA &nbsp;&nbsp;</span>';
+                                        break;
+
+                                      default:
+                                        echo '<span class="badge badge-info px-2"><i class="mdi mdi-alert-box-outline mdi-18px align-middle"></i></span>';
+                                        break;
+                                    }
+                                    // echo str_pad($count, 3, "0", STR_PAD_LEFT);
+                                    // $count++;
+                                    ?>
+                                  </td>
+                                  <td class="text-uppercase align-middle">
+                                    <?= lmWord($task['decricaoTarefa'], 70); ?>
+                                  </td>
+                                  <td class="text-uppercase align-middle text-center" style="font-weight: 300;">
+                                    <?php
+                                    switch ($task['finalizada']) {
+                                      case '1':
+                                        echo "<span class='badge badge-pill badge-success px-2 py-1'>Finalizada <i class='mdi mdi-checkbox-marked-circle-outline'></i></span>";
+                                        break;
+
+                                      case '0':
+                                        $today = date("Y-m-d", time());
+                                        if ($task['dtTarefa'] < $today) {
+                                          echo "<span class='badge badge-pill badge-danger px-2 py-1'>Atrasada</span>";
+                                        } elseif ($task['dtTarefa'] > $today) {
+                                          echo "<span class='badge badge-pill badge-info px-2 py-1'>Futura</span>";
+                                        } else {
+                                          echo "<span class='badge badge-pill badge-warning px-4 py-1'>Hoje</span>";
+                                        }
+                                        break;
+                                      default:
+
+                                        break;
+                                    }
+                                    ?>
+                                  </td>
+
+                                  <td class=" text-uppercase align-middle" style="font-size: .8rem; ">
+                                    <?php
+                                    $sql = "SELECT * FROM pessoa WHERE idPessoa = '" . $task['idResponsavel'] . "'";
+                                    $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+                                    foreach ($resultado as $pessoa) {
+                                      echo $pessoa['nmPessoa'];
+                                    }
+                                    ?>
+
+                                  </td>
+
+                                  <td class="text-uppercase align-middle text-center">
+                                    <?php
+                                    echo date('d/m/Y', strtotime($task['dtTarefa']));
+                                    echo " AS ";
+                                    echo date('H:i', strtotime($task['hora']));
+                                    ?>
+
+
+                                  </td>
+
+                                  <td class="text-uppercase align-middle  ">
+                                    <ul class="nav justify-content-center d-flex justify-content-evenly">
+
+                                      <li class="nav-item">
+                                        <a href="?page=task_detail&task=<?= $task['idtarefas'] ?>" class="btn btn-tool" target="" title="Visializar Processo" rel="noopener noreferrer">
+                                          <i class="mdi mdi-file-eye-outline mdi-24px "></i>
+                                        </a>
+                                      </li>
+
+                                    </ul>
+                                  </td>
+                                </tr>
+                              <?php } ?>
+
+                            </tbody>
+                          </table>
+                        </div>
+                        <!-- /.tarefas -->
+
+                      </div>
+
+                    </div>
+
+
+
+
+
+                  </div>
+                </div>
+              </div>
+              <!-- /.card-body -->
+              <!-- <div class="card-footer">
+                The footer of the card
+              </div> -->
+              <!-- /.card-footer -->
+            </div>
+            <!--  HISTÓRICO DO PROCESSO -->
             <div class="card col-12 col-md-12">
               <div class="card-header">
                 <h2 class="card-title text-uppercase h3">Histórico do Processo</h2>
@@ -386,6 +673,16 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                         case 'concluido':
                           echo 'Concluído';
                           break;
+                        case 'analise':
+                          echo 'Análise';
+                          break;
+                        case 'justComum':
+                          echo 'Justiça Comum';
+                          break;
+                        case 'concluso':
+                          echo 'Concluso';
+                          break;
+
                         default:
                           echo 'Aguardando Documento';
                           break;
@@ -561,73 +858,132 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
               switch ($dadoProcesso['statusprocesso']) {
                 case 'aguardando': ?>
                   <option value="aguardando" selected>Aguardando Documento</option>
+                  <option value="analise">Análise</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="concluso">Concluso </option>
+                  <option value="concluido">Concluído </option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="justComum">Justiça Comum</option>
+                  <option value="justFederal">Justiça Federal </option>
                   <option value="pericia">Perícia ou Agendamento</option>
                   <option value="prorrogacao">Prorrogação</option>
-                  <option value="exigencia">Exigência</option>
-                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
-                  <option value="justFederal">Justiça Federal </option>
-                  <option value="concluido">Concluído </option>
-
                 <?php
                   break;
-                case 'pericia': ?>
+                case 'analise': ?>
                   <option value="aguardando">Aguardando Documento</option>
-                  <option value="pericia" selected>Perícia ou Agendamento</option>
-                  <option value="prorrogacao">Prorrogação</option>
-                  <option value="exigencia">Exigência</option>
+                  <option value="analise" selected>Análise</option>
                   <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
-                  <option value="justFederal">Justiça Federal </option>
+                  <option value="concluso">Concluso </option>
                   <option value="concluido">Concluído </option>
-                <?php
-                  break;
-                case 'prorrogacao': ?>
-                  <option value="aguardando">Aguardando Documento</option>
-                  <option value="pericia">Perícia ou Agendamento</option>
-                  <option value="prorrogacao" selected>Prorrogação</option>
                   <option value="exigencia">Exigência</option>
-                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="justComum">Justiça Comum</option>
                   <option value="justFederal">Justiça Federal </option>
-                  <option value="concluido">Concluído </option>
-                <?php
-                  break;
-                case 'exigencia': ?>
-                  <option value="aguardando">Aguardando Documento</option>
                   <option value="pericia">Perícia ou Agendamento</option>
                   <option value="prorrogacao">Prorrogação</option>
-                  <option value="exigencia" selected>Exigência</option>
-                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
-                  <option value="justFederal">Justiça Federal </option>
-                  <option value="concluido">Concluído </option>
                 <?php
                   break;
                 case 'aguardandoINSS': ?>
                   <option value="aguardando">Aguardando Documento</option>
+                  <option value="analise">Análise</option>
+                  <option value="aguardandoINSS" selected>Aguardando Resposta do INSS</option>
+                  <option value="concluso">Concluso </option>
+                  <option value="concluido">Concluído </option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="justComum">Justiça Comum</option>
+                  <option value="justFederal">Justiça Federal </option>
                   <option value="pericia">Perícia ou Agendamento</option>
                   <option value="prorrogacao">Prorrogação</option>
-                  <option value="exigencia">Exigência</option>
-                  <option value="aguardandoINSS" selected>Aguardando Resposta do INSS</option>
-                  <option value="justFederal">Justiça Federal </option>
-                  <option value="concluido">Concluído </option>
                 <?php
                   break;
-                case 'justFederal': ?>
+                case 'concluso': ?>
                   <option value="aguardando">Aguardando Documento</option>
+                  <option value="analise">Análise</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="concluso" selected>Concluso </option>
+                  <option value="concluido">Concluído </option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="justComum">Justiça Comum</option>
+                  <option value="justFederal">Justiça Federal </option>
                   <option value="pericia">Perícia ou Agendamento</option>
                   <option value="prorrogacao">Prorrogação</option>
-                  <option value="exigencia">Exigência</option>
-                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
-                  <option value="justFederal" selected>Justiça Federal </option>
-                  <option value="concluido">Concluído </option>
                 <?php
                   break;
                 case 'concluido': ?>
                   <option value="aguardando">Aguardando Documento</option>
+                  <option value="analise">Análise</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="concluso">Concluso </option>
+                  <option value="concluido" selected>Concluído </option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="justComum">Justiça Comum</option>
+                  <option value="justFederal">Justiça Federal </option>
                   <option value="pericia">Perícia ou Agendamento</option>
                   <option value="prorrogacao">Prorrogação</option>
-                  <option value="exigencia">Exigência</option>
+                <?php
+                  break;
+                case 'exigencia': ?>
+                  <option value="aguardando">Aguardando Documento</option>
+                  <option value="analise">Análise</option>
                   <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="concluso">Concluso </option>
+                  <option value="concluido">Concluído </option>
+                  <option value="exigencia" selected>Exigência</option>
+                  <option value="justComum">Justiça Comum</option>
                   <option value="justFederal">Justiça Federal </option>
-                  <option value="concluido" selected>Concluído </option>
+                  <option value="pericia">Perícia ou Agendamento</option>
+                  <option value="prorrogacao">Prorrogação</option>
+                <?php
+                  break;
+                case 'justComum': ?>
+                  <option value="aguardando">Aguardando Documento</option>
+                  <option value="analise">Análise</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="concluso">Concluso </option>
+                  <option value="concluido">Concluído </option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="justComum" selected>Justiça Comum</option>
+                  <option value="justFederal">Justiça Federal </option>
+                  <option value="pericia">Perícia ou Agendamento</option>
+                  <option value="prorrogacao">Prorrogação</option>
+                <?php
+                  break;
+                case 'justFederal': ?>
+                  <option value="aguardando">Aguardando Documento</option>
+                  <option value="analise">Análise</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="concluso">Concluso </option>
+                  <option value="concluido">Concluído </option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="justComum">Justiça Comum</option>
+                  <option value="justFederal" selected>Justiça Federal </option>
+                  <option value="pericia">Perícia ou Agendamento</option>
+                  <option value="prorrogacao">Prorrogação</option>
+                <?php
+                  break;
+                case 'pericia': ?>
+                  <option value="aguardando">Aguardando Documento</option>
+                  <option value="analise">Análise</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="concluso">Concluso </option>
+                  <option value="concluido">Concluído </option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="justComum">Justiça Comum</option>
+                  <option value="justFederal">Justiça Federal </option>
+                  <option value="pericia" selected>Perícia ou Agendamento</option>
+                  <option value="prorrogacao">Prorrogação</option>
+                <?php
+                  break;
+                case 'prorrogacao': ?>
+                  <option value="aguardando">Aguardando Documento</option>
+                  <option value="analise">Análise</option>
+                  <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                  <option value="concluso">Concluso </option>
+                  <option value="concluido">Concluído </option>
+                  <option value="exigencia">Exigência</option>
+                  <option value="justComum">Justiça Comum</option>
+                  <option value="justFederal">Justiça Federal </option>
+                  <option value="pericia">Perícia ou Agendamento</option>
+                  <option value="prorrogacao" selected>Prorrogação</option>
               <?php
                   break;
                 default:
