@@ -289,7 +289,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                                     ?>
                                   </td>
                                   <td class="text-uppercase align-middle">
-                                    <?= lmWord($task['decricaoTarefa'], 70) . '-' . $task['idProcesso']; ?>
+                                    <?= lmWord($task['decricaoTarefa'], 70); ?>
                                   </td>
                                   <td class="text-uppercase align-middle text-center" style="font-weight: 300;">
                                     <?php

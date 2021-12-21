@@ -8,38 +8,25 @@ $idClient = $task['idpessoa'];
 $idProcess = $task['idProcesso'];
 
 if (isset($_POST['edtTarefa']) && $_POST['edtTarefa'] == 'edtTarefa') {
-  $idCreador = strip_tags((trim($_POST['idCreador'])));
-  $idResponsavel = strip_tags((trim($_POST['idResponsavel'])));
-  $idProcesso = strip_tags((trim($_POST['idProcesso'])));
-  $decricaoTarefa = strip_tags((trim($_POST['decricaoTarefa'])));
-  $dtTarefa = strip_tags(strip_tags(trim($_POST['dtTarefa'])));
-  $hora = strip_tags(strip_tags(trim($_POST['hora'])));
-  $local = strip_tags(strip_tags(trim($_POST['local'])));
-  $prioridade = strip_tags(strip_tags(trim($_POST['prioridade'])));
 
-  $restingir = $_POST['restingir'] == 'on' ? 1 : 0;
-  $finalizada = $_POST['finalizada'] == 'on' ? 1 : 0;
-  $idpessoa = strip_tags(strip_tags(trim($_POST['idpessoa'])));
+  $dados['idCreador'] = strip_tags((trim($_POST['idCreador'])));
+  $dados['idResponsavel'] = strip_tags((trim($_POST['idResponsavel'])));
+  $dados['idProcesso'] = strip_tags((trim($_POST['idProcesso'])));
+  $dados['idpessoa'] = strip_tags(strip_tags(trim($_POST['idpessoa'])));
+  $dados['decricaoTarefa'] = strip_tags((trim($_POST['decricaoTarefa'])));
+  $dados['dtTarefa'] = strip_tags(strip_tags(trim($_POST['dtTarefa'])));
+  $dados['hora'] = strip_tags(strip_tags(trim($_POST['hora'])));
+  $dados['local'] = strip_tags(strip_tags(trim($_POST['local'])));
+  $dados['finalizada'] = $_POST['finalizada'];
+  $dados['prioridade'] = strip_tags(strip_tags(trim($_POST['prioridade'])));
 
-  $sql = "UPDATE `tarefas` SET
-  `idpessoa` = '$idpessoa',
-  `idCreador` = '$idCreador',
-  `idResponsavel` = '$idResponsavel',
-  `idProcesso` = '$idProcesso',
-  `decricaoTarefa` = '$decricaoTarefa',
-  `dtTarefa` = '$dtTarefa',
-  `hora` = '$hora',
-  `local` = '$local',
-  `prioridade` = '$prioridade',
-  `finalizada` = '$finalizada',
-  WHERE idtarefas = '$task_id'";
-  $resultQueryTask = $conexao->exec($sql);
-  if ($resultQueryTask) {
-    sweetalert('', 'Tarefa editada com sucesso!', 'success', 2000, 'top-end');
-
+  $updadeTask = atualizar('tarefas', $dados, "idtarefas = '$task_id'");
+  if ($updadeTask) {
+    echo "<script>alert('Tarefa atualizada com sucesso!');</script>";
     echo "<script>window.location.href = 'inicio.php?page=task_detail&task=$task_id';</script>";
   } else {
-    sweetalert('', 'Erro ao editar tarefa!', 'error', 2000, 'top-end');
+    echo "<script>alert('Erro ao atualizar tarefa!');</script>";
+    echo "<script>window.location.href = 'inicio.php?page=task_detail&task=$task_id';</script>";
   }
 }
 
@@ -700,7 +687,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
               <label for="checkboxDanger1" class="center">
                 <?= $task['finalizada'] == 1 ? 'Finalizada' : 'Finalizar ?' ?>
               </label>
-              <select class="form-control text-uppercase custom-select" name="prioridade" id="prioridade">
+              <select class="form-control text-uppercase custom-select" name="finalizada" id="">
                 <?php
                 switch ($task['finalizada']) {
                   case '1':
