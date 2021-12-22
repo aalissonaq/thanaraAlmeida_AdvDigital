@@ -5,13 +5,14 @@ switch ($_SESSION['NIVEL']) {
         include_once 'dashboards/_root.php';
         break;
     case 1:
-        include_once 'dashboards/_adm.php';
+        include_once 'dashboards/_root.php';
         break;
     case 2:
-        include_once './pages/pages/contactsClient.php';
+        include_once 'dashboards/_root.php';
+        // include_once './pages/pages/contactsClient.php';
         break;
     case 3:
-        include_once 'dash/dashMedico.php';
+        include_once 'dashboards/_root.php';
         break;
 
     default;

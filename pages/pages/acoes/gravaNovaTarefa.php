@@ -14,7 +14,7 @@ if (isset($_POST['gravar']) && $_POST['gravar'] == 'gravar') {
   $dados['local'] = strip_tags(strip_tags(trim($_POST['local'])));
   $dados['prioridade'] = strip_tags(strip_tags(trim($_POST['prioridade'])));
 
-  $dados['restingir'] = $_POST['restingir'] == 'on' ? 1 : 0;
+  //$dados['restingir'] = isset($_POST['restingir']) == 'on' ? 1 : 0;
   $dados['idpessoa'] = strip_tags(strip_tags(trim($_POST['idpessoa'])));
 
   $inserir = inseir('tarefas', $dados);

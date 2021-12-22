@@ -144,11 +144,11 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
       <!-- <h3 class="card-title">Projects Detail</h3> -->
 
       <div class="card-tools">
-        <a href="?page=profileCliente&id=<?= $idClient ?>" class="btn btn-tool text- d-print-none">
+        <button onclick="history.go(-1)" class="btn btn-tool text- d-print-none">
           <!-- <i class="far fa-arrow-alt-circle-left fa-fw fa-lg"></i> -->
           <i class="mdi mdi-arrow-left-bold-circle-outline fa fa-2x align-middle "></i>
           Voltar ao Peril do Cliente
-        </a>
+        </button>
         <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
               <i class="fas fa-minus"></i></button>
             <buttn type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">

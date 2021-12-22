@@ -29,7 +29,11 @@
             <div class="inner mx-3">
               <?php
               //$today = date("Y-m-d", time());
-              $sql = "SELECT * FROM tarefas WHERE dtTarefa =  CURDATE()";
+              if ($_SESSION['NIVEL'] > 1) {
+                $sql = "SELECT * FROM tarefas WHERE idResponsavel = {$_SESSION['ID']} AND dtTarefa =  CURDATE() AND finalizada = 0";
+              } else {
+                $sql = "SELECT * FROM tarefas WHERE dtTarefa =  CURDATE()";
+              }
               $resultado = $conexao->query($sql);
               ?>
 
@@ -51,7 +55,12 @@
           <div class="small-box bg-gradient-default">
             <div class="inner mx-3">
               <?php
-              $sql = "SELECT * FROM tarefas WHERE finalizada = 0";
+              if ($_SESSION['NIVEL'] > 1) {
+                $sql = "SELECT * FROM tarefas WHERE idResponsavel = {$_SESSION['ID']} AND finalizada = 0";
+              } else {
+                $sql = "SELECT * FROM tarefas WHERE finalizada = 0";
+              }
+
               $resultado = $conexao->query($sql);
               ?>
               <h3><?= str_pad($resultado->rowCount(), 3, "0", STR_PAD_LEFT); ?></h3>
@@ -71,7 +80,11 @@
           <div class="small-box bg-gradient-default">
             <div class="inner mx-3">
               <?php
-              $sql = "SELECT * FROM tarefas WHERE finalizada = 1";
+              if ($_SESSION['NIVEL'] > 1) {
+                $sql = "SELECT * FROM tarefas WHERE idResponsavel = {$_SESSION['ID']} AND finalizada = 1";
+              } else {
+                $sql = "SELECT * FROM tarefas WHERE finalizada = 1";
+              }
               $resultado = $conexao->query($sql);
               ?>
               <h3><?= str_pad($resultado->rowCount(), 3, "0", STR_PAD_LEFT); ?></h3>
@@ -116,7 +129,7 @@
               <a class="nav-link" href="#allTask" data-toggle="tab">
                 <i class="align-middle mdi mdi-calendar-clock mdi-24px fa fa-fw"></i>&nbsp;&nbsp;
                 <span class="align-middle">
-                  Tarefas Agendadas
+                  Todas as Tarefas Agendadas
                 </span>
               </a>
             </li>
@@ -130,8 +143,8 @@
           <div class="card-tools">
             <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
               </button> -->
-            <button type="button" class="btn btn-default float-right m-2 "><i class="fas fa-plus"></i> Nova Tarefa
-            </button>
+            <!-- <button type="button" class="btn btn-default float-right m-2 "><i class="fas fa-plus"></i> Nova Tarefa
+            </button> -->
 
           </div>
           <!-- <div class="card-header">
@@ -161,7 +174,13 @@
                         </thead>
                         <tbody>
                           <?php
-                          $sql = "SELECT * FROM tarefas WHERE  (dtTarefa = CURDATE() OR dtTarefa < CURDATE()) AND finalizada = 0   ORDER BY dtTarefa ASC";
+                          if ($_SESSION['NIVEL'] > 1) {
+                            $sql = "SELECT * FROM tarefas WHERE idResponsavel = {$_SESSION['ID']} AND (dtTarefa = CURDATE() OR dtTarefa < CURDATE()) AND finalizada = 0 ORDER BY dtTarefa ASC";
+                          } else {
+                            $sql = "SELECT * FROM tarefas WHERE (dtTarefa = CURDATE() OR dtTarefa < CURDATE()) AND finalizada = 0   ORDER BY dtTarefa ASC";
+                          }
+
+
                           $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                           $count = 1;
                           foreach ($resultado as $task) {
@@ -264,7 +283,11 @@
                         </thead>
                         <tbody>
                           <?php
-                          $sql = "SELECT * FROM tarefas ORDER BY dtTarefa ASC";
+                          if ($_SESSION['NIVEL'] > 1) {
+                            $sql = "SELECT * FROM tarefas WHERE idResponsavel = {$_SESSION['ID']} ORDER BY dtTarefa ASC";
+                          } else {
+                            $sql = "SELECT * FROM tarefas ORDER BY dtTarefa ASC";
+                          }
                           $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                           $count = 1;
                           foreach ($resultado as $task) {

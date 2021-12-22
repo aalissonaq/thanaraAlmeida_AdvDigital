@@ -9,15 +9,15 @@
                     } else {
                       echo "./upload/fotoPessoas/default.png";
                     } ?>" alt="
-                  <?= $_SESSION['FOTO'] ?>" class=" profile-user-img img-fluid img-circle shadow user-image" style="min-width:3rem; min-height:3rem; object-fit: cover;
+                  <?= $_SESSION['FOTO'] ?>" class=" profile-user-img img-fluid img-circle shadow user-image" style="width:3.2rem;height:3.2rem; object-fit: cover;
                   position: relative;  border: 0px solid transparent; background: linear-gradient(#c77129,60%, #6368B1); background-clip: padding-box; padding: .21rem;
 
                   " />
     </div>
 
     <div class="info">
-      <a href="#" class="text-capitalize">
-        <p class="">
+      <a href="#" class="">
+        <p class="text-capitalize">
           olá,
         </p>
         <span class="text-orange lead align-middle" style="font-family: 'Advent Pro', sans-serif; font-weight: 300; letter-spacing: 0.5%; margin-top: -1.3rem; position: absolute; text-transform: uppercase;">
@@ -35,6 +35,9 @@
           }
           ?>
         </span>
+        <small class="text-muted">
+          Secretário(a)/Atendente
+        </small>
       </a>
     </div>
     <div class="info">

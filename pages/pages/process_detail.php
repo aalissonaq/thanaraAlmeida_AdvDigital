@@ -97,11 +97,11 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
       <!-- <h3 class="card-title">Projects Detail</h3> -->
 
       <div class="card-tools">
-        <a href="?page=profileCliente&id=<?= $_GET["idcli"] ?>" class="btn btn-tool text- d-print-none">
+        <button onclick="history.go(-1)" class="btn btn-tool text- d-print-none">
           <!-- <i class="far fa-arrow-alt-circle-left fa-fw fa-lg"></i> -->
           <i class="mdi mdi-arrow-left-bold-circle-outline fa fa-2x align-middle "></i>
           Voltar ao Peril do Cliente
-        </a>
+        </button>
         <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
               <i class="fas fa-minus"></i></button>
             <buttn type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
@@ -204,7 +204,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                 <h2 class="card-title text-uppercase h3">Tarefas do Processo</h2>
 
                 <div class="card-tools">
-                  <button type="button" class="btn btn-sm btn-outline-primary mr-4 " data-toggle="modal" data-target="#modal-novoHistorico">
+                  <button type="button" class="btn btn-sm btn-outline-primary mr-4 " data-toggle="modal" data-target="#modal-novaTarefa" onclick="modalIdProcesso(<?= $dadosProcesso['idprocesso'] ?>)">
                     <i class="fas fa-plus"></i>
                     Adicionar Tarefa
                   </button>
@@ -235,7 +235,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                         <a class="nav-link" href="#allTask" data-toggle="tab">
                           <i class="align-middle mdi mdi-calendar-clock mdi-24px fa fa-fw"></i>&nbsp;&nbsp;
                           <span class="align-middle">
-                            Tarefas Agendadas
+                            Todas as Tarefas
                           </span>
                         </a>
                       </li>
@@ -1239,6 +1239,159 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
 </div>
 <!-- /.modal -->
 
+
+<!-- MODAL NOVA TAREFA -->
+<div class="modal fade" id="modal-novaTarefa">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" style="font-family: 'Advent Pro', sans-serif; font-weight: 500; letter-spacing: 1px;">Nova Tarefa&nbsp;
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- form novo Usuário -->
+        <form class="needs-validation" novalidate action="./pages/pages/acoes/gravaNovaTarefa.php" method="POST" enctype="multipart/form-data">
+
+          <input type="hidden" name="idCreador" id="idCreador" value="<?= $_SESSION['ID']; ?>" />
+          <input type="hidden" name="idProcesso" id="idProcesso" value="<?= $_GET['idprocess']; ?>" />
+          <input type="hidden" name="idpessoa" id="" value="<?= $_GET['idcli']; ?>" />
+
+          <div class="form-row">
+            <div class="col-md-12">
+              <label for="idResponsavel">Responsavel
+                <span class="text-orange">*</span>
+              </label>
+
+              <select class="form-control text-uppercase custom-select" name="idResponsavel" id="idResponsavel">
+                <option value="" selected disabled>Selecione Responsavel </option>
+                <?php
+                foreach (ler('vw_pessoa_user', '', 'WHERE nivelUser > 0 and flStatusUser = 1')->fetchAll(PDO::FETCH_ASSOC) as $users) {
+                ?>
+                  <option value="<?= $users['idPessoaPessoa'] ?>"><?= $users['nmPessoa'] . ' - ' ?>
+                    <?php
+                    switch ($users['nivelUser']) {
+                      case '1':
+                        echo 'Administrador';
+                        break;
+                      case '2':
+                        echo 'Secretário(a) / Atendente';
+                        break;
+                      case '3':
+                        echo 'Advogado(a) / Parceiro(a)';
+                        break;
+
+                      default:
+                        # code...
+                        break;
+                    }
+
+                    ?>
+                  </option>
+                <?php } ?>
+
+              </select>
+              <div class="invalid-feedback">
+                A seleção é Obrigatório !
+              </div>
+              <!-- <input type="text" name="objprocesso" class="form-control text-uppercase" disabled id="objprocesso" placeholder="Objeto do Processo" value="" required/>
+                  <div class="invalid-feedback">
+                    Obrigatório !
+                  </div> -->
+            </div>
+
+            <!-- <div class="col-md-6">
+                  <label for="contraparte">Processo
+                    <span class="text-orange">*</span>
+                  </label>
+                  <input type="text" name="contraparte" class="form-control text-uppercase  " id="contraparte" placeholder=" Parte Contraria" value="" >
+                  <div class="invalid-feedback">
+                    Obrigatório !
+                  </div>
+                </div> -->
+
+          </div>
+          <div class="form-row">
+            <div class="col-md-12">
+              <label for="decricaoTarefa">O que deverá ser feito ?
+                <span class="text-orange">*</span>
+              </label>
+              <textarea class="form-control" name="decricaoTarefa" id="decricaoTarefa" placeholder="Decrição da tarefa" name="validation" rows="4" required></textarea>
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="col-md-3">
+              <label for="dtTarefa">Data da tarefa
+                <span class="text-orange">*</span>
+              </label>
+              <input type="date" maxlength="19" name="dtTarefa" class="form-control text-uppercase" id="dtTarefa" placeholder="" value="" required />
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label for="hora">Hora da tarefa</label>
+              <input type="time" maxlength="19" name="hora" class="form-control text-uppercase" id="hora" placeholder="" value="">
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+
+            <div class="col-md-5">
+              <label for="statusprocesso">Local do Compromisso</label>
+
+              </label>
+              <input type="text" maxlength="19" name="local" class="form-control text-uppercase" id="local" placeholder="Local onde sera realizada a terefa" value="" />
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label for="prioridade">Prioridade</label>
+              <select class="form-control text-uppercase custom-select" name="prioridade" id="prioridade">
+                <option value="baixa" class="text-success">Baixa</option>
+                <option value="media" class="text-warning">Média</option>
+                <option value="alta" class="text-danger">Alta</option>
+                <div class="invalid-feedback">
+                  Obrigatório !
+                </div>
+              </select>
+            </div>
+          </div>
+          <br />
+
+
+      </div>
+      <div class="modal-footer justify-content-between">
+        <input type="hidden" name="idcliente" value="<?= $id; ?>" />
+        <input type="hidden" name="idadvogado" value="0" />
+        <input type="hidden" name="nomeCliente" value="<?= $dcliente['nmPessoa']; ?>" />
+        <input type="hidden" name="userActionLog" value="<?= $_SESSION['USUARIO']; ?>" />
+        <input type="hidden" name="gravar" value="gravar" />
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-times fa-fw fa-lg"></i>
+          Fechar </button>
+        <button class="btn btn-success btn-lg" type="submit">
+          <i class="far fa-save fa-fw fa-lg"></i>
+          Gravar Dados</button>
+        </form>
+        <!--/form novo Usuario -->
+        <!-- <button type="button" class="btn btn-success">Save changes</button> -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+
 <!-- Control Sidebar -->
 <aside class="control-sidebar control-sidebar-dark">
   <!-- Control sidebar content goes here -->
@@ -1270,6 +1423,24 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
     console.log(variavelphp);
 
     //document.getElementById('id_historico').value = valor;
+  };
+</script>
+
+<script>
+  function setaDadosModalProcesso(valor) {
+    document.getElementById('idPessoaCliente').value = valor;
+  };
+
+  function modalIdProcesso(valor) {
+    document.getElementById('idProcesso').value = valor;
+    document.getElementById('id_processo').value = valor;
+    document.getElementById('id_processoHistorico').value = valor;
+    // var currentUrl = window.location.href
+    // document.location.href = currentUrl + "&idp=" + valor;
+  };
+
+  function setaDadosModal(valor) {
+    document.getElementById('idPessoa').value = valor;
   };
 </script>
 </body>

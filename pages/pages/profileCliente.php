@@ -217,7 +217,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                   <a class="nav-link " href="#allTasks" data-toggle="tab">
                     <i class="align-middle mdi mdi-calendar-clock mdi-24px fa fa-fw"></i>&nbsp;&nbsp;
                     <span class="align-middle">
-                      Tarefas Agendadas
+                      Todas as Tarefas
                     </span>
                   </a>
                 </li>
