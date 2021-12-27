@@ -4,7 +4,8 @@
 ,._*
 
 //bd
-data/conexao.php
+./data/conexao.php
+./data/dbasys.php
 
 // Archives
 *.zip
