@@ -175,9 +175,21 @@
                         <tbody>
                           <?php
                           if ($_SESSION['NIVEL'] > 1) {
-                            $sql = "SELECT * FROM tarefas WHERE idResponsavel = {$_SESSION['ID']} AND (dtTarefa = CURDATE() OR dtTarefa < CURDATE()) AND finalizada = 0 ORDER BY dtTarefa ASC";
+                            $sql = "SELECT * FROM tarefas
+                                    INNER JOIN processos
+                                    ON tarefas.idProcesso = processos.idprocesso
+                                    INNER JOIN pessoa
+                                    ON tarefas.idpessoa = pessoa.idPessoa
+                                    WHERE idResponsavel = {$_SESSION['ID']} AND (dtTarefa = CURDATE() OR dtTarefa < CURDATE()) AND finalizada = 0
+                                    ORDER BY dtTarefa ASC";
                           } else {
-                            $sql = "SELECT * FROM tarefas WHERE (dtTarefa = CURDATE() OR dtTarefa < CURDATE()) AND finalizada = 0   ORDER BY dtTarefa ASC";
+                            $sql = "SELECT * FROM tarefas
+                                    INNER JOIN processos
+                                    ON tarefas.idProcesso = processos.idprocesso
+                                    INNER JOIN pessoa
+                                    ON tarefas.idpessoa = pessoa.idPessoa
+                                    WHERE (dtTarefa = CURDATE() OR dtTarefa < CURDATE()) AND finalizada = 0
+                                    ORDER BY dtTarefa ASC";
                           }
 
 
@@ -209,8 +221,22 @@
                                 // $count++;
                                 ?>
                               </td>
-                              <td class="text-uppercase align-middle">
-                                <?= lmWord($task['decricaoTarefa'], 70); ?>
+                              <td class="text-uppercase align-middle" style="font-size: .75rem; ">
+                                <div class="text-muted">
+                                  <strong class="text-primary">Processo:&nbsp;</strong><?php echo $task['objprocesso']; ?>
+                                </div>
+                                <div class="text-muted">
+                                  <strong class="text-primary">Tarefa:&nbsp;</strong><?= lmWord($task['decricaoTarefa'], 70); ?>
+                                </div>
+                                <div class="d-flex justify-content-around">
+                                  <div class="col-6 text-muted">
+                                    <strong class="text-primary">Parte:&nbsp;</strong><?= lmWord($task['nmPessoa'], 70); ?>
+                                  </div>|&nbsp;
+                                  <div class="col-6 text-muted">
+                                    <strong class="text-primary">Contra-Parte:&nbsp;</strong><?= lmWord($task['contraparte'], 70); ?>
+                                  </div>
+                                </div>
+
                               </td>
                               <td class="text-uppercase align-middle text-center" style="font-weight: 300;">
                                 <?php
@@ -264,14 +290,14 @@
                     <!-- /.tarefas -->
 
                   </div>
-                  <div class="tab-pane fade  " id="allTask" role="tabpanel" aria-labelledby="allTask-tab">
+                  <div class="tab-pane fade" id="allTask" role="tabpanel" aria-labelledby="allTask-tab">
 
                     <!-- Todas as Tarefas  -->
-                    <div class="table-responsive">
+                    <div class="table-responsive col-12">
                       <table id="tabela" class="table table-sm table-striped table-hover">
                         <thead class="" style="font-weight: 300; font-family: 'Advent Pro', sans-serif;">
                           <tr>
-                            <th class="col-1 text- align-middle">Prioridade</th>
+                            <th class="col-1  align-middle">Prioridade</th>
                             <th class="col-4 text-center align-middle">Tarefa</th>
                             <th class="col-2 text-center align-middle">status</th>
                             <th class="col-3 text-center align-middle">Responsável</th>
@@ -284,9 +310,19 @@
                         <tbody>
                           <?php
                           if ($_SESSION['NIVEL'] > 1) {
-                            $sql = "SELECT * FROM tarefas WHERE idResponsavel = {$_SESSION['ID']} ORDER BY dtTarefa ASC";
+                            $sql = "SELECT * FROM tarefas
+                                    INNER JOIN processos
+                                    ON tarefas.idProcesso = processos.idprocesso
+                                    INNER JOIN pessoa
+                                    ON tarefas.idpessoa = pessoa.idPessoa
+                                    WHERE idResponsavel = {$_SESSION['ID']} ORDER BY dtTarefa ASC";
                           } else {
-                            $sql = "SELECT * FROM tarefas ORDER BY dtTarefa ASC";
+                            $sql = "SELECT * FROM tarefas
+                                    INNER JOIN processos
+                                    ON tarefas.idProcesso = processos.idprocesso
+                                    INNER JOIN pessoa
+                                    ON tarefas.idpessoa = pessoa.idPessoa
+                                    ORDER BY dtTarefa ASC";
                           }
                           $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                           $count = 1;
@@ -316,9 +352,21 @@
                                 // $count++;
                                 ?>
                               </td>
-                              <td class="text-uppercase align-middle">
-                                <?= lmWord($task['decricaoTarefa'], 70); ?>
-
+                              <td class="text-uppercase align-middle" style="font-size: .75rem; ">
+                                <div class="text-muted">
+                                  <strong class="text-primary">Processo:&nbsp;</strong><?php echo $task['objprocesso']; ?>
+                                </div>
+                                <div class="text-muted">
+                                  <strong class="text-primary">Tarefa:&nbsp;</strong><?= lmWord($task['decricaoTarefa'], 70); ?>
+                                </div>
+                                <div class="d-flex justify-content-around">
+                                  <div class="col-6 text-muted">
+                                    <strong class="text-primary">Parte:&nbsp;</strong><?= lmWord($task['nmPessoa'], 70); ?>
+                                  </div>|&nbsp;
+                                  <div class="col-6 text-muted">
+                                    <strong class="text-primary">Contra-Parte:&nbsp;</strong><?= lmWord($task['contraparte'], 70); ?>
+                                  </div>
+                                </div>
                               </td>
                               <td class="text-uppercase align-middle text-center" style="font-weight: 300;">
                                 <?php
