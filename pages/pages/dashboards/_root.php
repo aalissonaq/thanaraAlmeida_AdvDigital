@@ -226,7 +226,7 @@
                                   </div>
                                   <div class="d-flex flex-column">
                                     <div class="text-muted">
-                                      <strong class="text-primary">Processo:&nbsp;</strong><?php echo $task['objprocesso']; ?>
+                                      <strong class="text-primary">Processo:&nbsp;</strong><?= $task['niprocesso'] . ' - ' .  $task['objprocesso']; ?>
                                     </div>
                                     <div class="text-muted">
                                       <strong class="text-primary">Tarefa:&nbsp;</strong><?= lmWord($task['decricaoTarefa'], 100); ?>
@@ -351,7 +351,7 @@
                                   </div>
                                   <div class="d-flex flex-column">
                                     <div class="text-muted">
-                                      <strong class="text-primary">Processo:&nbsp;</strong><?php echo $task['objprocesso']; ?>
+                                      <strong class="text-primary">Processo:&nbsp;</strong><?= $task['niprocesso'] . ' - ' .  $task['objprocesso']; ?>
                                     </div>
                                     <div class="text-muted">
                                       <strong class="text-primary">Tarefa:&nbsp;</strong><?= lmWord($task['decricaoTarefa'], 100); ?>

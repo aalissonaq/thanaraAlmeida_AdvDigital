@@ -234,12 +234,12 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                     <table id="tabela" class="table table-sm table-striped table-hover">
                       <thead class="" style="font-family: 'Advent Pro', sans-serif; font-weight: 100;">
                         <tr>
-                          <th class="col-md-1 text-center align-middle">Prioridade</th>
-                          <th class="col-md-4 text-center align-middle ">Tarefa</th>
+
+                          <th class="col-md-auto text-center align-middle ">Tarefa</th>
                           <th class="col-md-2 text-center align-middle ">status</th>
-                          <th class="col-md-3 text-center align-middle ">Responsável</th>
-                          <th class="col-md-2 text-center align-middle ">Data e Hora</th>
-                          <th class="col-md-auto text-center align-middle">
+                          <th class="col-md-2 text-center align-middle ">Responsável</th>
+                          <th class="col-md-1 text-center align-middle ">Data e Hora</th>
+                          <th class="col-md-1 text-center align-middle">
                             <i class="fab fa-lg fa-fw fa-whmcs" title="Ações"></i>
                           </th>
                         </tr>
@@ -247,37 +247,54 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                       <tbody>
                         <?php
                         $idpessoa = $_GET['id'];
-                        $sql = "SELECT * FROM tarefas WHERE idpessoa = '$idpessoa' AND (dtTarefa = CURDATE() OR dtTarefa < CURDATE()) AND finalizada = 0 ORDER BY dtTarefa ASC";
+                        $sql = "SELECT * FROM tarefas
+                                INNER JOIN processos
+                                ON tarefas.idProcesso = processos.idprocesso
+                                WHERE idpessoa = '$idpessoa' AND (dtTarefa = CURDATE() OR dtTarefa < CURDATE()) AND finalizada = 0 ORDER BY dtTarefa ASC";
                         $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                         $count = 1;
                         foreach ($resultado as $task) {
                         ?>
                           <tr scope="row" class="">
-                            <td class=" text-uppercase align-middle" style="font-size: .9rem;">
-                              <?php
-                              switch ($task['prioridade']) {
-                                case 'baixa':
-                                  echo '<span class="badge badge-success px-2"><i class="mdi mdi-alert-circle-outline mdi-24px align-middle"></i> BAIXA&nbsp;</span>';
-                                  break;
 
-                                case 'media':
-                                  echo '<span class="badge badge-warning px-2"><i class="mdi mdi-alert-octagon-outline mdi-24px align-middle"></i> MÉDIA</span>';
-                                  break;
-
-                                case 'alta':
-                                  echo '<span class="badge badge-danger px-2"><i class="mdi mdi-car-brake-alert mdi-24px align-middle"></i> &nbsp;ALTA &nbsp;&nbsp;</span>';
-                                  break;
-
-                                default:
-                                  echo '<span class="badge badge-info px-2"><i class="mdi mdi-alert-box-outline mdi-18px align-middle"></i></span>';
-                                  break;
-                              }
-                              // echo str_pad($count, 3, "0", STR_PAD_LEFT);
-                              // $count++;
-                              ?>
-                            </td>
                             <td class="text-uppercase align-middle">
-                              <?= $task['decricaoTarefa']; ?>
+                              <div class="d-flex align-items-center">
+                                <div class="mr-2 ">
+                                  <?php
+                                  switch ($task['prioridade']) {
+                                    case 'baixa':
+                                      echo '<i title="Baixa" class=" text-info mdi mdi-alert-circle-outline mdi-24px align-middle">&nbsp;</i>';
+                                      break;
+
+                                    case 'media':
+                                      echo '<i title="Média" class="text-orange mdi mdi-alert-octagon-outline mdi-24px align-middle">&nbsp;</i>';
+                                      break;
+
+                                    case 'alta':
+                                      echo '<i title="Alta" class="text-danger mdi mdi-car-brake-alert mdi-24px align-middle">&nbsp;</i>';
+                                      break;
+
+                                    default:
+                                      echo '<i class="mdi mdi-alert-box-outline mdi-18px align-middle">&nbsp;</i>';
+                                      break;
+                                  }
+                                  // echo str_pad($count, 3, "0", STR_PAD_LEFT);
+                                  // $count++;
+                                  ?>
+                                </div>
+                                <div class="d-flex flex-column">
+                                  <div class="text-muted">
+                                    <strong class="text-primary">Processo:&nbsp;</strong><?= $task['niprocesso'] . ' - ' .  $task['objprocesso']; ?>
+                                  </div>
+                                  <div class="text-muted">
+                                    <strong class="text-primary">Tarefa:&nbsp;</strong><?= lmWord($task['decricaoTarefa'], 100); ?>
+                                  </div>
+                                  <div class="text-muted">
+                                    <strong class="text-primary">Contra-Parte:&nbsp;</strong><?= lmWord($task['contraparte'], 70); ?>
+                                  </div>
+
+                                </div>
+                              </div>
                             </td>
                             <td class="text-uppercase align-middle text-center" style="font-weight: 300;">
                               <?php
@@ -341,7 +358,6 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                     <table id="tabela" class="table table-sm table-striped table-hover">
                       <thead class="" style="font-weight: 300; font-family: 'Advent Pro', sans-serif;">
                         <tr>
-                          <th class="col-1 text- align-middle">Prioridade</th>
                           <th class="col-4 text-center align-middle">Tarefa</th>
                           <th class="col-2 text-center align-middle">status</th>
                           <th class="col-3 text-center align-middle">Responsável</th>
@@ -353,37 +369,54 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                       </thead>
                       <tbody>
                         <?php
-                        $sql = "SELECT * FROM tarefas WHERE idpessoa = '$idpessoa'  ORDER BY dtTarefa ASC";
+                        $sql = "SELECT * FROM tarefas
+                                INNER JOIN processos
+                                ON tarefas.idProcesso = processos.idprocesso
+                                WHERE idpessoa = '$idpessoa'  ORDER BY dtTarefa ASC";
                         $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                         $count = 1;
                         foreach ($resultado as $task) {
                         ?>
-                          <tr scope="row" class="">
-                            <td class=" text-uppercase align-middle  col-auto" style="font-size: .9rem;">
-                              <?php
-                              switch ($task['prioridade']) {
-                                case 'baixa':
-                                  echo '<span class="badge badge-success px-2"><i class="mdi mdi-alert-circle-outline mdi-24px align-middle"></i> BAIXA&nbsp;</span>';
-                                  break;
+                          <tr scope="row" class="" <?= $task['finalizada'] == '1' ? $colorBG = '#c6e5b1' : $colorBG = '' ?> style="background-color: <?= $colorBG ?>;">
 
-                                case 'media':
-                                  echo '<span class="badge badge-warning px-2"><i class="mdi mdi-alert-octagon-outline mdi-24px align-middle"></i> MÉDIA</span>';
-                                  break;
-
-                                case 'alta':
-                                  echo '<span class="badge badge-danger px-2"><i class="mdi mdi-car-brake-alert mdi-24px align-middle"></i> &nbsp;ALTA &nbsp;&nbsp;</span>';
-                                  break;
-
-                                default:
-                                  echo '<span class="badge badge-info px-2"><i class="mdi mdi-alert-box-outline mdi-18px align-middle"></i></span>';
-                                  break;
-                              }
-                              // echo str_pad($count, 3, "0", STR_PAD_LEFT);
-                              // $count++;
-                              ?>
-                            </td>
                             <td class="text-uppercase align-middle">
-                              <?= $task['decricaoTarefa']; ?>
+                              <div class="d-flex align-items-center">
+                                <div class="mr-2 ">
+                                  <?php
+                                  switch ($task['prioridade']) {
+                                    case 'baixa':
+                                      echo '<i title="Baixa" class=" text-info mdi mdi-alert-circle-outline mdi-24px align-middle">&nbsp;</i>';
+                                      break;
+
+                                    case 'media':
+                                      echo '<i title="Média" class="text-orange mdi mdi-alert-octagon-outline mdi-24px align-middle">&nbsp;</i>';
+                                      break;
+
+                                    case 'alta':
+                                      echo '<i title="Alta" class="text-danger mdi mdi-car-brake-alert mdi-24px align-middle">&nbsp;</i>';
+                                      break;
+
+                                    default:
+                                      echo '<i class="mdi mdi-alert-box-outline mdi-18px align-middle">&nbsp;</i>';
+                                      break;
+                                  }
+                                  // echo str_pad($count, 3, "0", STR_PAD_LEFT);
+                                  // $count++;
+                                  ?>
+                                </div>
+                                <div class="d-flex flex-column">
+                                  <div class="text-muted">
+                                    <strong class="text-primary">Processo:&nbsp;</strong><?= $task['niprocesso'] . ' - ' .  $task['objprocesso']; ?>
+                                  </div>
+                                  <div class="text-muted">
+                                    <strong class="text-primary">Tarefa:&nbsp;</strong><?= lmWord($task['decricaoTarefa'], 100); ?>
+                                  </div>
+                                  <div class="text-muted">
+                                    <strong class="text-primary">Contra-Parte:&nbsp;</strong><?= lmWord($task['contraparte'], 70); ?>
+                                  </div>
+
+                                </div>
+                              </div>
                             </td>
                             <td class="text-uppercase align-middle text-center" style="font-weight: 300;">
                               <?php
@@ -422,7 +455,14 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                               echo date('d/m/Y', strtotime($task['dtTarefa']));
                               echo " AS ";
                               echo date('H:i', strtotime($task['hora']));
+
                               ?>
+                              <div class="text-muted">
+                                <small class="">
+                                  Finalizada em:
+                                </small>
+                                <?= $task['finalizada'] == '1' ? date('d/m/Y', strtotime($task['dtFinalizada'])) : '-' ?>
+                              </div>
                             </td>
                             <td class="text-uppercase align-middle  ">
                               <ul class="nav justify-content-center d-flex justify-content-evenly">
