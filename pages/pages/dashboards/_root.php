@@ -372,6 +372,10 @@
                                 switch ($task['finalizada']) {
                                   case '1':
                                     echo "<span class='badge badge-pill badge-success px-2 py-1'>Finalizada <i class='mdi mdi-checkbox-marked-circle-outline'></i></span>";
+                                    echo "<br/>
+                                    <small>
+                                    Finalizada em:<br/>
+                                    </small>" . date('d/m/Y', strtotime($task['dtFinalizacao'])) . " AS " . date('H:i', strtotime($task['dtFinalizacao'])) . "";
                                     break;
 
                                   case '0':
