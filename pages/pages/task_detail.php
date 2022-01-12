@@ -18,6 +18,7 @@ if (isset($_POST['edtTarefa']) && $_POST['edtTarefa'] == 'edtTarefa') {
   $dados['hora'] = strip_tags(strip_tags(trim($_POST['hora'])));
   $dados['local'] = strip_tags(strip_tags(trim($_POST['local'])));
   $dados['finalizada'] = $_POST['finalizada'];
+  $_POST['finalizada'] == 1 ? $dados['dtFinalizacao'] = date("Y-m-d H:i:s", time()) : $dados['dtFinalizacao'] = null;
   $dados['prioridade'] = strip_tags(strip_tags(trim($_POST['prioridade'])));
 
   $updadeTask = atualizar('tarefas', $dados, "idtarefas = '$task_id'");
