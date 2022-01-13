@@ -666,7 +666,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
 
                 <?= $dadoProcesso['niprocesso'] . ' - ' . $dadoProcesso['objprocesso'] ?>
               </h4>
-              <a href="" title="Editar Processo">
+              <a href="" title="Editar Processo" data-toggle="modal" data-target="#modal-edtProdesso">
                 <i class="mdi mdi-pencil text-secondary mdi-24px"></i>
               </a>
             </div>
@@ -1154,6 +1154,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
   <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+
 <!-- MODAL EDITAR HISTORICO -->
 <div class="modal fade" id="modal-edtHistorico">
   <div class="modal-dialog modal-lg">
@@ -1424,6 +1425,298 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
 </div>
 <!-- /.modal -->
 
+<!-- MODAL EDITAR PROCESSO -->
+<div class="modal fade" id="modal-edtProdesso">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" style="font-family: 'Advent Pro', sans-serif; font-weight: 500; letter-spacing: 1px; color:orange">Editar Proceso nº:&nbsp;
+        </h5>
+        <h5 class="modal-title text-primary" style="font-family: 'Advent Pro', sans-serif; font-weight: 500; letter-spacing: 1px; text-transform: uppercase;">
+          <?= $dadoProcesso['niprocesso']; ?>
+        </h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- form novo Usuário -->
+
+        <form class="needs-validation" novalidate action="./pages/pages/acoes/gravaNovoProcesso.php" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="niprocesso" value="<?= $dadoProcesso['niprocesso']; ?>" />
+          <div class="form-row">
+            <div class="col-md-6">
+              <label for="titulo_historico">Objeto do Processo
+                <span class="text-orange">*</span>
+              </label>
+              <input type="text" name="objprocesso" class="form-control text-uppercase  " id="objprocesso" placeholder="Objeto do Processo" value="<?= $dadoProcesso['objprocesso']; ?>" required>
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="contraparte">Parte Contraria
+                <span class="text-orange">*</span>
+              </label>
+              <input type="text" name="contraparte" class="form-control text-uppercase  " id="contraparte" placeholder=" Parte Contraria" value="<?= $dadoProcesso['contraparte']; ?>" required>
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+
+          </div>
+          <div class="form-row">
+            <div class="col-md-12">
+              <label for="descricaoprocesso">Descrição do Processo
+                <span class="text-orange">*</span>
+              </label>
+
+              <textarea class="form-control" name="descricaoprocesso" id="descricaoprocesso" name="validation" rows="4" required><?= trim($dadoProcesso['descricaoprocesso']); ?></textarea>
+
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="col-md-4">
+              <label for="numprocesso">Nº Processo (CNJ)</label>
+              <input type="text" maxlength="19" name="numprocesso" class="form-control text-uppercase js_numCNJ" id="numprocesso" placeholder="Número do Processo" value=" <?= $dadoProcesso['numprocesso'] > 0 ? $dadoProcesso['numprocesso'] : ''; ?>">
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label for="areaprocesso">Área da Ação
+                <span class="text-orange">*</span>
+              </label>
+              <select class="form-control text-uppercase" required name="areaprocesso" id="areaprocesso">
+                <?php
+                switch ($dadoProcesso['areaprocesso']) {
+                  case 'adminsitrativo':
+                    echo '<option value="adminsitrativo" selected>Administrativo</option>
+                          <option value="civil">Civil</option>
+                          <option value="familia">Família</option>
+                          <option value="previdenciario">Previdenciário</option>
+                          <option value="trabalhista">Trabalhista</option>';
+                    break;
+                  case 'civil':
+                    echo '<option value="adminsitrativo">Administrativo</option>
+                          <option value="civil" selected>Civil</option>
+                          <option value="familia">Família</option>
+                          <option value="previdenciario">Previdenciário</option>
+                          <option value="trabalhista">Trabalhista</option>';
+                    break;
+                  case 'familia':
+                    echo '<option value="adminsitrativo">Administrativo</option>
+                          <option value="civil">Civil</option>
+                          <option value="familia" selected>Família</option>
+                          <option value="previdenciario">Previdenciário</option>
+                          <option value="trabalhista">Trabalhista</option>';
+                    break;
+                  case 'previdenciario':
+                    echo '<option value="adminsitrativo">Administrativo</option>
+                          <option value="civil">Civil</option>
+                          <option value="familia">Família</option>
+                          <option value="previdenciario" selected>Previdenciário</option>
+                          <option value="trabalhista">Trabalhista</option>';
+                    break;
+                  case 'trabalhista':
+                    echo '<option value="adminsitrativo">Administrativo</option>
+                          <option value="civil">Civil</option>
+                          <option value="familia">Família</option>
+                          <option value="previdenciario">Previdenciário</option>
+                          <option value="trabalhista" selected>Trabalhista</option>';
+                    break;
+                  default:
+                    echo '<option value="" selected disabled>Área do ação</option>
+                          <option value="adminsitrativo">Administrativo</option>
+                          <option value="civil">Civil</option>
+                          <option value="familia">Família</option>
+                          <option value="previdenciario">Previdenciário</option>
+                          <option value="trabalhista">Trabalhista</option>';
+                    break;
+                }
+                ?>
+
+              </select>
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label for="statusprocesso">Etapa
+                <span class="text-orange">*</span>
+              </label>
+              <select class="form-control text-uppercase" required name="statusprocesso" id="statusprocesso">
+
+                <?php
+                switch ($dadoProcesso['statusprocesso']) {
+                  case 'aguardando':
+                    echo ' <option value="aguardando" selected>Aguardando Documento</option>
+                    <option value="analise">Análise</option>
+                    <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                    <option value="concluso">Concluso </option>
+                    <option value="concluido">Concluído </option>
+                    <option value="exigencia">Exigência</option>
+                    <option value="justComum">Justiça Comum</option>
+                    <option value="justFederal">Justiça Federal </option>
+                    <option value="pericia">Perícia ou Agendamento</option>
+                    <option value="prorrogacao">Prorrogação</option>';
+                    break;
+                  case 'analise':
+                    echo '<option value="aguardando">Aguardando Documento</option>
+                    <option value="analise" selected>Análise</option>
+                    <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                    <option value="concluso">Concluso </option>
+                    <option value="concluido">Concluído </option>
+                    <option value="exigencia">Exigência</option>
+                    <option value="justComum">Justiça Comum</option>
+                    <option value="justFederal">Justiça Federal </option>
+                    <option value="pericia">Perícia ou Agendamento</option>
+                    <option value="prorrogacao">Prorrogação</option>';
+                    break;
+                  case 'aguardandoINSS':
+                    echo '<option value="aguardando">Aguardando Documento</option>
+                    <option value="analise">Análise</option>
+                    <option value="aguardandoINSS" selected>Aguardando Resposta do INSS</option>
+                    <option value="concluso">Concluso </option>
+                    <option value="concluido">Concluído </option>
+                    <option value="exigencia">Exigência</option>
+                    <option value="justComum">Justiça Comum</option>
+                    <option value="justFederal">Justiça Federal </option>
+                    <option value="pericia">Perícia ou Agendamento</option>
+                    <option value="prorrogacao">Prorrogação</option>';
+                    break;
+                  case 'concluso':
+                    echo '<option value="aguardando">Aguardando Documento</option>
+                    <option value="analise">Análise</option>
+                    <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                    <option value="concluso" selected>Concluso </option>
+                    <option value="concluido">Concluído </option>
+                    <option value="exigencia">Exigência</option>
+                    <option value="justComum">Justiça Comum</option>
+                    <option value="justFederal">Justiça Federal </option>
+                    <option value="pericia">Perícia ou Agendamento</option>
+                    <option value="prorrogacao">Prorrogação</option>';
+                    break;
+                  case 'concluido':
+                    echo '<option value="aguardando">Aguardando Documento</option>
+                    <option value="analise">Análise</option>
+                    <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                    <option value="concluso">Concluso </option>
+                    <option value="concluido" selected>Concluído </option>
+                    <option value="exigencia">Exigência</option>
+                    <option value="justComum">Justiça Comum</option>
+                    <option value="justFederal">Justiça Federal </option>
+                    <option value="pericia">Perícia ou Agendamento</option>
+                    <option value="prorrogacao">Prorrogação</option>';
+                    break;
+                  case 'exigencia':
+                    echo '<option value="aguardando">Aguardando Documento</option>
+                    <option value="analise">Análise</option>
+                    <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                    <option value="concluso">Concluso </option>
+                    <option value="concluido">Concluído </option>
+                    <option value="exigencia" selected>Exigência</option>
+                    <option value="justComum">Justiça Comum</option>
+                    <option value="justFederal">Justiça Federal </option>
+                    <option value="pericia">Perícia ou Agendamento</option>
+                    <option value="prorrogacao">Prorrogação</option>';
+                    break;
+                  case 'justComum':
+                    echo '<option value="aguardando">Aguardando Documento</option>
+                    <option value="analise">Análise</option>
+                    <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                    <option value="concluso">Concluso </option>
+                    <option value="concluido">Concluído </option>
+                    <option value="exigencia">Exigência</option>
+                    <option value="justComum" selected>Justiça Comum</option>
+                    <option value="justFederal">Justiça Federal </option>
+                    <option value="pericia">Perícia ou Agendamento</option>
+                    <option value="prorrogacao">Prorrogação</option>';
+                    break;
+                  case 'justFederal':
+                    echo '<option value="aguardando">Aguardando Documento</option>
+                    <option value="analise">Análise</option>
+                    <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                    <option value="concluso">Concluso </option>
+                    <option value="concluido">Concluído </option>
+                    <option value="exigencia">Exigência</option>
+                    <option value="justComum">Justiça Comum</option>
+                    <option value="justFederal" selected>Justiça Federal </option>
+                    <option value="pericia">Perícia ou Agendamento</option>
+                    <option value="prorrogacao">Prorrogação</option>';
+                    break;
+                  case 'pericia':
+                    echo '<option value="aguardando">Aguardando Documento</option>
+                    <option value="analise">Análise</option>
+                    <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                    <option value="concluso">Concluso </option>
+                    <option value="concluido">Concluído </option>
+                    <option value="exigencia">Exigência</option>
+                    <option value="justComum">Justiça Comum</option>
+                    <option value="justFederal">Justiça Federal </option>
+                    <option value="pericia" selected>Perícia ou Agendamento</option>
+                    <option value="prorrogacao">Prorrogação</option>';
+                    break;
+                  case 'prorrogacao':
+                    echo '<option value="aguardando">Aguardando Documento</option>
+                    <option value="analise">Análise</option>
+                    <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                    <option value="concluso">Concluso </option>
+                    <option value="concluido">Concluído </option>
+                    <option value="exigencia">Exigência</option>
+                    <option value="justComum">Justiça Comum</option>
+                    <option value="justFederal">Justiça Federal </option>
+                    <option value="pericia">Perícia ou Agendamento</option>
+                    <option value="prorrogacao" selected>Prorrogação</option>';
+                    break;
+                  default:
+                    echo '<option value="aguardando">Aguardando Documento</option>
+                    <option value="analise">Análise</option>
+                    <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                    <option value="concluso">Concluso </option>
+                    <option value="concluido">Concluído </option>
+                    <option value="exigencia">Exigência</option>
+                    <option value="justComum">Justiça Comum</option>
+                    <option value="justFederal">Justiça Federal </option>
+                    <option value="pericia">Perícia ou Agendamento</option>
+                    <option value="prorrogacao">Prorrogação</option>';
+                    break;
+                }
+                ?>
+              </select>
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <input type="hidden" name="idcliente" value="<?= $id; ?>">
+        <input type="hidden" name="idadvogado" value="0">
+        <input type="hidden" name="nomeCliente" value="<?= $dcliente['nmPessoa']; ?>">
+        <input type="hidden" name="userActionLog" value="<?= $_SESSION['USUARIO']; ?>">
+        <input type="hidden" name="gravar" value="gravar">
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-times fa-fw fa-lg"></i>
+          Fechar </button>
+        <button class="btn btn-success btn-lg" type="submit">
+          <i class="far fa-save fa-fw fa-lg"></i>
+          Gravar Dados</button>
+        </form>
+        <!--/form novo Usuario -->
+        <!-- <button type="button" class="btn btn-success">Save changes</button> -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
 
 <!-- Control Sidebar -->
@@ -1477,6 +1770,3 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
     document.getElementById('idPessoa').value = valor;
   };
 </script>
-</body>
-
-</html>

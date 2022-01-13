@@ -23,7 +23,8 @@
         "issues": "https://github.com/ColorlibHQ/AdminLTE/issues"
     },
     "require": {
-        "dompdf/dompdf": "^0.8.3"
+        "dompdf/dompdf": "^0.8.3",
+        "mpdf/mpdf": "^8.0"
 
       }
 }
