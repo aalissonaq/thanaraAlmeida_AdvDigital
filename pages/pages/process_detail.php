@@ -1291,7 +1291,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
         <form class="needs-validation" novalidate action="./pages/pages/acoes/gravaNovaTarefa.php" method="POST" enctype="multipart/form-data">
 
           <input type="hidden" name="idCreador" id="idCreador" value="<?= $_SESSION['ID']; ?>" />
-          <input type="hidden" name="idProcesso" id="idProcesso" value="<?= $_GET['idprocess']; ?>" />
+          <input type="hidden" name="idProcesso" id="" value="<?= $_GET['idprocess']; ?>" />
           <input type="hidden" name="idpessoa" id="" value="<?= $_GET['idcli']; ?>" />
 
           <div class="form-row">
@@ -1404,7 +1404,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
 
       </div>
       <div class="modal-footer justify-content-between">
-        <input type="hidden" name="idcliente" value="<?= $id; ?>" />
+        <input type="hidden" name="idcliente" value="<?= $_GET["idcli"]; ?>" />
         <input type="hidden" name="idadvogado" value="0" />
         <input type="hidden" name="nomeCliente" value="<?= $dcliente['nmPessoa']; ?>" />
         <input type="hidden" name="userActionLog" value="<?= $_SESSION['USUARIO']; ?>" />
@@ -1697,11 +1697,12 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
           </div>
       </div>
       <div class="modal-footer justify-content-between">
-        <input type="hidden" name="idcliente" value="<?= $id; ?>">
+        <input type="hidden" name="idcliente" value="<?= $_GET["idcli"] ?>">
+        <input type="hidden" name="idprocesso" value="<?= $_GET["idprocess"] ?>">
         <input type="hidden" name="idadvogado" value="0">
         <input type="hidden" name="nomeCliente" value="<?= $dcliente['nmPessoa']; ?>">
         <input type="hidden" name="userActionLog" value="<?= $_SESSION['USUARIO']; ?>">
-        <input type="hidden" name="gravar" value="gravar">
+        <input type="hidden" name="saveEdi" value="gravar">
         <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-times fa-fw fa-lg"></i>
           Fechar </button>
         <button class="btn btn-success btn-lg" type="submit">

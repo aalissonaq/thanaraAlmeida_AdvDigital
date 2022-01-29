@@ -94,8 +94,8 @@ if (!isset($_GET['page']) || $_GET['page'] == null) {
 
 
       #GESTÃO FINANCEIRO
-    case 'listardespesas':
-      include "./pages/pages/listarDespesas.php";
+    case 'financial':
+      include "./pages/pages/financial.php";
       break;
 
 

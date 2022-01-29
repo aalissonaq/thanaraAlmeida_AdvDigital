@@ -90,38 +90,38 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
               <p>
               <div class="d-flex justify-content-around align-items-center">
                 <?php
-                switch ($_SESSION['NIVEL']) {
-                  case '0':
+                if ($_SESSION['NIVEL'] <= "1") {
                 ?>
 
-                    <a href="?page=listarClientes" class="btn btn-tool " target="" title="Voltar" rel="noopener noreferrer">
-                      <i class="mdi mdi-arrow-left-circle-outline mdi-24px fa fa-fw"></i>
-                    </a>
-                    <a href="#settings" class="btn btn-tool" target="" data-toggle="tab" title="Editar Dados" rel="noopener noreferrer">
-                      <i class="mdi mdi-account-edit-outline mdi-24px fa fa-fw"></i>
-                    </a>
+                  <a href="?page=listarClientes" class="btn btn-tool " target="" title="Voltar" rel="noopener noreferrer">
+                    <i class="mdi mdi-arrow-left-circle-outline mdi-24px fa fa-fw"></i>
+                  </a>
 
-                    <button data-toggle="modal" data-target="#modal-edtFoto" data-id="<?= $idEdit ?>" onclick="setaDadosModal(<?= $idEdit ?> )" class="btn btn-tool \" target="" title="Trocar Foto" rel="noopener noreferrer\">
-                      <i class="mdi mdi-camera-flip-outline mdi-24px fa fa-fw"></i>
-                    </button>
-                  <?php
-                    break;
+                  <a href="#settings" class="btn btn-tool" target="" data-toggle="tab" title="Editar Dados" rel="noopener noreferrer">
+                    <i class="mdi mdi-account-edit-outline mdi-24px fa fa-fw"></i>
+                  </a>
 
+                  <button data-toggle="modal" data-target="#modal-edtFoto" data-id="<?= $idEdit ?>" onclick="setaDadosModal(<?= $idEdit ?> )" class="btn btn-tool \" target="" title="Trocar Foto" rel="noopener noreferrer\">
+                    <i class="mdi mdi-camera-flip-outline mdi-24px fa fa-fw"></i>
+                  </button>
 
-                  default:
-                  ?>
-                    <a href="?page=listarClientes" class="btn btn-tool " target="" title="Voltar" rel="noopener noreferrer">
-                      <i class="mdi mdi-arrow-left-circle-outline mdi-24px fa fa-fw"></i>
-                    </a>
-                    <a href="#settings" class="btn btn-tool" target="" data-toggle="tab" title="Editar Dados" rel="noopener noreferrer">
-                      <i class="mdi mdi-account-edit-outline mdi-24px fa fa-fw"></i>
-                    </a>
-
-                    <button data-toggle="modal" data-target="#modal-edtFoto" data-id="<?= $idEdit ?>" onclick="setaDadosModal(<?= $idEdit ?> )" class="btn btn-tool \" target="" title="Trocar Foto" rel="noopener noreferrer\">
-                      <i class="mdi mdi-camera-flip-outline mdi-24px fa fa-fw"></i>
-                    </button>
+                  <a href="?page=financial&id=<?= $_GET['id'] ?>" class="btn btn-tool " target="" title="Finenceiro" rel="noopener noreferrer">
+                    <i class="mdi mdi-currency-brl mdi-18px fa fa-fw"></i>
+                  </a>
                 <?php
-                    break;
+                } else {
+                ?>
+                  <a href="?page=listarClientes" class="btn btn-tool " target="" title="Voltar" rel="noopener noreferrer">
+                    <i class="mdi mdi-arrow-left-circle-outline mdi-24px fa fa-fw"></i>
+                  </a>
+                  <a href="#settings" class="btn btn-tool" target="" data-toggle="tab" title="Editar Dados" rel="noopener noreferrer">
+                    <i class="mdi mdi-account-edit-outline mdi-24px fa fa-fw"></i>
+                  </a>
+
+                  <button data-toggle="modal" data-target="#modal-edtFoto" data-id="<?= $idEdit ?>" onclick="setaDadosModal(<?= $idEdit ?> )" class="btn btn-tool \" target="" title="Trocar Foto" rel="noopener noreferrer\">
+                    <i class="mdi mdi-camera-flip-outline mdi-24px fa fa-fw"></i>
+                  </button>
+                <?php
                 }
                 ?>
               </div>
@@ -621,12 +621,12 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                                   break;
                               };
 
-                              echo "
-                  <a href=\"\" class=\"btn btn-tool\" target=\"\"
-                  title=\"Atualizar Status\" rel=\"noopener noreferrer\">
-                  <i class=\"mdi mdi-rotate-3d-variant mdi-24px fa fa-fw\"></i>
-                  </a>
-                  ";
+                              // echo "
+                              //       <a href=\"\" class=\"btn btn-tool\" target=\"\"
+                              //       title=\"Atualizar Status\" rel=\"noopener noreferrer\">
+                              //       <i class=\"mdi mdi-rotate-3d-variant mdi-24px fa fa-fw\"></i>
+                              //       </a>
+                              //       ";
                               ?>
                             </td>
                             <td class="text-uppercase align-middle  ">
@@ -645,6 +645,15 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                                         <i class="mdi mdi-file-eye-outline mdi-24px "></i>
                                       </a>
                                     </li>
+                                    <?php
+                                    if ($_SESSION['NIVEL'] <= '1') {
+                                    ?>
+                                      <li class="nav-item">
+                                        <a href="" class="btn btn-tool d-flex justify-content-between align-content-around flex-wrap" title="Detalhes do Projeto" rel="noopener noreferrer">
+                                          <i class="mdi mdi-currency-brl mdi-24px "></i>
+                                        </a>
+                                      </li>
+                                    <?php } ?>
                                     <li class="nav-item">
                                       <a href="" class="btn btn-tool d-flex justify-content-between align-content-around flex-wrap" target="" title="Adicionar Tarefas" rel="noopener noreferrer" data-toggle="modal" data-target="#modal-novaTarefa" onclick="modalIdProcesso(<?= $dadosProcesso['idprocesso'] ?>)">
                                         <i class="mdi mdi-book-cog-outline mdi-24px"></i>

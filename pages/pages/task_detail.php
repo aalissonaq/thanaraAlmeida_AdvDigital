@@ -331,9 +331,9 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                 <i class="fas fa-balance-scale mx-1"> </i>-
                 <?= $dadoProcesso['niprocesso'] . ' - ' . $dadoProcesso['objprocesso'] ?>
               </h4>
-              <a href="" title="Editar Processo">
+              <!--<a href="" title="Editar Processo">
                 <i class="mdi mdi-pencil text-secondary mdi-24px"></i>
-              </a>
+              </a>-->
             </div>
             <div class="row mt-1">
               <div class="col-5">
@@ -622,9 +622,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
               <label for="decricaoTarefa">O que deverá ser feito ?
                 <span class="text-orange">*</span>
               </label>
-              <textarea class="form-control" name="decricaoTarefa" id="decricaoTarefa" placeholder="Decrição da tarefa" name="validation" rows="4" required>
-              <?= $task['decricaoTarefa']; ?>
-              </textarea>
+              <textarea class="form-control" name="decricaoTarefa" id="decricaoTarefa" placeholder="Decrição da tarefa" name="validation" rows="4" required><?= $task['decricaoTarefa']; ?></textarea>
               <div class="invalid-feedback">
                 Obrigatório !
               </div>

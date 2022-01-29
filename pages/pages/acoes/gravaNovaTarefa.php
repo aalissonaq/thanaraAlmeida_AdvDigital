@@ -20,11 +20,14 @@ if (isset($_POST['gravar']) && $_POST['gravar'] == 'gravar') {
   $inserir = inseir('tarefas', $dados);
 
   if ($inserir) {
-    echo "<script>alert('Tarefa inserida com sucesso!'); history.go(-1);</script>";
     $log['tipyActionLog'] = 'Cadastrar';
     $log['userActionLog'] = $_POST['userActionLog'];
     $log['actionLog'] = "Cadastrou uma nova Tarefa";
     inseir('logs', $log);
+
+    echo "<script type='text/javascript'> alert('Tarefa inserida com sucesso !');
+    history.go(-1);
+  </script>";
   } else {
     echo "<script>alert('Erro ao inserir Tarefa!'); history.go(-1);</script>";
   }
