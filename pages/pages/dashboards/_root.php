@@ -29,7 +29,7 @@
             <div class="inner mx-3">
               <?php
               //$today = date("Y-m-d", time());
-              if ($_SESSION['NIVEL'] > 1) {
+              if ($_SESSION['NIVEL'] >= 1) {
                 $sql = "SELECT * FROM tarefas WHERE idResponsavel = {$_SESSION['ID']} AND dtTarefa =  CURDATE() AND finalizada = 0";
               } else {
                 $sql = "SELECT * FROM tarefas WHERE dtTarefa =  CURDATE()";

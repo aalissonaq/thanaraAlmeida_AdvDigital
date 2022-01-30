@@ -247,10 +247,25 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                       <tbody>
                         <?php
                         $idpessoa = $_GET['id'];
-                        $sql = "SELECT * FROM tarefas
-                                INNER JOIN processos
-                                ON tarefas.idProcesso = processos.idprocesso
-                                WHERE idpessoa = '$idpessoa' AND (dtTarefa = CURDATE() OR dtTarefa < CURDATE()) AND finalizada = 0 ORDER BY dtTarefa ASC";
+
+                        if ($_SESSION['NIVEL'] > 1) {
+                          $sql = "SELECT * FROM tarefas
+                                  INNER JOIN processos
+                                  ON tarefas.idProcesso = processos.idprocesso
+                                  INNER JOIN pessoa
+                                  ON tarefas.idpessoa = pessoa.idPessoa
+                                  WHERE (idResponsavel = {$_SESSION['ID']}) AND tarefas.idpessoa = '$idpessoa'  AND (dtTarefa = CURDATE() OR dtTarefa < CURDATE()) AND finalizada = 0
+                                  ORDER BY dtTarefa ASC";
+                        } else {
+                          $sql = "SELECT * FROM tarefas
+                                  INNER JOIN processos
+                                  ON tarefas.idProcesso = processos.idprocesso
+                                  INNER JOIN pessoa
+                                  ON tarefas.idpessoa = pessoa.idPessoa
+                                  WHERE tarefas.idpessoa = '$idpessoa'  AND (dtTarefa = CURDATE() OR dtTarefa < CURDATE()) AND finalizada = 0
+                                  ORDER BY dtTarefa ASC";
+                        }
+
                         $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                         $count = 1;
                         foreach ($resultado as $task) {
@@ -369,10 +384,24 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                       </thead>
                       <tbody>
                         <?php
-                        $sql = "SELECT * FROM tarefas
-                                INNER JOIN processos
-                                ON tarefas.idProcesso = processos.idprocesso
-                                WHERE idpessoa = '$idpessoa'  ORDER BY dtTarefa ASC";
+
+                        if ($_SESSION['NIVEL'] > 1) {
+                          $sql = "SELECT * FROM tarefas
+                                  INNER JOIN processos
+                                  ON tarefas.idProcesso = processos.idprocesso
+                                  INNER JOIN pessoa
+                                  ON tarefas.idpessoa = pessoa.idPessoa
+                                  WHERE idResponsavel = {$_SESSION['ID']} AND tarefas.idpessoa = '$idpessoa'
+                                  ORDER BY dtTarefa ASC";
+                        } else {
+                          $sql = "SELECT * FROM tarefas
+                                  INNER JOIN processos
+                                  ON tarefas.idProcesso = processos.idprocesso
+                                  INNER JOIN pessoa
+                                  ON tarefas.idpessoa = pessoa.idPessoa
+                                  WHERE tarefas.idpessoa = '$idpessoa'  ORDER BY dtTarefa ASC";
+                        }
+
                         $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                         $count = 1;
                         foreach ($resultado as $task) {
