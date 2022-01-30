@@ -209,8 +209,9 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                 <li class="nav-item">
                   <a class="nav-link active." href="#toayTask" data-toggle="tab">
                     <i class="align-middle mdi mdi-currency-brl mdi-18px fa fa-fw"> </i>&nbsp;&nbsp;
+
                     <span class="align-middle">
-                      Financeiro do Cliente
+                      <?= !isset($_GET['process']) ? "Financeiro do Cliente" : "Financeiro do Proceso" ?>
                     </span>
                   </a>
                 </li>
@@ -229,31 +230,63 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
 
 
                 <div class="tab-pane active" id="allTasks">
-                  <!-- Todas as Tarefas  -->
-                  <div class="table-responsive">
-                    <table id="tabela" class="table table-sm table-striped table-hover">
-                      <thead class="" style="font-weight: 300; font-family: 'Advent Pro', sans-serif;">
-                        <tr>
+                  <!-- Financeiro -->
+                  <?php
+                  if (!isset($_GET['process'])) {
+
+                  ?>
+                    <div class="table-responsive">
+                      <table id="tabela" class="table table-sm table-striped table-hover">
+                        <thead class="" style="font-weight: 300; font-family: 'Advent Pro', sans-serif;">
+                          <tr>
+                            <th class="col-4 text-center align-middle">#</th>
+                            <th class="col-2 text-center align-middle">Nº Proceso</th>
+                            <th class="col-3 text-center align-middle">Valor da Ação</th>
+                            <th class="col-2 text-center align-middle">Data e Hora</th>
+                            <th class="col-auto text-center align-middle">
+                              <i class="fab fa-lg fa-fw fa-whmcs" title="Ações"></i>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
                           <th class="col-4 text-center align-middle">#</th>
-                          <th class="col-2 text-center align-middle">Nº Proceso</th>
-                          <th class="col-3 text-center align-middle">Valor da Ação</th>
-                          <th class="col-2 text-center align-middle">Data e Hora</th>
-                          <th class="col-auto text-center align-middle">
-                            <i class="fab fa-lg fa-fw fa-whmcs" title="Ações"></i>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      <th class="col-4 text-center align-middle">#</th>
                           <th class="col-2 text-center align-middle">status</th>
                           <th class="col-3 text-center align-middle">Responsável</th>
                           <th class="col-2 text-center align-middle">Data e Hora</th>
                           <th class="col-auto text-center align-middle">
                             <i class="fab fa-lg fa-fw fa-whmcs" title="Ações"></i>
                           </th>
-                      </tbody>
-                    </table>
-                  </div>
+                        </tbody>
+                      </table>
+                    </div>
+                  <?php
+                  } else {
+                  ?>
+                    <div class="table-responsive">
+                      <table id="tabela" class="table table-sm table-striped table-hover">
+                        <thead class="" style="font-weight: 300; font-family: 'Advent Pro', sans-serif;">
+                          <tr>
+                            <th class="col-4 text-center align-middle">#</th>
+                            <th class="col-2 text-center align-middle">Nº Proceso</th>
+                            <th class="col-3 text-center align-middle">Valor da Ação</th>
+
+                            <th class="col-auto text-center align-middle">
+                              <i class="fab fa-lg fa-fw fa-whmcs" title="Ações"></i>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <th class="col-4 text-center align-middle">#</th>
+                          <th class="col-2 text-center align-middle">status</th>
+                          <th class="col-3 text-center align-middle">Responsável</th>
+
+                          <th class="col-auto text-center align-middle">
+                            <i class="fab fa-lg fa-fw fa-whmcs" title="Ações"></i>
+                          </th>
+                        </tbody>
+                      </table>
+                    </div>
+                  <?php } ?>
                   <!-- /.tarefas -->
                 </div>
                 <!-- /.tab-pane -->

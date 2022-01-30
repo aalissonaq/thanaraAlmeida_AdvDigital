@@ -678,7 +678,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                                     if ($_SESSION['NIVEL'] <= '1') {
                                     ?>
                                       <li class="nav-item">
-                                        <a href="" class="btn btn-tool d-flex justify-content-between align-content-around flex-wrap" title="Detalhes do Projeto" rel="noopener noreferrer">
+                                        <a href="?page=financial&id=<?= $_GET['id'] ?>&process=<?= $dadosProcesso['idprocesso'] ?>" class="btn btn-tool d-flex justify-content-between align-content-around flex-wrap" title="Detalhes do Projeto" rel="noopener noreferrer">
                                           <i class="mdi mdi-currency-brl mdi-24px "></i>
                                         </a>
                                       </li>
