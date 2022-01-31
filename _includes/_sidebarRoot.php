@@ -68,6 +68,11 @@
           </p>
         </a>
       </li>
+
+
+
+
+
       <!--
       <li class="nav-item " id="">
         <a href="?page=listarAdvs" class="nav-link" id="menuPacientes">
@@ -79,13 +84,13 @@
         </a>
       </li>-->
     </ul>
-
+    <hr class="" />
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
       <li class="nav-header text-uppercase" style="font-size: 16px;">
-        <i class="mdi mdi-cogs mdi-24px text-orange"> </i>
+        <i class="mdi mdi-tune-vertical mdi-24px text-orange"> </i>
         <!--<i class="fas fa-cogs nav-icon fa-fw fa-lg text-orange"> </i>-->
-        GESTÃO
+        CONFIGURAÇÕES
       </li>
 
       <li class="nav-item">
@@ -107,99 +112,41 @@
         </a>
       </li>
 
-
-
-      <!--GESTÃO -->
-      <!--  <li class="nav-item has-treeview" id="gestaoMenu">
-        <a href="#" class="nav-link" id="gestaoMenuActive">
-          <i class="fas fa-cogs nav-icon fa-fw fa-lg text-orange"> </i>
+      <!--Financeiro -->
+      <li class="nav-item has-treeview" id="FinaceiroMenu">
+        <a href="#" class="nav-link" id="FinaceiroMenuActive">
+          <i class="mdi mdi-currency-brl nav-icon fa-fw fa-lg "> </i>
           <p>
-            GESTÃO
+            Fiancneiro
             <i class="right fas fa-angle-left"></i>
           </p>
         </a>
-        <ul class="nav nav-treeview"> -->
-
-      <!-- <li class="nav-item">
-            <a href="?page=listarParceiros" class="nav-link" id="parceiros">
-              <i class="nav-icon fas fa-hospital-alt"></i>
-              <p>Parceiros</p>
-            </a>
-          </li>
+        <ul class="nav nav-treeview">
           <li class="nav-item " id="">
-            <a href="?page=listarPaciantes" class="nav-link" id="menuPacientes">
-              <i class="nav-icon fas fa-user-injured"></i>
+            <a href="?page=financialReleases" class="nav-link" id="LancamentosFinac">
+              <i class="nav-icon fas fa-file-invoice-dollar"></i>
               <p>
-                Paciente-->
-      <!-- <span class="badge badge-info right">2</span> -->
-      <!--</p>
+                Lançamentos
+                <!-- <span class="badge badge-info right">2</span> -->
+              </p>
             </a>
-          </li>-->
+          </li>
+          <li class="nav-item">
+            <a href="?page=financialCategories" class="nav-link" id="CategoriesFinac">
+              <i class="nav-icon mdi mdi-format-list-bulleted"></i>
+              <p>Categorias</p>
+            </a>
+          </li>
 
-      <!-- <li class="nav-item has-treeview-" id="">
-            <a href="?page=listarConvenios" class="nav-link" id="menuConvenio">
-              <i class="nav-icon fas fa-first-aid"></i>
-              <p>
-                Convênios | Planos
-                <!-- <i class="right fas fa-angle-left"></i> -->
-      <!-- <span class="badge badge-info right">2</span> -->
-      <!-- </p>
-      </a>
+        </ul>
       </li>
-      <li class="nav-item has-treeview " id="gestExameMenu">
-        <a href="" class="nav-link" id="">
-          <i class="fas fa-vials fa-fw nav-icon"></i>
-          <p>Gestão de Exames
-            <i class="right fas fa-angle-left"></i>
-          </p>
 
-        </a>
-        <ul class="nav nav-treeview">
 
-          <li class="nav-item">
-            <a href="?page=listBancadaExames" class="nav-link" id="bancadaExemesActive">
-              <i class="nav-icon fas fa-vial"></i>
-              <p>Bancadada</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="?page=listarExamesGest" class="nav-link" id="getExemesActive">
-              <i class="nav-icon fas fa-vial"></i>
-              <p>Exames</p>
-            </a>
-          </li>
-        </ul>
-      </li>-->
-      <!-- Materiais -->
-      <!-- <li class="nav-item has-treeview" id="gestMaterialMenu">
-        <a href="?page=listarMateriais" class="nav-link">
-          <i class="fas fa-dolly-flatbed fa-fw nav-icon"></i>
-          <p>Gestão de Materiais
-            <i class="right fas fa-angle-left"></i>
-          </p>
-        </a>
-        <ul class="nav nav-treeview">
 
-          <li class="nav-item">
-            <a href="?page=" class="nav-link" id="bancadaExemesActive">
-              <i class="nav-icon fas fa-people-carry"></i>
-              <p>Solicitações</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="?page=listarMateriais" class="nav-link" id="getMaterialActive">
-              <i class="nav-icon fas fa-boxes"></i>
-              <p>Materiais</p>
-            </a>
-          </li>
-        </ul>
 
-      </li>-->
-    </ul>
-    </li>
 
-    <!-- SOLICITAÇÕES -->
-    <!-- <li class="nav-header text-uppercase">
+      <!-- SOLICITAÇÕES -->
+      <!-- <li class="nav-header text-uppercase">
       <i class="fas fa-dolly nav-icon fa-fw fa-lg text-yellow"> </i>
       SOLICITAÇÕES
     </li>
@@ -215,7 +162,7 @@
                     <p>Documentation</p>
                 </a>
             </li> -->
-    <!-- <li class="nav-header">MULTI LEVEL EXAMPLE</li>
+      <!-- <li class="nav-header">MULTI LEVEL EXAMPLE</li>
             <li class="nav-item">
                 <a href="#" class="nav-link">
                     <i class="fas fa-circle nav-icon"></i>
