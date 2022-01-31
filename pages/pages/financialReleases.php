@@ -24,7 +24,7 @@
 
 
     <div class="row">
-      <div class="col-12 col-sm-3 col-md-3">
+      <div class="col-12 col-sm-4 col-md-4">
         <a class="nav-link" href="#todayTask" data-toggle="tab" onclick="window.getElementById('todayTask').classList.add(' active');">
           <div class="small-box bg-default">
             <div class="inner mx-3">
@@ -38,15 +38,15 @@
               $resultado = $conexao->query($sql);
               ?>
 
-              <h3 class="text-success">
+              <h3 class="text-info">
                 <i class="mdi mdi-currency-brl"></i>
                 <?= formatMoedaBr(str_pad($resultado->rowCount(), 3, "0", STR_PAD_LEFT)); ?>
               </h3>
-              <p>Receitas previstas para esse mês</p>
+              <p>Salto previsto nesse mês</p>
             </div>
             <div class="icon">
               <!-- <i class="fas fa-donate"></i> -->
-              <i class="mdi mdi-cash-plus text-success"></i>
+              <i class="mdi mdi-cash"></i>
             </div>
 
           </div>
@@ -54,7 +54,7 @@
         <!-- /.info-box -->
       </div>
       <!-- /.col -->
-      <div class="col-12 col-sm-3 col-md-3">
+      <div class="col-12 col-sm-4 col-md-4">
         <a class="nav-link" href="#allTask" data-toggle="tab" onclick="window.getElementById('todayTask').classList.add(' active');">
           <div class="small-box bg-gradient-default">
             <div class="inner mx-3">
@@ -67,14 +67,14 @@
 
               $resultado = $conexao->query($sql);
               ?>
-              <h3 class="text-danger">
+              <h3 class="text-success">
                 <i class="mdi mdi-currency-brl"></i>
                 <?= formatMoedaBr(str_pad($resultado->rowCount(), 3, "0", STR_PAD_LEFT)); ?>
               </h3>
-              <p>Despesas previstas para o mês</p>
+              <p>a receber esta semana</p>
             </div>
             <div class="icon ">
-              <i class="mdi mdi-cash-minus text-danger"></i>
+              <i class="mdi mdi-cash-plus text-success"></i>
             </div>
 
           </div>
@@ -82,32 +82,8 @@
         <!-- /.info-box -->
       </div>
       <!-- /.col -->
-      <div class="col-12 col-sm-3 col-md-3">
-        <a class="nav-link" href="#allTask" data-toggle="tab" onclick="window.getElementById('todayTask').classList.add(' active');">
-          <div class="small-box bg-gradient-default">
-            <div class="inner mx-3">
-              <?php
-              if ($_SESSION['NIVEL'] > 1) {
-                $sql = "SELECT * FROM tarefas WHERE idResponsavel = {$_SESSION['ID']} AND finalizada = 1";
-              } else {
-                $sql = "SELECT * FROM tarefas WHERE finalizada = 1";
-              }
-              $resultado = $conexao->query($sql);
-              ?>
-              <h3 class="text-success">
-                <i class="mdi mdi-currency-brl"></i>
-                <?= formatMoedaBr(str_pad($resultado->rowCount(), 3, "0", STR_PAD_LEFT)); ?>
-              </h3>
-              <p>Receitas para hoje</p>
-            </div>
-            <div class="icon ">
-              <i class="mdi mdi-cash-plus text-success"></i>
-            </div>
-          </div>
-        </a>
-        <!-- /.info-box -->
-      </div>
-      <div class="col-12 col-sm-3 col-md-3">
+
+      <div class="col-12 col-sm-4 col-md-4">
         <a class="nav-link" href="#allTask" data-toggle="tab" onclick="window.getElementById('todayTask').classList.add(' active');">
           <div class="small-box bg-gradient-default">
             <div class="inner mx-3">
@@ -121,9 +97,9 @@
               ?>
               <h3 class="text-danger">
                 <i class="mdi mdi-currency-brl"></i>
-                <?= formatMoedaBr(9999.99) ?>
+                <?= formatMoedaBr(str_pad($resultado->rowCount(), 3, "0", STR_PAD_LEFT)); ?>
               </h3>
-              <p>Despesas para hoje</p>
+              <p>a pagar esta semana</p>
             </div>
             <div class="icon ">
               <i class="mdi mdi-cash-minus text-danger"></i>
