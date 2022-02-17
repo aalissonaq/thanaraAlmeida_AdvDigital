@@ -1,6 +1,6 @@
 <?php
 
-function sweetalert($title, $message, $type, $time, $position=null)
+function sweetalert($title, $message, $type, $time, $position=null,$question=null)
 {
   $position = $position ? $position : 'center';
   echo "<script type='text/javascript'>
@@ -8,12 +8,15 @@ function sweetalert($title, $message, $type, $time, $position=null)
     icon: '$type',
     title: '$title',
     text: '$message',
-    showConfirmButton: false,
+    showConfirmButton: true,
     timer: $time,
     position: '$position',
+    question: '$question',
   });
   </script>";
 }
+
+
 
 function GetDirectorySize($path)
 {

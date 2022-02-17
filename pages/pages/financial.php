@@ -51,7 +51,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
   ?>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
 
           <!-- Profile Image -->
           <div class="card card-primary card-outline">
@@ -134,7 +134,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                   <a href="tel:<?= tiraMascara($dcliente['nnTelefonePessoa']) ?>" class="" style="font-size:1rem">
                     <?= $dcliente['nnTelefonePessoa'] ?>
                   </a>
-                  <span class="float-right">
+                  <span class="float-left">
                     <b>
                       <i class="fab fa-lg fa-whatsapp text-success"></i>
                     </b>
@@ -202,7 +202,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
           <!-- /.card -->
         </div>
         <!-- /.col -->
-        <div class="col-md-9">
+        <div class="col-md-10">
           <div class="card card-outline">
             <div class="card-header p-2">
               <ul class="nav nav-pills">
@@ -250,7 +250,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                         </thead>
                         <tbody>
                           <th class="col-4 text-center align-middle">#</th>
-                          <th class="col-2 text-center align-middle">status</th>
+                          <th class="col-2 text-center align-middle">1235464654654564564654</th>
                           <th class="col-3 text-center align-middle">Responsável</th>
                           <th class="col-2 text-center align-middle">Data e Hora</th>
                           <th class="col-auto text-center align-middle">
@@ -266,22 +266,55 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                       <table id="tabela" class="table table-sm table-striped table-hover">
                         <thead class="" style="font-weight: 300; font-family: 'Advent Pro', sans-serif;">
                           <tr>
-                            <th class="col-4 text-center align-middle">#</th>
+                            <th class="col-1 text-center align-middle">#</th>
+                            <th class="col-3 text-center align-middle">Tipo</th>
                             <th class="col-2 text-center align-middle">Nº Proceso</th>
-                            <th class="col-3 text-center align-middle">Valor da Ação</th>
+                            <th class="col-3 text-center align-middle">Descrição</th>
+                            <th class="col-1 text-center align-middle">Valor</th>
+                            <th class="col-2 text-center align-middle">Competência</th>
+                            <th class="col-2 text-center align-middle">Vencimento</th>
 
                             <th class="col-auto text-center align-middle">
                               <i class="fab fa-lg fa-fw fa-whmcs" title="Ações"></i>
                             </th>
                           </tr>
                         </thead>
-                        <tbody>
-                          <th class="col-4 text-center align-middle">#</th>
-                          <th class="col-2 text-center align-middle">status</th>
-                          <th class="col-3 text-center align-middle">Responsável</th>
+                        <tbody >
+
+                          <th class="col-1 text-center align-middle" style="font-weight: 400;">
+                          <?= str_pad(1, 3, "0", STR_PAD_LEFT);?>
+                          </th>
+                          <th class="col-3 text-center align-middle" style="font-weight: 400;">
+                          Receita - CONSULTAS
+                          </th>
+                          <th class="col-3 text-center align-middle" style="font-weight: 400;">
+                          <?= MascaraCNJ( str_pad('55155520178060041', 20, "0", STR_PAD_LEFT)) ?>
+                          </th>
+                          <th class="col-3 text-justify align-middle" style="font-weight: 400;">
+                          Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias error officiis doloremque dolor repudiandae iure accusantium quibusdam, est libero minima, veritatis atque illum ad modi molestiae voluptatum in recusandae. Autem.
+                          </th>
+                          <th class="col-3 text-center align-middle" style="font-weight: 400;">
+                          R$ 999.000,00
+                          </th>
+                          <th class="col-3 text-center align-middle" style="font-weight: 400;">
+                          <?= date('m/Y',time()) ?>
+                          </th>
+                          <th class="col-3 text-center align-middle" style="font-weight: 400;">
+                          25/02/2022
+                          </th>
 
                           <th class="col-auto text-center align-middle">
-                            <i class="fab fa-lg fa-fw fa-whmcs" title="Ações"></i>
+                          <div class="dropdown">
+                            <button class="btn  dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false">
+                              ...
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                              <button class="dropdown-item" type="button">Action</button>
+                              <button class="dropdown-item" type="button">Another action</button>
+                              <button class="dropdown-item" type="button">Something else here</button>
+                            </div>
+                          </div>
+
                           </th>
                         </tbody>
                       </table>

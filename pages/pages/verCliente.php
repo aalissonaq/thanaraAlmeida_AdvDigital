@@ -42,11 +42,11 @@
         </h2>
 
         <div class="card-tools">
-          <a href="?page=profileCliente&id=<?= $_GET["id"] ?>" class="btn btn-tool text-orange d-print-none">
+          <button  onclick="history.go(-1)"  class="btn btn-tool text-orange d-print-none">
             <!-- <i class="far fa-arrow-alt-circle-left fa-fw fa-lg"></i> -->
             <i class="mdi mdi-arrow-left-bold-circle-outline fa fa-2x align-middle "></i>
             Voltar ao Peril do Cliente
-          </a>
+          </button>
         </div>
       </div>
       <div class="card-body">

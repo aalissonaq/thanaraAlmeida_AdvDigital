@@ -1,3 +1,52 @@
+<?php
+if(isset($_POST['action']) && $_POST['action'] =='add') {
+
+  $type = $_POST['type'];
+  $category = $_POST['category'];
+
+  $sql = "INSERT INTO financial_categories (type, category) VALUES ('$type', '$category')";
+
+  if($conexao->query($sql)) {
+    sweetalert('Sucesso', 'Nova Categoria Adicionanda com sucesso', 'success', 2000);
+  } else {
+    sweetalert('Ops !', ' Erro ao adicionar categoria, por favor tente novamente', 'error', 2000);
+  }
+}else if(isset($_POST['action']) && $_POST['action'] =='update') {
+
+  $id = $_POST['id'];
+  $type = $_POST['type'];
+  $category = $_POST['category'];
+
+  $sql = "UPDATE financial_categories SET type = '$type', category = '$category' WHERE id = '$id'";
+
+  if($conexao->query($sql)) {
+    sweetalert('Sucesso', 'Categoria editada com sucesso', 'success', 2000);
+  } else {
+    sweetalert('Ops !', ' Erro ao editar categoria, por favor tente novamente', 'error', 2000);
+  }
+}
+
+if(isset($_GET['action']) && $_GET['action'] =='update') {
+  $id = $_GET['id'];
+  $sql = "SELECT * FROM financial_categories WHERE id = '$id'";
+  $result = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+  $category = $result[0];
+  $type = $category['type'];
+  $category = $category['category'];
+}
+else if(isset($_GET['action']) && $_GET['action'] =='delete') {
+  $id = $_GET['id'];
+  $sql = "DELETE FROM financial_categories WHERE id = '$id'";
+
+    if($conexao->query($sql)) {
+    sweetalert('Sucesso', 'Categoria deletada com sucesso', 'success', 2000);
+  } else {
+    sweetalert('Ops !', ' Erro ao deletar categoria, por favor tente novamente', 'error', 2000);
+  }
+}
+
+
+?>
 <section class="content-header">
   <div class="container-fluid">
     <div class="row mb-2">
@@ -35,8 +84,11 @@
       </div> -->
     </div>
     <div class="card-body">
-      <form class="row g-3 needs-validation" novalidate>
-        <div class="col-md-2 ">
+    <?php
+    if(!isset($_GET['action']) || $_GET['action'] != 'update') {
+    ?>
+    <form class="row g-3 needs-validation" novalidate action="" method="POST">
+        <div class="col-12 col-sm-6 col-md-3">
           <label for="type">Tipo </label>
           <select class="form-control text-uppercase" required name="type" id="type">
             <option value="" disabled selected>-</option>
@@ -47,18 +99,52 @@
             Obrigatório !
           </div>
         </div>
-        <div class="col-md-10">
+        <div class="col-12 col-sm-6 col-md-9">
           <label for="category" class="form-label">Categoria</label>
-          <input type="text" class="form-control" id="category" value="" required>
+          <input type="text" class="form-control" id="category" name="category" placeholder="De um nome a sua categoria" value="" required>
           <div class="invalid-feedback">
             Obrigatório !
           </div>
         </div>
 
         <div class="col-12" style="margin-top: 1rem;">
+        <input type="hidden" name="action" value="add">
           <button class="btn btn-primary" type="submit">Gravar Dados</button>
         </div>
       </form>
+    <?php
+    }else if (isset($_GET['action']) && $_GET['action'] == 'update') {
+    ?>
+    <form class="row g-3 needs-validation" novalidate action="" method="POST">
+        <div class="col-12 col-sm-6 col-md-3">
+          <label for="type">Tipo </label>
+          <select class="form-control text-uppercase" required name="type" id="type">
+            <option value="" disabled selected>-</option>
+            <option value="Receita" <?php if($type == 'Receita') echo 'selected'; ?>>Receita</option>
+            <option value="Despesa" <?php if($type == 'Despesa') echo 'selected'; ?>>Despesa</option>
+          </select>
+          <div class="invalid-feedback">
+            Obrigatório !
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-9">
+          <label for="category" class="form-label">Categoria</label>
+          <input type="text" class="form-control" id="category" name="category" placeholder="De um nome a sua categoria" value="<?php echo $category; ?>" required>
+          <div class="invalid-feedback">
+            Obrigatório !
+          </div>
+        </div>
+
+        <div class="col-12" style="margin-top: 1rem;">
+        <input type="hidden" name="action" value="update">
+          <input type="hidden" name="id" value="<?php echo $id; ?>">
+          <button class="btn btn-primary" type="submit">Atualizar Categoria</button>
+        </div>
+      </form>
+    <?php
+    }
+    ?>
+
 
     </div>
     <!-- /.card-body -->
@@ -78,12 +164,12 @@
         <table id="tabela" class="table table-sm table-striped table-hover ">
           <thead class="">
             <tr>
-              <th class="col-md-1 text-center align-middle">
+              <th class="col-1 text-center align-middle">
                 <i class="fas fa-hashtag fa-fw"></i>
               </th>
-              <th class="col-md-1 align-middle text-center text-uppercase">Tipo</th>
-              <th class="col-md-auto align-middle text-uppercase">Categoria</th>
-              <th class="col-md-1 align-middle text-uppercase">
+              <th class="col-2 align-middle text-center text-uppercase">Tipo</th>
+              <th class="col-auto col-md-auto align-middle text-uppercase">Categoria</th>
+              <th class="col-1 align-middle text-uppercase text-center">
                 <i class="mdi mdi-cogs fa-fw"></i>
               </th>
 
@@ -110,12 +196,12 @@
                 <td class="text-uppercase align-middle justify-content-between">
                   <ul class="nav justify-content-center d-flex justify-content-evenly">
                     <li class="nav-item">
-                      <a href="inicio.php?page=financialCategories&id=<?= $dados['id'] ?>&acao=editar" class="btn btn-tool d-flex  align-content-around flex-wrap">
+                      <a href="inicio.php?page=financialCategories&id=<?= $dados['id'] ?>&action=update" class="btn btn-tool d-flex  align-content-around flex-wrap">
                         <i class="mdi mdi-square-edit-outline mdi-24px fa-fw"></i>
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="inicio.php?page=financialCategories&id=<?= $dados['id'] ?>&acao=excluir" class="bbtn btn-tool d-flex  align-content-around flex-wrap">
+                      <a href="inicio.php?page=financialCategories&id=<?= $dados['id'] ?>&action=delete" onclick="return confirm('Tem certeza que deseja deletar este registro?')" class="bbtn btn-tool d-flex  align-content-around flex-wrap">
                         <i class="mdi mdi-trash-can mdi-24px fa-fw "></i>
                       </a>
                     </li>
