@@ -290,21 +290,33 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                         <tbody>
                           <?php
                           $sql = "SELECT * FROM financial_release
-                                  INNER JOIN processos ON financial_release.id = processos.idprocesso
                                   WHERE financial_release.id_process = '{$_GET['process']}'";
                           $result = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+                          $count = 1;
                           foreach ($result as  $release) {
                           ?>
 
                             <tr class="">
                               <td class="col-1 text-center align-middle">
-                                <?= str_pad($release['id'], 3, "0", STR_PAD_LEFT); ?>
+                                <?= str_pad($count, 3, "0", STR_PAD_LEFT); $count++ ?>
                               </td>
-                              <td class="col-1 text-center align-middle">
+                              <td class="col-2 text-center align-middle">
                                 <?= $release['type']; ?>
                               </td>
-                              <td class="col-1 text-center align-middle">
-                                <?= $release['type']; ?>
+                              <td class="col-2 text-center align-middle">
+                                <?= $release['id_process']; ?>
+                              </td>
+                              <td class="col-3 text-center align-middle">
+                                <?= $release['description']; ?>
+                              </td>
+                              <td class="col-2 text-center align-middle">
+                                R$ <?= formatMoedaBr($release['amount']); ?>
+                              </td>
+                              <td class="col-2 text-center align-middle">
+                                <?= $release['competence']; ?>
+                              </td>
+                              <td class="col-2 text-center align-middle">
+                              <?= date('d/m/Y', strtotime($release['due_date'])); ?>
                               </td>
 
                               <td class="col-auto text-center align-middle">

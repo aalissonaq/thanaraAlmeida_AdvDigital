@@ -4,7 +4,7 @@
 //include_once "../conexao_odbc/conexao_odbc.php";
 //define(SERVER, "SISTEMA"); //$Server = "SISTEMA";
 //define(LOGIN, 'sa');     //$Login = "sa";
-//define(SENHA, '123456'); //$Senha = "123456";
+//define(SENHA, '123456'); '//$Senha = "123456";
 //$con = odbc_connect(SERVER, LOGIN, SENHA) or die(odbc_error()); //$con = odbc_connect($Server, $Login, $Senha) or die(odbc_error());
 
 /* * ***************************
