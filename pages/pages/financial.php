@@ -1,22 +1,27 @@
 <?php
-if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHistorico') {
-  $id_pessoa_cliente = $_POST['id_pessoa_cliente'];
-  $id_pessoa_responsavel = $_POST['id_pessoa_responsavel'];
-  $id_processo = $_POST['id_processo'];
-  $titulo_historico = $_POST['titulo_historico'];
-  $descricao_historico = $_POST['descricao_historico'];
-  $tipo_historico = $_POST['tipo_historico'];
+if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
 
+  $typeFull = explode('-', $_POST['type']);
+  $type = $typeFull[1] . '-' . $typeFull[2];
+  $id_process = $_GET['process'];
+  $id_financial_category = $typeFull[0];
+  $description = strip_tags(trim($_POST['description']));
+  $vl = substr(tiraMascara(strip_tags(trim($_POST['amount']))), 0, strlen(tiraMascara(strip_tags(trim($_POST['amount'])))) - 2) . '.' . substr(tiraMascara(strip_tags(trim($_POST['amount']))), -2);
+  $amount = $vl;
+  $competence = $_POST['competence'];
+  $due_date = strip_tags(trim($_POST['due_date']));
+  $installments = $_POST['number_installments'] > 1 ? 1 : 0;
+  $number_installments = $_POST['number_installments'];
 
-  $sql = "INSERT INTO historico_processo (id_pessoa_cliente,id_pessoa_responsavel,id_processo,titulo_historico,descricao_historico,tipo_historico)
-          VALUES ('$id_pessoa_cliente','$id_pessoa_responsavel','$id_processo','$titulo_historico','$descricao_historico','$tipo_historico')";
+  $sql = "INSERT INTO financial_release (type, id_process, id_financial_category, description, amount, competence, due_date, installments, number_installments) VALUES ('$type', '$id_process','$id_financial_category', '$description', '$amount', '$competence', '$due_date', '$installments', '$number_installments')";
 
   if ($conexao->exec($sql)) {
-    sweetalert('Sucesso', 'Histórico gravado com suscesso', 'success', 2000);
+    sweetalert('Sucesso', 'Lançamento gravado com suscesso', 'success', 2000);
   } else {
-    sweetalert('Ops !', ' Erro ao grava o Histórico, por favor tente novamente', 'error', 2000);
+    sweetalert('Ops !', ' Erro ao grava o Lançamento, por favor tente novamente', 'error', 2000);
   }
 }
+
 ?>
 
 <!-- Content Header (Page header) -->
@@ -176,10 +181,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-
-
               <strong><i class="fas fa-map-marker-alt mr-1"></i> Endereço</strong>
-
               <p class="text-muted" style="text-transform: uppercase;">
                 <?= $dcliente['stLogradouroPessoa'] . ", " . $dcliente['nnCasaPessoa'] . " <br/>" . $dcliente['stBairroPessoa'] . " <br/> " . $dcliente['stCidadePessoa'] . "-" . $dcliente['stEstadoPessoa'] . " CEP:" . $dcliente['stCepPessoa'] ?>
               </p>
@@ -205,6 +207,15 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
         <div class="col-md-10">
           <div class="card card-outline">
             <div class="card-header p-2">
+
+              <div class="card-tools">
+                <a href="" class="btn btn-tool align-middle mr-3" data-toggle="modal" data-target="#modal-newFinancialReleases" style="font-family:'Advent Pro', sans-serif; font-weight: bold; font-size: 1rem; letter-spacing: 1px;">
+                  <i class="fa fa-plus-square fa-fw fa-lg align-middle"></i>
+                  <!-- <i class="fa fa-user-plus fa-fw fa-lg"></i> -->
+                  Novo Lançamento
+                </a>
+              </div>
+
               <ul class="nav nav-pills">
                 <li class="nav-item">
                   <a class="nav-link active." href="#toayTask" data-toggle="tab">
@@ -216,24 +227,21 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                   </a>
                 </li>
 
-
-
                 <!-- <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a>
                 </li> -->
               </ul>
+
+
+
             </div><!-- /.card-header -->
             <div class="card-body">
               <div class="tab-content">
                 <div class="active tab-pane" id="toayTask">
-
                 </div>
-
-
                 <div class="tab-pane active" id="allTasks">
                   <!-- Financeiro -->
                   <?php
                   if (!isset($_GET['process'])) {
-
                   ?>
                     <div class="table-responsive">
                       <table id="tabela" class="table table-sm table-striped table-hover">
@@ -279,43 +287,51 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                             </th>
                           </tr>
                         </thead>
-                        <tbody >
+                        <tbody>
+                          <?php
+                          $sql = "SELECT * FROM financial_release
+                                  INNER JOIN processos ON financial_release.id = processos.idprocesso
+                                  WHERE financial_release.id_process = '{$_GET['process']}'";
+                          $result = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+                          foreach ($result as  $release) {
+                          ?>
 
-                          <th class="col-1 text-center align-middle" style="font-weight: 400;">
-                          <?= str_pad(1, 3, "0", STR_PAD_LEFT);?>
-                          </th>
-                          <th class="col-3 text-center align-middle" style="font-weight: 400;">
-                          Receita - CONSULTAS
-                          </th>
-                          <th class="col-3 text-center align-middle" style="font-weight: 400;">
-                          <?= MascaraCNJ( str_pad('55155520178060041', 20, "0", STR_PAD_LEFT)) ?>
-                          </th>
-                          <th class="col-3 text-justify align-middle" style="font-weight: 400;">
-                          Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias error officiis doloremque dolor repudiandae iure accusantium quibusdam, est libero minima, veritatis atque illum ad modi molestiae voluptatum in recusandae. Autem.
-                          </th>
-                          <th class="col-3 text-center align-middle" style="font-weight: 400;">
-                          R$ 999.000,00
-                          </th>
-                          <th class="col-3 text-center align-middle" style="font-weight: 400;">
-                          <?= date('m/Y',time()) ?>
-                          </th>
-                          <th class="col-3 text-center align-middle" style="font-weight: 400;">
-                          25/02/2022
-                          </th>
+                            <tr class="">
+                              <td class="col-1 text-center align-middle">
+                                <?= str_pad($release['id'], 3, "0", STR_PAD_LEFT); ?>
+                              </td>
+                              <td class="col-1 text-center align-middle">
+                                <?= $release['type']; ?>
+                              </td>
+                              <td class="col-1 text-center align-middle">
+                                <?= $release['type']; ?>
+                              </td>
 
-                          <th class="col-auto text-center align-middle">
-                          <div class="dropdown">
-                            <button class="btn  dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false">
-                              ...
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                              <button class="dropdown-item" type="button">Action</button>
-                              <button class="dropdown-item" type="button">Another action</button>
-                              <button class="dropdown-item" type="button">Something else here</button>
-                            </div>
-                          </div>
-
-                          </th>
+                              <td class="col-auto text-center align-middle">
+                                <div class="dropdown">
+                                  <button class="btn  dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false">
+                                    ...
+                                  </button>
+                                  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                    <button class="dropdown-item" type="button">
+                                      <i class="mdi mdi-cash-register" title="Pagamento"></i>
+                                      Pagamento
+                                    </button>
+                                    <button class="dropdown-item" type="button">
+                                      <i class="mdi mdi-calendar-multiple" title="Parcelamento"></i>
+                                      Parcelas
+                                    </button>
+                                    <button class="dropdown-item" type="button">
+                                      <i class="mdi mdi-square-edit-outline" title="Documentos"></i>
+                                      Editar
+                                    </button>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          <?php
+                          }
+                          ?>
                         </tbody>
                       </table>
                     </div>
@@ -340,18 +356,141 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
-<!-- <footer class="main-footer">
-  <div class="float-right d-none d-sm-block">
-    <b>Version</b> 3.0.0-rc.5
-  </div>
-  <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong> All rights
-  reserved.
-</footer> -->
 
 <!-- Control Sidebar -->
 <aside class="control-sidebar control-sidebar-dark">
   <!-- Control sidebar content goes here -->
 </aside>
+
+<!-- modal NOVO USUARIO -->
+<div class="modal fade" id="modal-newFinancialReleases">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" style="font-family: 'Advent Pro', sans-serif; font-weight: 500; letter-spacing: 1px;">
+          <span class="text-orange">Novo Lançamento no Proceso:</span>
+          <?php
+          $sql = "SELECT * FROM processos WHERE idprocesso = {$_GET['process']}";
+          $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+          foreach ($resultado as $value) {
+            echo '#' . $value['niprocesso'] . '<br/>' . strtoupper($value['objprocesso']);
+          }
+          ?>
+        </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- form novo Usuário -->
+
+        <form class="needs-validation" novalidate action="" method="POST" enctype="multipart/form-data">
+          <div class="form-row">
+            <div class="col-md-3 mb-3">
+              <label for="nmPessoa">Tipo de Lançamento
+                <span class="text-orange">*</span>
+              </label>
+              <select class="form-control" id="type" name="type" required>
+                <option value="" selected disabled>Selecione...</option>
+                <?php
+                $sql = "SELECT * FROM financial_categories ORDER BY financial_categories.type DESC";
+                $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($resultado as $value) {
+                ?>
+                  <option value="<?= $value['id'] ?>-<?= $value['type'] ?>-<?= $value['category'] ?>"><?= $value['type'] ?> - <?= $value['category'] ?></option>
+                <?php } ?>
+              </select>
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+            <div class="col-md-9 mb-3">
+              <label for="docPessoa">Descrição do Lançamento
+                <span class="text-orange">*</span>
+              </label>
+              <input type="text" name="description" class="form-control text-uppercase" id="description" placeholder="Descrição do Lançamento" required />
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col-md-3 mb-3">
+              <label for="dtNascPessoa">Valor do Lançamento
+                <span class="text-orange">*</span>
+              </label>
+              <input type="text" name="amount" class="form-control text-uppercase js_dinheiro" id="amount" maxlength="12" placeholder="R$ 0.000,00" required />
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <label for="competence">Competência</label>
+              <select name="competence" id="competence" class="form-control" required>
+                <option value="" selected disabled>Selecione...</option>
+                <?php
+                for ($i = 1; $i <= 12; $i++) {
+                ?>
+                  <option value="<?= str_pad($i, 2, '0', STR_PAD_LEFT) ?>/<?= date('Y', time()) ?>">
+                    <?= str_pad($i, 2, '0', STR_PAD_LEFT) ?>/<?= date('Y', time()) ?>
+                  </option>
+
+                <?php } ?>
+              </select>
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <label for="due_date">Data de Vencimento
+                <span class="text-orange">*</span>
+              </label>
+              <input type="date" name="due_date" class="form-control text-uppercase" id="due_date" placeholder="" required />
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <label for="number_installments">Pascelas
+                <span class="text-orange">*</span>
+              </label>
+              <select name="number_installments" id="number_installments" class="form-control" required>
+                <option value="" selected disabled>Selecione...</option>
+                <?php
+                for ($i = 1; $i <= 12; $i++) {
+                ?>
+                  <option value="<?= $i; ?>">
+                    <?= str_pad($i, 2, '0', STR_PAD_LEFT) ?>
+                  </option>
+
+                <?php } ?>
+              </select>
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+
+          </div>
+
+      </div>
+      <div class="modal-footer justify-content-between">
+        <input type="hidden" name="active" value="createFinancialRelease">
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-times fa-fw fa-lg"></i>
+          Fechar </button>
+        <button class="btn btn-lg btn-success" type="submit">
+          <i class="far fa-save fa-fw fa-lg"></i>
+          Gravar Dados</button>
+        </form>
+        <!--/form novo Usuario -->
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
 
 <!-- ./wrapper -->
 <script>

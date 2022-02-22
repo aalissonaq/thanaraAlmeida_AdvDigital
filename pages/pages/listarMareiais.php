@@ -87,7 +87,7 @@
                                         switch ($_SESSION['NIVEL']) {
                                             case '0':
                                                 echo "<li class=\"nav-item\">
-                                      <a href=\"?page=edtMaterial&idEdit={$dados['idMaterial']}\" class=\"btn btn-tool\" 
+                                      <a href=\"?page=edtMaterial&idEdit={$dados['idMaterial']}\" class=\"btn btn-tool\"
                                       target=\"\" title=\"Editar Material\" rel=\"noopener noreferrer\">
                                         <i class=\"far fa-edit fa-lg\"></i>
                                       </a>
@@ -96,7 +96,7 @@
 
                                             case '1':
                                                 echo "<li class=\"nav-item\">
-                                      <a href=\"?page=edtMaterial&idEdit={$dados['idMaterial']}\" class=\"btn btn-tool\" 
+                                      <a href=\"?page=edtMaterial&idEdit={$dados['idMaterial']}\" class=\"btn btn-tool\"
                                       target=\"\" title=\"Editar Material\" rel=\"noopener noreferrer\">
                                         <i class=\"far fa-edit fa-lg\"></i>
                                       </a>

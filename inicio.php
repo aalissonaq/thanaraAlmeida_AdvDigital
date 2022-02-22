@@ -76,7 +76,7 @@ if (!isset($_SESSION['USUARIO'])) {
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.css" />
   <!-- <link rel="stylesheet" href="./dist/css/bootstrapCustun.css" /> -->
 
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@mdi/font@6.2.95/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css">
   <!-- <link rel="stylesheet" href="node_modules/@mdi/font/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.5.95/css/materialdesignicons.min.css"> -->
 

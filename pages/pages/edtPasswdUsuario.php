@@ -21,7 +21,7 @@
     $idEdit = $_GET['idEdit'];
     $dadosPessoa = ler("vw_pessoa_user", '', "WHERE id = '{$idEdit}'")->fetchAll(PDO::FETCH_ASSOC);
     foreach ($dadosPessoa as $dp) {
-        ?>
+    ?>
 
         <!-- Default box -->
         <div class="card">
@@ -34,13 +34,13 @@
                     <a href="?page=listarusuarios" class="btn btn-tool text-primary">
                         <!-- <i class="far fa-arrow-alt-circle-left fa-fw fa-lg"></i> -->
                         <i class="mdi mdi-arrow-left-bold-circle-outline fa fa-2x align-middle"></i>
-                        Voltar para Lista de Usuários</a>
+                        Voltar para Lista de Usuários
+                    </a>
                 </div>
             </div>
             <div class="card-body">
 
-                <form class="needs-validation" novalidate action="pages/pages/acoes/editarPasswdUsuario.php" method="POST"
-                      enctype="multipart/form-data">
+                <form class="needs-validation" novalidate action="pages/pages/acoes/editarPasswdUsuario.php" method="POST" enctype="multipart/form-data">
                     <input type="hidden" value="<?= $idEdit; ?>" name="idEdit" />
 
                     <!-- <fieldset>
@@ -97,14 +97,14 @@
     document.getElementById('userSystem').classList.add("active");
 
     // Example starter JavaScript for disabling form submissions if there are invalid fields
-    (function () {
+    (function() {
         'use strict';
-        window.addEventListener('load', function () {
+        window.addEventListener('load', function() {
             // Fetch all the forms we want to apply custom Bootstrap validation styles to
             var forms = document.getElementsByClassName('needs-validation');
             // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function (form) {
-                form.addEventListener('submit', function (event) {
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
                     if (form.checkValidity() === false) {
                         event.preventDefault();
                         event.stopPropagation();
@@ -129,13 +129,13 @@
         if (!("erro" in conteudo)) {
             //Atualiza os campos com os valores.
             document.getElementById("logradouro").value =
-                    conteudo.logradouro;
+                conteudo.logradouro;
             document.getElementById("bairro").value =
-                    conteudo.bairro;
+                conteudo.bairro;
             document.getElementById("cidade").value =
-                    conteudo.localidade;
+                conteudo.localidade;
             document.getElementById("estado").value =
-                    conteudo.uf;
+                conteudo.uf;
             //document.getElementById("ibge").value =
             //conteudo.ibge;
         } //end if.
@@ -159,7 +159,7 @@
             if (validacep.test(cep)) {
                 //Preenche os campos com "..." enquanto consulta webservice.
                 document.getElementById("logradouro").value =
-                        "...";
+                    "...";
                 document.getElementById("bairro").value = "...";
                 document.getElementById("cidade").value = "...";
                 document.getElementById("estado").value = "...";
@@ -170,9 +170,9 @@
 
                 //Sincroniza com o callback.
                 script.src =
-                        "https://viacep.com.br/ws/" +
-                        cep +
-                        "/json/?callback=meu_callback";
+                    "https://viacep.com.br/ws/" +
+                    cep +
+                    "/json/?callback=meu_callback";
 
                 //Insere script no documento e carrega o conteúdo.
                 document.body.appendChild(script);
