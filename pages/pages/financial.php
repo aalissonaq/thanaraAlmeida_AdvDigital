@@ -8,14 +8,23 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
   $description = strip_tags(trim($_POST['description']));
   $vl = substr(tiraMascara(strip_tags(trim($_POST['amount']))), 0, strlen(tiraMascara(strip_tags(trim($_POST['amount'])))) - 2) . '.' . substr(tiraMascara(strip_tags(trim($_POST['amount']))), -2);
   $amount = $vl;
-  $competence = $_POST['competence'];
+  // $competence = $_POST['competence'];
   $due_date = strip_tags(trim($_POST['due_date']));
   $installments = $_POST['number_installments'] > 1 ? 1 : 0;
   $number_installments = $_POST['number_installments'];
 
-  $sql = "INSERT INTO financial_release (type, id_process, id_financial_category, description, amount, competence, due_date, installments, number_installments) VALUES ('$type', '$id_process','$id_financial_category', '$description', '$amount', '$competence', '$due_date', '$installments', '$number_installments')";
+  $sql = "INSERT INTO financial_release (type, id_process, id_financial_category, description, amount, due_date, installments, number_installments) VALUES ('$type', '$id_process','$id_financial_category', '$description', '$amount', '$due_date', '$installments', '$number_installments')";
 
   if ($conexao->exec($sql)) {
+    $id_financial_release = $conexao->lastInsertId();
+    $installments_amount = $amount / $_POST['number_installments'];
+    for ($i = 0; $i < $number_installments; $i++) {
+      $installments_due_date = date('Y-m-d', strtotime($due_date . "+ $i month"));
+      $competence = date('m/Y', strtotime($installments_due_date));
+      $sql = "INSERT INTO financial_release_installments (id_financial_release, due_date, installments_amount, competence) VALUES ('$id_financial_release', '$installments_due_date', '$installments_amount', '$competence')";
+      $conexao->exec($sql);
+    }
+
     sweetalert('Sucesso', 'Lançamento gravado com suscesso', 'success', 2000);
   } else {
     sweetalert('Ops !', ' Erro ao grava o Lançamento, por favor tente novamente', 'error', 2000);
@@ -45,7 +54,6 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
 <!-- Main content -->
 <section class="content">
   <?php
-
 
   $idEdit = $_GET['id'];
   $dadosPessoa = ler("vw_pessoa_cliente", '', "WHERE idPassoaPessoa = '{$idEdit}'")->fetchAll(PDO::FETCH_ASSOC);
@@ -275,12 +283,9 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                         <thead class="" style="font-weight: 300; font-family: 'Advent Pro', sans-serif;">
                           <tr>
                             <th class="col-1 text-center align-middle">#</th>
-                            <th class="col-3 text-center align-middle">Tipo</th>
-                            <th class="col-2 text-center align-middle">Nº Proceso</th>
-                            <th class="col-3 text-center align-middle">Descrição</th>
-                            <th class="col-1 text-center align-middle">Valor</th>
-                            <th class="col-2 text-center align-middle">Competência</th>
+                            <th class="col-9 text-center align-middle">Lançamento</th>
                             <th class="col-2 text-center align-middle">Vencimento</th>
+                            <th class="col-2 text-center align-middle">Status</th>
 
                             <th class="col-auto text-center align-middle">
                               <i class="fab fa-lg fa-fw fa-whmcs" title="Ações"></i>
@@ -289,8 +294,9 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                         </thead>
                         <tbody>
                           <?php
-                          $sql = "SELECT * FROM financial_release
-                                  WHERE financial_release.id_process = '{$_GET['process']}'";
+                          $sql = "SELECT * FROM financial_release as fr
+                                  INNER JOIN processos as p ON fr.id_process = p.idprocesso
+                                  WHERE fr.id_process = '{$_GET['process']}'";
                           $result = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                           $count = 1;
                           foreach ($result as  $release) {
@@ -298,25 +304,107 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
 
                             <tr class="">
                               <td class="col-1 text-center align-middle">
-                                <?= str_pad($count, 3, "0", STR_PAD_LEFT); $count++ ?>
+                                <?= str_pad($count, 3, "0", STR_PAD_LEFT);
+                                $count++ ?>
+                              </td>
+                              <td class="col-9 text-left align-middle">
+                                <div class="d-flex flex-column">
+                                  <div class="text-muted">
+                                    <strong class="text-primary">
+                                      PROCESSO:&nbsp;
+                                    </strong>
+                                    <?= $release['niprocesso'] . " - " . strtoupper($release['objprocesso']); ?>
+                                  </div>
+                                  <div class="text-muted">
+                                    <strong class="text-primary">
+                                      CATEGORIA:&nbsp;
+                                    </strong>
+                                    <?= $release['type']; ?>
+                                  </div>
+                                  <div class="text-muted">
+                                    <strong class="text-primary">
+                                      DESCRIÇÃO:&nbsp;
+                                    </strong>
+                                    <?= $release['description'] ?>
+                                  </div>
+                                  <div class="text-muted">
+                                    <strong class="text-primary">
+                                      VALOR TOTAL:&nbsp;
+                                    </strong>
+                                    <?= "R$ " . number_format($release['amount'], 2, ',', '.'); ?>
+                                  </div>
+
+                                  <div class=" d-flex justify-content-between">
+                                    <div class="text-muted">
+                                      <strong class="text-primary">
+                                        VENCIMENTOS:&nbsp;
+                                      </strong>
+                                      <br />
+                                      <div class="d-flex justify-content-around">
+
+                                        <?php
+                                        for ($i = 1; $i <= $release['number_installments']; $i++) {
+                                        ?>
+
+                                          <div class=" mx-1 bg-primary text-center border ">
+                                            <span class="text-white">
+                                              <?= $i ?>º Parcela
+                                            </span><br />
+                                            <div class="bg-white p-1">
+                                              <?= date('d/m/Y', strtotime("+1 month", strtotime($release['due_date']))) ?> <br />
+                                              R$ 102,88 <br />
+                                              <span class='badge badge-pill badge-success' style='font-size: 12px;'> PAGO </span><br />
+                                            </div>
+                                          </div>
+                                        <?php
+                                        }
+                                        ?>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="text-muted">
+                                  <strong class="text-primary">
+                                    VALOR TOTAL:&nbsp;
+                                  </strong>
+                                  <?= "R$ " . number_format($release['amount'], 2, ',', '.'); ?>
+                                </div>
+
+                                <div class="text-muted align-middle">
+                                  <strong class="text-primary">
+                                    POSSUI PARCELAS ?:&nbsp;
+                                  </strong>
+                                  <?php
+                                  if ($release['installments'] == 1) {
+                                  ?>
+                                    <a href="<?= $release['id'] ?>" type="button" class="btn btn-sm btn-outline-secondary align-middle" style="border: none;">
+                                      SIM &nbsp;
+                                      <i class="fa fa-eye fa-fw fa-lg test-orange"></i>
+                                    </a>
+                                  <?php
+                                  } else {
+                                  ?>
+                                    NÃO
+                                  <?php } ?>
+                                </div>
+                                <div class="text-muted align-middle">
+                                  <strong class="text-primary">
+                                    STATUS:&nbsp;
+                                  </strong>
+                                  <!--<span class="badge badge-<?= $release['status'] == 'PENDENTE' ? 'warning' : 'success' ?>">-->
+                                  <span class="badge badge-success align-middle">
+                                    <?= 'PAGO' ?>
+                                  </span>
+
+                                </div>
+
                               </td>
                               <td class="col-2 text-center align-middle">
-                                <?= $release['type']; ?>
+                                <?= date('d/m/Y', strtotime($release['due_date'])); ?>
                               </td>
                               <td class="col-2 text-center align-middle">
-                                <?= $release['id_process']; ?>
-                              </td>
-                              <td class="col-3 text-center align-middle">
-                                <?= $release['description']; ?>
-                              </td>
-                              <td class="col-2 text-center align-middle">
-                                R$ <?= formatMoedaBr($release['amount']); ?>
-                              </td>
-                              <td class="col-2 text-center align-middle">
-                                <?= $release['competence']; ?>
-                              </td>
-                              <td class="col-2 text-center align-middle">
-                              <?= date('d/m/Y', strtotime($release['due_date'])); ?>
+                                <?= 'PAGA' ?>
                               </td>
 
                               <td class="col-auto text-center align-middle">
@@ -355,6 +443,14 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
               <!-- /.tab-content -->
             </div><!-- /.card-body -->
           </div>
+
+          <?php
+          // for ($i = 0; $i <= 12; $i++) {
+          //   $current_date = date('Y-m-d');
+          //   $due_date = date('Y-m-d', strtotime($current_date . "+ $i  month"));
+          //   echo $due_date . '<br>';
+          // }
+          ?>
 
           <!-- /.nav-tabs-custom -->
         </div>

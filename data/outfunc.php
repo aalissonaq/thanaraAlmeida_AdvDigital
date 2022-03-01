@@ -633,3 +633,9 @@ function valorPorExtensoDois($valor = 0, $bolExibirMoeda = true, $bolPalavraFemi
   $rt = mb_substr($rt, 1);
   return ($rt ? trim($rt) : "zero");
 }
+function addDaysToCurrentDate($days = null)
+{
+  $days = $days = null ? 0 : $days;
+  $due_date = date("d/m/Y", time() + ($days * 60 * 60 * 24)); // Este cálculo determina quantos segundos leva um dia
+  return $due_date;
+}
