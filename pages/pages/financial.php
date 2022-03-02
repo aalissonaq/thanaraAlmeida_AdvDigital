@@ -213,6 +213,144 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
         </div>
         <!-- /.col -->
         <div class="col-md-10">
+
+          <?php
+          if (isset($_GET['process'])) {
+            $sql = "SELECT * FROM processos as p
+                    INNER JOIN pessoa as c ON p.idcliente = c.idPessoa
+                    WHERE p.idprocesso = {$_GET['process']}";
+            $result = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+            $dprocesso = $result[0];
+          ?>
+            <div class="card">
+
+              <div class="card-header">
+                <h1 class="card-title text-uppercase">
+                  <i class="mdi mdi-scale-balance mdi-24px fa fa-fw mr-1"></i>
+                  <?= $dprocesso['niprocesso'] . ' - ' . $dprocesso['objprocesso'] ?>
+                </h1>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <div class="d-flex">
+                  <div class="mr-5 d-flex flex-column">
+                    <span class="text-primary">
+                      <i class="mdi mdi-pound mdi-18px fa fa-fw mr-1"></i>
+                      Nº do Porcesso:
+                    </span>
+                    <span class="text-muted ml-4">
+                      <?= MascaraCNJ(str_pad($dprocesso['numprocesso'], 20, "0", STR_PAD_LEFT)); ?>
+                    </span>
+                  </div>
+                  <div class="mr-5 d-flex flex-column">
+                    <span class="text-primary">
+                      <i class="mdi mdi-state-machine mdi-18px fa fa-fw mr-1"></i>
+                      Status do Porcesso:
+                    </span>
+                    <span class="text-muted text-uppercase ml-4">
+                      <?= $dprocesso['statusprocesso'] != 'concluido' ? 'ATIVO' : 'INATIVO';  ?>
+                    </span>
+                  </div>
+
+                  <div class="mr-5 d-flex flex-column">
+                    <span class="text-primary">
+                      <i class="mdi mdi-list-status mdi-18px fa fa-fw mr-1"></i>
+                      Etapa do Processo:
+                    </span>
+                    <span class="text-muted text-uppercase ml-4">
+                      <?php
+                      switch ($dprocesso['statusprocesso']) {
+                        case 'aguardando':
+                          echo 'Aguardando Documento';
+                          break;
+                        case 'pericia':
+                          echo 'Perícia ou Agendamento';
+                          break;
+                        case 'prorrogacao':
+                          echo 'Prorrogação';
+                          break;
+                        case 'exigencia':
+                          echo 'Exigência';
+                          break;
+                        case 'aguardandoINSS':
+                          echo 'Aguardando Resposta do INSS';
+                          break;
+                        case 'justFederal':
+                          echo 'Justiça Federal';
+                          break;
+                        case 'concluido':
+                          echo 'Concluído';
+                          break;
+                        case 'analise':
+                          echo 'Análise';
+                          break;
+                        case 'justComum':
+                          echo 'Justiça Comum';
+                          break;
+                        case 'concluso':
+                          echo 'Concluso';
+                          break;
+
+                        default:
+                          echo 'Aguardando Documento';
+                          break;
+                      };
+                      ?>
+                    </span>
+                  </div>
+
+
+                </div>
+                <br />
+                <div class="">
+                  <div class="d-flex flex-column">
+                    <span class="text-primary">
+                      <i class="mdi mdi-file mdi-18px fa fa-fw mr-1"></i>
+                      Descrição do Processo:
+                    </span>
+                    <span class="text-muted text-uppercase text-justify ml-4">
+                      <?= $dprocesso['descricaoprocesso']; ?>
+                    </span>
+                  </div>
+                </div>
+                <br />
+                <div class="d-flex ">
+                  <div class="d-flex flex-column mr-5">
+                    <span class="text-primary">
+                      <i class="mdi mdi-account mdi-18px fa fa-fw mr-1"></i>
+                      Cliente:
+                    </span>
+                    <span class="text-muted text-uppercase ml-4">
+                      <?= $dprocesso['nmPessoa']; ?>
+                    </span>
+                  </div>
+
+                  <div class="d-flex flex-column">
+                    <span class="text-primary">
+                      <i class="mdi mdi-account mdi-18px fa fa-fw mr-1"></i>
+                      Contra Parte no Proceso:
+                    </span>
+                    <span class="text-muted text-uppercase ml-4">
+                      <?= $dprocesso['contraparte']; ?>
+                    </span>
+                  </div>
+
+
+                </div>
+
+              </div>
+              <!-- /.card-body -->
+              <!--  <div class="card-footer">
+                The footer of the card
+              </div> -->
+              <!-- /.card-footer -->
+            </div>
+            <!-- /.card -->
+          <?php
+          } else {
+          }
+          ?>
+
           <div class="card card-outline">
             <div class="card-header p-2">
 
@@ -238,8 +376,6 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                 <!-- <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a>
                 </li> -->
               </ul>
-
-
 
             </div><!-- /.card-header -->
             <div class="card-body">
@@ -284,9 +420,6 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                           <tr>
                             <th class="col-1 text-center align-middle">#</th>
                             <th class="col-9 text-center align-middle">Lançamento</th>
-                            <th class="col-2 text-center align-middle">Vencimento</th>
-                            <th class="col-2 text-center align-middle">Status</th>
-
                             <th class="col-auto text-center align-middle">
                               <i class="fab fa-lg fa-fw fa-whmcs" title="Ações"></i>
                             </th>
@@ -340,23 +473,55 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                         VENCIMENTOS:&nbsp;
                                       </strong>
                                       <br />
+
                                       <div class="d-flex justify-content-around">
-
                                         <?php
-                                        for ($i = 1; $i <= $release['number_installments']; $i++) {
+                                        // $sql = "SELECT * FROM financial_release_payments as frp
+                                        //         INNER JOIN financial_release as fr ON frp.id_release = fr.id_release
+                                        //         WHERE fr.id_process = '{$_GET['process']}'";
+                                        $sql = "SELECT * FROM financial_release_installments
+                                                WHERE id_financial_release = '{$release['id']}'";
+                                        $result = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+                                        $i = 1;
+                                        foreach ($result as $installment) {
+
                                         ?>
+                                          <a href="<?= $installment['id'] ?>">
 
-                                          <div class=" mx-1 bg-primary text-center border ">
-                                            <span class="text-white">
-                                              <?= $i ?>º Parcela
-                                            </span><br />
-                                            <div class="bg-white p-1">
-                                              <?= date('d/m/Y', strtotime("+1 month", strtotime($release['due_date']))) ?> <br />
-                                              R$ 102,88 <br />
-                                              <span class='badge badge-pill badge-success' style='font-size: 12px;'> PAGO </span><br />
+                                            <div class=" mx-1 bg-primary text-center border " style="border-radius: 4px;">
+                                              <span class="text-white">
+                                                <?= $i ?>º Parcela
+                                              </span><br />
+                                              <div class="bg-white p-1">
+                                                <?= date('d/m/Y', strtotime($installment['due_date'])) ?> <br />
+                                                R$ <?= $installment['installments_amount'] ?> <br />
+                                                <?php
+                                                if ($installment['is_paid'] == '0'  && $installment['due_date'] >= date('Y-m-d', time())) {
+                                                  $colorStatus = 'warning';
+                                                } elseif ($installment['is_paid'] == '0' && $installment['due_date'] < date('Y-m-d', time())) {
+                                                  $colorStatus = 'danger';
+                                                } else {
+                                                  $colorStatus = 'success';
+                                                }
+                                                ?>
+                                                <span class="badge badge-<?= $colorStatus ?>" style='font-size: 12px; font-weight: 400; letter-spacing: 1px; width: 100%;'>
+                                                  <?php
+                                                  if ($installment['is_paid'] == '0'  && $installment['due_date'] >= date('Y-m-d', time())) {
+                                                    echo "Pendente";
+                                                  } elseif ($installment['is_paid'] == '0' && $installment['due_date'] < date('Y-m-d', time())) {
+                                                    echo "Atrasado";
+                                                  } else {
+                                                    echo "Pago";
+                                                  }
+                                                  ?>
+                                                  <? $installment['is_paid'] == '0' ? 'Pendente' : 'Pago' ?>
+
+                                                </span>
+                                              </div>
                                             </div>
-                                          </div>
+                                          </a>
                                         <?php
+                                          $i++;
                                         }
                                         ?>
                                       </div>
@@ -366,51 +531,24 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
 
                                 <div class="text-muted">
                                   <strong class="text-primary">
-                                    VALOR TOTAL:&nbsp;
-                                  </strong>
-                                  <?= "R$ " . number_format($release['amount'], 2, ',', '.'); ?>
-                                </div>
-
-                                <div class="text-muted align-middle">
-                                  <strong class="text-primary">
-                                    POSSUI PARCELAS ?:&nbsp;
+                                    SALDO DEVEDOR:&nbsp;
                                   </strong>
                                   <?php
-                                  if ($release['installments'] == 1) {
+                                  $sql = "SELECT SUM(installments_amount) as total FROM financial_release_installments
+                                          WHERE id_financial_release = '{$release['id']}' AND is_paid = 0";
+                                  $result = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+                                  $total = $result[0]['total'];
                                   ?>
-                                    <a href="<?= $release['id'] ?>" type="button" class="btn btn-sm btn-outline-secondary align-middle" style="border: none;">
-                                      SIM &nbsp;
-                                      <i class="fa fa-eye fa-fw fa-lg test-orange"></i>
-                                    </a>
-                                  <?php
-                                  } else {
-                                  ?>
-                                    NÃO
-                                  <?php } ?>
-                                </div>
-                                <div class="text-muted align-middle">
-                                  <strong class="text-primary">
-                                    STATUS:&nbsp;
-                                  </strong>
-                                  <!--<span class="badge badge-<?= $release['status'] == 'PENDENTE' ? 'warning' : 'success' ?>">-->
-                                  <span class="badge badge-success align-middle">
-                                    <?= 'PAGO' ?>
-                                  </span>
-
+                                  <?= "R$ " . number_format($total, 2, ',', '.'); ?>
                                 </div>
 
                               </td>
-                              <td class="col-2 text-center align-middle">
-                                <?= date('d/m/Y', strtotime($release['due_date'])); ?>
-                              </td>
-                              <td class="col-2 text-center align-middle">
-                                <?= 'PAGA' ?>
-                              </td>
+
 
                               <td class="col-auto text-center align-middle">
                                 <div class="dropdown">
                                   <button class="btn  dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false">
-                                    ...
+                                    Ações
                                   </button>
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                     <button class="dropdown-item" type="button">
@@ -470,7 +608,7 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
   <!-- Control sidebar content goes here -->
 </aside>
 
-<!-- modal NOVO USUARIO -->
+<!-- modal NOVO LANÇAMETO -->
 <div class="modal fade" id="modal-newFinancialReleases">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -523,8 +661,8 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
             </div>
           </div>
           <div class="form-row">
-            <div class="col-md-3 mb-3">
-              <label for="dtNascPessoa">Valor do Lançamento
+            <div class="col-md-4 mb-3">
+              <label for="dtNascPessoa">Valor Total do Lançamento
                 <span class="text-orange">*</span>
               </label>
               <input type="text" name="amount" class="form-control text-uppercase js_dinheiro" id="amount" maxlength="12" placeholder="R$ 0.000,00" required />
@@ -532,25 +670,9 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                 Obrigatório !
               </div>
             </div>
-            <div class="col-md-3 mb-3">
-              <label for="competence">Competência</label>
-              <select name="competence" id="competence" class="form-control" required>
-                <option value="" selected disabled>Selecione...</option>
-                <?php
-                for ($i = 1; $i <= 12; $i++) {
-                ?>
-                  <option value="<?= str_pad($i, 2, '0', STR_PAD_LEFT) ?>/<?= date('Y', time()) ?>">
-                    <?= str_pad($i, 2, '0', STR_PAD_LEFT) ?>/<?= date('Y', time()) ?>
-                  </option>
 
-                <?php } ?>
-              </select>
-              <div class="invalid-feedback">
-                Obrigatório !
-              </div>
-            </div>
-            <div class="col-md-3 mb-3">
-              <label for="due_date">Data de Vencimento
+            <div class="col-md-4 mb-3">
+              <label for="due_date">Data do 1º Vencimento
                 <span class="text-orange">*</span>
               </label>
               <input type="date" name="due_date" class="form-control text-uppercase" id="due_date" placeholder="" required />
@@ -558,8 +680,8 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                 Obrigatório !
               </div>
             </div>
-            <div class="col-md-3 mb-3">
-              <label for="number_installments">Pascelas
+            <div class="col-md-4 mb-3">
+              <label for="number_installments">Quantidade de Pascelas
                 <span class="text-orange">*</span>
               </label>
               <select name="number_installments" id="number_installments" class="form-control" required>

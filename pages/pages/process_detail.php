@@ -656,7 +656,9 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
         </div>
         <div class="col-12 col-md-12 col-lg-4 order-1 order-sm-1 order-md-2 mb-4 border-left px-4 ">
           <?php
-          $sql = "SELECT * FROM processos INNER JOIN pessoa ON processos.idcliente = pessoa.idPessoa WHERE idprocesso = '$idProcess'";
+          $sql = "SELECT * FROM processos
+                  INNER JOIN pessoa ON processos.idcliente = pessoa.idPessoa
+                  WHERE idprocesso = '$idProcess'";
           $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
           foreach ($resultado as $dadoProcesso) {
           ?>
@@ -730,7 +732,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
               <div class="col-2">
                 <p class="text-sm">Status
                   <span class="d-block text-muted">
-                    ATIVO
+                    <?= $dadoProcesso['statusprocesso'] != 'concluido' ? 'ATIVO' : 'INATIVO';  ?>
                   </span>
                 </p>
               </div>
