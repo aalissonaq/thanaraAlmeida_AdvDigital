@@ -29,10 +29,16 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
   } else {
     sweetalert('Ops !', ' Erro ao grava o Lançamento, por favor tente novamente', 'error', 2000);
   }
+} else if (isset($_POST['active']) && $_POST['active'] == 'payment') {
+  $_POST['is_paid'] == 0 ? $_POST['payday_installments'] = '' : '';
+  $sql = "UPDATE financial_release_installments SET payday_installments = '{$_POST['payday_installments']}', is_paid = '{$_POST['is_paid']}' WHERE id = '{$_POST['idInstallment']}'";
+  if ($conexao->exec($sql)) {
+    sweetalert('Sucesso', 'Pagamento gravado com suscesso', 'success', 2000);
+  } else {
+    sweetalert('Ops !', ' Erro ao grava o Pagamento, por favor tente novamente', 'error', 2000);
+  }
 }
-
 ?>
-
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <div class="container-fluid">
@@ -93,7 +99,6 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                 } else {
                   echo $dcliente['nmPessoaSocial'];
                 }
-
                 ?>
               </h3>
 
@@ -298,8 +303,6 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                       ?>
                     </span>
                   </div>
-
-
                 </div>
                 <br />
                 <div class="">
@@ -334,10 +337,7 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                       <?= $dprocesso['contraparte']; ?>
                     </span>
                   </div>
-
-
                 </div>
-
               </div>
               <!-- /.card-body -->
               <!--  <div class="card-footer">
@@ -473,7 +473,6 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                         VENCIMENTOS:&nbsp;
                                       </strong>
                                       <br />
-
                                       <div class="d-flex justify-content-around">
                                         <?php
                                         // $sql = "SELECT * FROM financial_release_payments as frp
@@ -486,13 +485,12 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                         foreach ($result as $installment) {
 
                                         ?>
-                                          <a href="<?= $installment['id'] ?>">
-
+                                          <a href="<?= $installment['id'] ?>" class="" data-toggle="modal" data-target="#modal-payment" style="font-family:'Advent Pro', sans-serif; font-weight: bold; font-size: 1rem; letter-spacing: 1px;" onclick="setarDadosModalProcesso(<?= $installment['id'] ?>)">
                                             <div class=" mx-1 bg-primary text-center border " style="border-radius: 4px;">
                                               <span class="text-white">
-                                                <?= $i ?>º Parcela
+                                                <?= $i ?>ª Parcela
                                               </span><br />
-                                              <div class="bg-white p-1">
+                                              <div class="bg-white p-2">
                                                 <?= date('d/m/Y', strtotime($installment['due_date'])) ?> <br />
                                                 R$ <?= $installment['installments_amount'] ?> <br />
                                                 <?php
@@ -608,6 +606,105 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
   <!-- Control sidebar content goes here -->
 </aside>
 
+<!-- Modal -->
+<div class="modal fade" id="modal-payment" tabindex="-1" aria-labelledby="modal-payment" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-payment" style="font-family: 'Advent Pro', sans-serif; font-weight: 500; letter-spacing: 1px;">
+          <span class="text-orange">Pagamento:</span>
+        </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form class="needs-validation" novalidate action="" method="POST" enctype="multipart/form-data">
+        <div class="modal-body">
+          <div class="col-md-12 mb-3">
+            <label for="docPessoa">Data de Pagamento
+              <span class="text-orange">*</span>
+            </label>
+            <input type="date" name="payday_installments" class="form-control text-uppercase" id="description" placeholder="Data do Pagamento" required />
+            <div class="invalid-feedback">
+              Obrigatório !
+            </div>
+          </div>
+          <div class="col-md-12 mb-3">
+            <label for="is_paid">Confima o Pagamento
+              <span class="text-orange">*</span>
+            </label>
+            <select class="form-control text-uppercase" name="is_paid" id="is_paid" required>
+              <option value="1">Sim</option>
+              <option value="0">Não</option>
+            </select>
+            <div class="invalid-feedback">
+              Obrigatório !
+            </div>
+          </div>
+        </div>
+        <input type="hidden" name="idInstallment" id="idInstallment">
+        <input type="hidden" name="active" value="payment">
+        <div class="modal-footer d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-danger" data-dismiss="modal">
+            <i class="mdi mdi-trash-can-outline mdi-18px"></i>
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-success">
+            <i class="mdi mdi-content-save-outline mdi-18px"></i>
+            Salvar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL NOVO PAGAMENTO -->
+<div class="modal fade" id="modal-payment2">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" style="font-family: 'Advent Pro', sans-serif; font-weight: 500; letter-spacing: 1px;">
+          <span class="text-orange">Pagamento:</span>
+        </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form class="needs-validation" novalidate action="" method="POST" enctype="multipart/form-data">
+          <div class="col-md-9 mb-3">
+            <label for="docPessoa">Descrição do Lançamento
+              <span class="text-orange">*</span>
+            </label>
+            <input type="text" name="description" class="form-control text-uppercase" id="description" placeholder="Descrição do Lançamento" required />
+            <div class="invalid-feedback">
+              Obrigatório !
+            </div>
+          </div>
+      </div>
+
+
+    </div>
+    <div class="modal-footer justify-content-between">
+      <input type="hidden" name="active" value="createFinancialRelease">
+      <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-times fa-fw fa-lg"></i>
+        Fechar </button>
+      <button class="btn btn-lg btn-success" type="submit">
+        <i class="far fa-save fa-fw fa-lg"></i>
+        Gravar Dados</button>
+      </form>
+      <!--/form novo Usuario -->
+      <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</div>
+<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 <!-- modal NOVO LANÇAMETO -->
 <div class="modal fade" id="modal-newFinancialReleases">
   <div class="modal-dialog modal-lg">
@@ -724,8 +821,8 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
 
 <!-- ./wrapper -->
 <script>
-  function setaDadosModalProcesso(valor) {
-    document.getElementById('idPessoaCliente').value = valor;
+  function setarDadosModalProcesso(valor) {
+    document.getElementById('idInstallment').value = valor;
   };
 
   function modalIdProcesso(valor) {
