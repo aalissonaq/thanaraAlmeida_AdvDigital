@@ -30,19 +30,24 @@
             <div class="inner mx-3">
               <?php
               //$today = date("Y-m-d", time());
-              if ($_SESSION['NIVEL'] >= 1) {
-                $sql = "SELECT * FROM tarefas WHERE idResponsavel = {$_SESSION['ID']} AND dtTarefa =  CURDATE() AND finalizada = 0";
-              } else {
-                $sql = "SELECT * FROM tarefas WHERE dtTarefa =  CURDATE()";
-              }
+              $initMonth = date("Y-m-01");
+              $endMonth = date("Y-m-t");
+              $competence = date('m/Y');
+
+              $sql = "SELECT * FROM financial_release_installments WHERE due_date >= '{$initMonth}' AND due_date <='{$endMonth}'";
+              //$sql = "SELECT SUM(installments_amount) FROM financial_release_installments WHERE competence = '03/2022'";
+
               $resultado = $conexao->query($sql);
-              ?>
+              $total = 0;
+              while ($row = $resultado->fetch(PDO::FETCH_OBJ)) {
+                $total += $row->installments_amount;
+              }              ?>
 
               <h3 class="text-info">
                 <i class="mdi mdi-currency-brl"></i>
-                <?= formatMoedaBr(str_pad($resultado->rowCount(), 3, "0", STR_PAD_LEFT)); ?>
+                <?= formatMoedaBr($total) ?>
               </h3>
-              <p>Salto previsto nesse mês</p>
+              <p>Saldo previsto nesse mês</p>
             </div>
             <div class="icon">
               <!-- <i class="fas fa-donate"></i> -->
@@ -59,6 +64,9 @@
           <div class="small-box bg-gradient-default">
             <div class="inner mx-3">
               <?php
+
+
+
               if ($_SESSION['NIVEL'] > 1) {
                 $sql = "SELECT * FROM tarefas WHERE idResponsavel = {$_SESSION['ID']} AND finalizada = 0";
               } else {
