@@ -442,23 +442,23 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                               </td>
                               <td class="col-9 text-left align-middle">
                                 <div class="d-flex flex-column">
-                                  <div class="text-muted">
+                                  <div class="text-muted text-uppercase">
                                     <strong class="text-primary">
                                       PROCESSO:&nbsp;
                                     </strong>
                                     <?= $release['niprocesso'] . " - " . strtoupper($release['objprocesso']); ?>
                                   </div>
-                                  <div class="text-muted">
+                                  <div class="text-muted text-uppercase">
                                     <strong class="text-primary">
                                       CATEGORIA:&nbsp;
                                     </strong>
                                     <?= $release['type']; ?>
                                   </div>
-                                  <div class="text-muted">
+                                  <div class="text-muted text-uppercase">
                                     <strong class="text-primary">
                                       DESCRIÇÃO:&nbsp;
                                     </strong>
-                                    <?= $release['description'] ?>
+                                    <?= strtoupper($release['description']) ?>
                                   </div>
                                   <div class="text-muted">
                                     <strong class="text-primary">
@@ -716,7 +716,7 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
           $sql = "SELECT * FROM processos WHERE idprocesso = {$_GET['process']}";
           $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
           foreach ($resultado as $value) {
-            echo '#' . $value['niprocesso'] . '<br/>' . strtoupper($value['objprocesso']);
+            echo '#' . $value['niprocesso'] . '<br/> <span class="text-uppercase">' . strtoupper($value['objprocesso']) . '</span>';
           }
           ?>
         </h4>
@@ -781,17 +781,8 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
               <label for="number_installments">Quantidade de Pascelas
                 <span class="text-orange">*</span>
               </label>
-              <select name="number_installments" id="number_installments" class="form-control" required>
-                <option value="" selected disabled>Selecione...</option>
-                <?php
-                for ($i = 1; $i <= 12; $i++) {
-                ?>
-                  <option value="<?= $i; ?>">
-                    <?= str_pad($i, 2, '0', STR_PAD_LEFT) ?>
-                  </option>
+              <input type="number" name="number_installments" class="form-control text-uppercase" id="number_installments" placeholder="" required />
 
-                <?php } ?>
-              </select>
               <div class="invalid-feedback">
                 Obrigatório !
               </div>

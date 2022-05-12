@@ -66,7 +66,23 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
   $sql = "INSERT INTO historico_processo (id_pessoa_cliente,id_pessoa_responsavel,id_processo,titulo_historico,descricao_historico,tipo_historico)
           VALUES ('$id_pessoa_cliente','$id_pessoa_responsavel','$id_processo','$titulo_historico','$descricao_historico','$tipo_historico')";
   $conexao->exec($sql);
+} elseif (isset($_POST['acao']) && $_POST['acao'] == 'edtProcesso') {
+  $dados['objprocesso'] = strip_tags(strip_tags(trim($_POST['objprocesso'])));
+  $dados['contraparte'] = strip_tags(strip_tags(trim($_POST['contraparte'])));
+  $dados['descricaoprocesso'] = strip_tags(strip_tags(trim($_POST['descricaoprocesso'])));
+  $dados['numprocesso'] = $_POST['numprocesso'] == '' ? '0' : strip_tags(strip_tags(trim(tiraMascara($_POST['numprocesso']))));
+  $dados['areaprocesso'] = strip_tags(strip_tags(trim($_POST['areaprocesso'])));
+  $dados['statusprocesso'] = strip_tags(strip_tags(trim($_POST['statusprocesso'])));
+
+  $update = atualizar('processos', $dados, "idprocesso = {$idProcess}");
+
+  if ($update) {
+    sweetalert('Sucesso', 'processo atualizada com suscesso', 'success', 2000);
+  } else {
+    sweetalert('Ops !', ' Erro ao atualizar a processo, por favor tente novamente', 'error', 2000);
+  }
 }
+
 
 ?>
 
@@ -1445,7 +1461,8 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
       <div class="modal-body">
         <!-- form novo Usuário -->
 
-        <form class="needs-validation" novalidate action="./pages/pages/acoes/gravaNovoProcesso.php" method="POST" enctype="multipart/form-data">
+        <form class="needs-validation" novalidate action="" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="acao" value="edtProcesso" />
           <input type="hidden" name="niprocesso" value="<?= $dadoProcesso['niprocesso']; ?>" />
           <div class="form-row">
             <div class="col-md-6">
