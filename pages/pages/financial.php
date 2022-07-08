@@ -473,26 +473,27 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                         VENCIMENTOS:&nbsp;
                                       </strong>
                                       <br />
-                                      <div class="d-flex justify-content-around">
+                                      <div class="d-flex justify-content-around flex-wrap ">
                                         <?php
                                         // $sql = "SELECT * FROM financial_release_payments as frp
                                         //         INNER JOIN financial_release as fr ON frp.id_release = fr.id_release
                                         //         WHERE fr.id_process = '{$_GET['process']}'";
                                         $sql = "SELECT * FROM financial_release_installments
                                                 WHERE id_financial_release = '{$release['id']}'";
-                                        $result = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+                                        $result = $conexao->query($sql);
                                         $i = 1;
-                                        foreach ($result as $installment) {
+
+                                        foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $installment) {
 
                                         ?>
-                                          <a href="<?= $installment['id'] ?>" class="" data-toggle="modal" data-target="#modal-payment" style="font-family:'Advent Pro', sans-serif; font-weight: bold; font-size: 1rem; letter-spacing: 1px;" onclick="setarDadosModalProcesso(<?= $installment['id'] ?>)">
+                                          <a href="<?= $installment['id'] ?>" class="p-1 <?= $result->rowCount() > 1 ? 'col-3':''?>" data-toggle="modal" data-target="#modal-payment" style="font-family:'Advent Pro', sans-serif; font-weight: bold; font-size: 1rem; letter-spacing: 1px;" onclick="setarDadosModalProcesso(<?= $installment['id'] ?>)">
                                             <div class=" mx-1 bg-primary text-center border " style="border-radius: 4px;">
                                               <span class="text-white">
                                                 <?= $i ?>ª Parcela
                                               </span><br />
                                               <div class="bg-white p-2">
                                                 <?= date('d/m/Y', strtotime($installment['due_date'])) ?> <br />
-                                                R$ <?= $installment['installments_amount'] ?> <br />
+                                                R$ <?= formatMoedaBr($installment['installments_amount']) ?> <br />
                                                 <?php
                                                 if ($installment['is_paid'] == '0'  && $installment['due_date'] >= date('Y-m-d', time())) {
                                                   $colorStatus = 'warning';
@@ -509,7 +510,8 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                                   } elseif ($installment['is_paid'] == '0' && $installment['due_date'] < date('Y-m-d', time())) {
                                                     echo "Atrasado";
                                                   } else {
-                                                    echo "Pago";
+                                                    echo "Pago em <br/>";
+                                                    echo date('d/m/Y', strtotime($installment['payday_installments']));
                                                   }
                                                   ?>
                                                   <? $installment['is_paid'] == '0' ? 'Pendente' : 'Pago' ?>
@@ -543,10 +545,13 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                               </td>
 
 
-                              <td class="col-auto text-center align-middle">
+                              <td class="col-2 text-center ">
                                 <div class="dropdown">
-                                  <button class="btn  dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false">
-                                    Ações
+                                  <button class="btn dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false">
+                                    <span class="h6">
+                                      <i class="mdi mdi-cog"></i>
+                                      AÇÕES
+                                    </span>
                                   </button>
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                     <button class="dropdown-item" type="button">

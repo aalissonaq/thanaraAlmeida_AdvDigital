@@ -6,7 +6,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
   $id_pessoa_responsavel = $_POST['id_pessoa_responsavel'];
   $id_processo = trim(strip_tags($_GET['idprocess']));
   $titulo_historico = trim(strip_tags($_POST['titulo_historico']));
-  $descricao_historico = trim(strip_tags($_POST['descricao_historico']));
+  $descricao_historico = trim(nl2br($_POST['descricao_historico']));
   $tipo_historico = $_POST['tipo_historico'];
 
 
