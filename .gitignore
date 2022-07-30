@@ -5,6 +5,7 @@
 ._*
 
 //bd
+data/
 ./data/conexao.php
 ./data/dbasys.php
 

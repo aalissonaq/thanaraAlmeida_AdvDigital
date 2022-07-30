@@ -129,7 +129,7 @@
               <a class="nav-link" href="#allTask" data-toggle="tab">
                 <i class="align-middle mdi mdi-calendar-clock mdi-24px fa fa-fw"></i>&nbsp;&nbsp;
                 <span class="align-middle">
-                  Todas as Tarefas Agendadas
+                  Tarefas Agendadas
                 </span>
               </a>
             </li>
@@ -302,21 +302,26 @@
                         </thead>
                         <tbody>
                           <?php
-                          if ($_SESSION['NIVEL'] > 1) {
-                            $sql = "SELECT * FROM tarefas
-                                    INNER JOIN processos
-                                    ON tarefas.idProcesso = processos.idprocesso
-                                    INNER JOIN pessoa
-                                    ON tarefas.idpessoa = pessoa.idPessoa
-                                    WHERE idResponsavel = {$_SESSION['ID']} ORDER BY dtTarefa ASC";
-                          } else {
-                            $sql = "SELECT * FROM tarefas
-                                    INNER JOIN processos
-                                    ON tarefas.idProcesso = processos.idprocesso
-                                    INNER JOIN pessoa
-                                    ON tarefas.idpessoa = pessoa.idPessoa
-                                    ORDER BY dtTarefa ASC";
-                          }
+                         if ($_SESSION['NIVEL'] > 1) {
+                          $sql = "SELECT * FROM tarefas
+                                  INNER JOIN processos
+                                  ON tarefas.idProcesso = processos.idprocesso
+                                  INNER JOIN pessoa
+                                  ON tarefas.idpessoa = pessoa.idPessoa
+                                  WHERE idResponsavel = {$_SESSION['ID']}
+                                  AND finalizada != 1
+                                  AND  dtTarefa > CURDATE()
+                                  ORDER BY dtTarefa ASC";
+                        } else {
+                          $sql = "SELECT * FROM tarefas
+                                  INNER JOIN processos
+                                  ON tarefas.idProcesso = processos.idprocesso
+                                  INNER JOIN pessoa
+                                  ON tarefas.idpessoa = pessoa.idPessoa
+                                  WHERE finalizada != 1
+                                  AND  dtTarefa > CURDATE()
+                                  ORDER BY dtTarefa ASC";
+                        }
                           $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                           $count = 1;
                           foreach ($resultado as $task) {

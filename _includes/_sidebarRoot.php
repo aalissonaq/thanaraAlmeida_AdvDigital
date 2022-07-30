@@ -9,7 +9,7 @@
                     } else {
                       echo "./upload/fotoPessoas/default.png";
                     } ?>" alt="
-                  <?= $_SESSION['FOTO'] ?>" class=" profile-user-img img-fluid img-circle shadow user-image" style="width:3.3rem; height:3.3rem; object-fit: cover;
+                  <?= $_SESSION['FOTO'] ?>" class=" profile-user-img img-circle shadow user-image" style="width:3.3rem; height:3.3rem; object-fit: cover;
                   position: relative;  border: 0px solid transparent; background: linear-gradient(#D6CC6F,70%, #532317); background-clip: padding-box; padding: .21rem;
 
                   " />
