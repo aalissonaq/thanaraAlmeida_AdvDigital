@@ -50,7 +50,14 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
         <ol class="breadcrumb float-sm-right" style="font-family:'Advent Pro', sans-serif; letter-spacing: .06rem;">
           <li class="breadcrumb-item"><a href="inicio.php"><i class="mdi mdi-home-outline fa fa-fw"></i>Inicio</a></li>
           <li class="breadcrumb-item"><a href="?page=listarClientes"><i class="mdi mdi-account-outline fa fa-fw"></i>Cliente</a></li>
-          <li class="breadcrumb-item active"><i class="mdi mdi-file-account-outline fa fa-fw"></i>Financeiro do Cliente
+          <li class="breadcrumb-item"><i class="mdi mdi-file-account-outline fa fa-fw">
+              <a onclick="history.go(-1)" style="cursor:pointer ;">
+            </i>Financeiro do Processo
+            </a>
+          </li>
+          <li class="breadcrumb-item active">
+            <i class="mdi mdi-file-account-outline fa fa-fw"></i>editar Financeiro do
+            Processo
           </li>
         </ol>
       </div>
@@ -356,11 +363,13 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
             <div class="card-header p-2">
 
               <div class="card-tools">
-                <a href="" class="btn btn-tool align-middle mr-3" data-toggle="modal" data-target="#modal-newFinancialReleases" style="font-family:'Advent Pro', sans-serif; font-weight: bold; font-size: 1rem; letter-spacing: 1px;">
-                  <i class="fa fa-plus-square fa-fw fa-lg align-middle"></i>
-                  <!-- <i class="fa fa-user-plus fa-fw fa-lg"></i> -->
-                  Novo Lançamento
-                </a>
+                <!-- <a href="" class="btn btn-tool align-middle mr-3" data-toggle="modal"
+                data-target="#modal-newFinancialReleases"
+                style="font-family:'Advent Pro', sans-serif; font-weight: bold; font-size: 1rem; letter-spacing: 1px;">
+                <i class="fa fa-plus-square fa-fw fa-lg align-middle"></i>
+                <i class="fa fa-user-plus fa-fw fa-lg"></i>
+                Novo Lançamento
+              </a> -->
               </div>
 
               <ul class="nav nav-pills">
@@ -427,16 +436,17 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                           </tr>
                         </thead>
                         <tbody>
+
                           <?php
                           $sql = "SELECT * FROM financial_release as fr
                                   INNER JOIN processos as p ON fr.id_process = p.idprocesso
-                                  WHERE fr.id_process = '{$_GET['process']}'";
+                                  WHERE fr.id_process = '{$_GET['process']}' AND fr.id = '{$_GET['fr']}'";
                           $result = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                           $count = 1;
                           foreach ($result as  $release) {
 
                             $sql = "SELECT SUM(installments_amount) as total FROM financial_release_installments
-                            WHERE id_financial_release = '{$release['id']}' AND is_paid = 0";
+                                          WHERE id_financial_release = '{$release['id']}' AND is_paid = 0";
                             $result = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                             $total = $result[0]['total'];
 
@@ -449,6 +459,17 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                               </td>
                               <td class="col-9 text-left align-middle">
                                 <div class="d-flex flex-column">
+                                  <div class="text-muted text-uppercase">
+                                    <?php
+                                    if ($total < $release['amount']) {
+                                      echo '<div style class="alert alert-danger" role="alert">NÃO É POSSÍVEL EDITAR POIS JÁ EXISTEM PARCELAS PAGAS, DESEJA <a href="#" class="alert-link" style=" font-size:1.2rem;">NEGOCIAR</a> O SALDO DEVEDOR ?
+                                      </div>
+                                      ';
+                                    } else {
+                                      echo 'teste';
+                                    }
+                                    ?>
+                                  </div>
                                   <div class="text-muted text-uppercase">
                                     <strong class="text-primary">
                                       PROCESSO:&nbsp;
@@ -540,6 +561,7 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                   <strong class="text-primary">
                                     SALDO DEVEDOR:&nbsp;
                                   </strong>
+
                                   <?= "R$ " . number_format($total, 2, ',', '.'); ?>
                                 </div>
 
@@ -547,37 +569,28 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
 
 
                               <td class="col-2 text-center ">
-                                <?php
-                                if ($total <= 0) {
-                                  echo '<button type="button" class="btn btn-outline-success">Demostrativo</button>';
-                                } else {
-                                  echo "
-                                  <div class=\"dropdown\">
-                                  <button class=\"btn dropdown-toggle\" type=\"button\" id=\"dropdownMenu2\" data-toggle=\"dropdown\" aria-expanded=\"false\">
-                                    <span class=\"h6\">
-                                      <i class=\"mdi mdi-cog\"></i>
+                                <div class="dropdown">
+                                  <button class="btn dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false">
+                                    <span class="h6">
+                                      <i class="mdi mdi-cog"></i>
                                       AÇÕES
                                     </span>
                                   </button>
-                                  <div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu2\">
-                                    <button class=\"dropdown-item\" type=\"button\">
-                                      <i class=\"mdi mdi-cash-register\" title=\"Pagamento\"></i>
+                                  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                    <button class="dropdown-item" type="button">
+                                      <i class="mdi mdi-cash-register" title="Pagamento"></i>
                                       Pagamento
                                     </button>
-                                    <button class=\"dropdown-item\" type=\"button\">
-                                      <i class=\"mdi mdi-calendar-multiple\" title=\"Parcelamento\"></i>
+                                    <button class="dropdown-item" type="button">
+                                      <i class="mdi mdi-calendar-multiple" title="Parcelamento"></i>
                                       Parcelas
                                     </button>
-                                    <a href=\"?page=financialedt&id={$_GET['id']}&process= {$_GET['process']}&fr={$release['id']}\" class=\"dropdown-item\" type=\"button\">
-                                      <i class=\"mdi mdi-square-edit-outline\" title=\"Documentos\"></i>
+                                    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#modal-edtFinancialReleases" data-whatever="@mdo">
+                                      <i class="mdi mdi-square-edit-outline" title="Documentos"></i>
                                       Editar
-                                    </a>
+                                    </button>
                                   </div>
                                 </div>
-                                  ";
-                                }
-                                ?>
-
                               </td>
                             </tr>
                           <?php

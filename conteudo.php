@@ -103,6 +103,9 @@ if (!isset($_GET['page']) || $_GET['page'] == null) {
     case 'financialReleases':
       include "./pages/pages/financialReleases.php";
       break;
+    case 'financialedt':
+      include "./pages/pages/financial_edt.php";
+      break;
 
 
       #GESTÃO DE CONVÊNIO
