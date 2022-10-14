@@ -474,13 +474,13 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                     <?= "R$ " . number_format($release['amount'], 2, ',', '.'); ?>
                                   </div>
 
-                                  <div class=" d-flex justify-content-between">
+                                  <div class=" d-flex">
                                     <div class="text-muted">
                                       <strong class="text-primary">
                                         VENCIMENTOS:&nbsp;
                                       </strong>
                                       <br />
-                                      <div class="d-flex justify-content-around flex-wrap ">
+                                      <div class="d-flex flex-wrap" style="min-width:50vw;">
                                         <?php
                                         // $sql = "SELECT * FROM financial_release_payments as frp
                                         //         INNER JOIN financial_release as fr ON frp.id_release = fr.id_release
@@ -493,7 +493,7 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                         foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $installment) {
 
                                         ?>
-                                          <a href="<?= $installment['id'] ?>" class="p-1 <?= $result->rowCount() > 1 ? 'col-3' : '' ?>" data-toggle="modal" data-target="#modal-payment" style="font-family:'Advent Pro', sans-serif; font-weight: bold; font-size: 1rem; letter-spacing: 1px;" onclick="setarDadosModalProcesso(<?= $installment['id'] ?>)">
+                                          <a href="<?= $installment['id'] ?>" class="p-1 justify-content-around <?= $result->rowCount() > 1 ? 'col-3' : 'col-3' ?>" data-toggle="modal" data-target="#modal-payment" style="font-family:'Advent Pro', sans-serif; font-weight: bold; font-size: 1rem; letter-spacing: 1px; " onclick="setarDadosModalProcesso(<?= $installment['id'] ?>)">
                                             <div class=" mx-1 bg-primary text-center border " style="border-radius: 4px;">
                                               <span class="text-white">
                                                 <?= $i ?>ª Parcela
@@ -504,13 +504,19 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                                 <?php
                                                 if ($installment['is_paid'] == '0'  && $installment['due_date'] >= date('Y-m-d', time())) {
                                                   $colorStatus = 'warning';
+                                                  $padding = '1rem';
                                                 } elseif ($installment['is_paid'] == '0' && $installment['due_date'] < date('Y-m-d', time())) {
                                                   $colorStatus = 'danger';
+                                                  $padding = '1rem';
+                                                } elseif ($installment['is_paid'] == '3') {
+                                                  $colorStatus = 'info';
+                                                  $padding = '0.5rem';
                                                 } else {
                                                   $colorStatus = 'success';
+                                                  $padding = '0.5rem';
                                                 }
                                                 ?>
-                                                <span class="badge badge-<?= $colorStatus ?>" style='font-size: 12px; font-weight: 400; letter-spacing: 1px; width: 100%;'>
+                                                <span class="badge badge-<?= $colorStatus ?> " style='font-size: 0.9rem; padding:<?= $padding ?>; font-weight: 400; letter-spacing: 0.2em; line-height: 16px; width: 100%;'>
                                                   <?php
                                                   if ($installment['is_paid'] == '0'  && $installment['due_date'] >= date('Y-m-d', time())) {
                                                     echo "Pendente";

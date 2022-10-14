@@ -31,7 +31,7 @@ if (!empty($dados['active']) && $dados['active'] == "negotiateFinancialRelease")
       $saveNegotiateFinancialRelease->bindParam(':number_installments', $number_installments);
 
       if ($saveNegotiateFinancialRelease->execute()) {
-        $id_financial_release = $_GET['fr'];
+        $id_financial_release = $conexao->lastInsertId();
         $installments_amount = $amount / $dados['number_installments'];
         for ($i = 0; $i < $number_installments; $i++) {
           $installments_due_date = date('Y-m-d', strtotime($due_date . "+ $i month"));
@@ -41,7 +41,7 @@ if (!empty($dados['active']) && $dados['active'] == "negotiateFinancialRelease")
 
           $saveFinancialReleaseInstallments = $conexao->prepare($querySaveFinancialReleaseInstallments);
           $saveFinancialReleaseInstallments->bindParam(':id_financial_release', $id_financial_release);
-          $saveFinancialReleaseInstallments->bindParam(':due_date', $installments_due_date);
+          $saveFinancialReleaseInstallments->bindParam(':installments_due_date', $installments_due_date);
           $saveFinancialReleaseInstallments->bindParam(':installments_amount', $installments_amount);
           $saveFinancialReleaseInstallments->bindParam(':competence', $competence);
 
@@ -520,7 +520,6 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                     <?php
                                     if ($total < $release['amount']) {
                                       echo '<div style class="alert alert-danger" role="alert">NÃO É POSSÍVEL EDITAR POIS JÁ EXISTEM PARCELAS PAGAS, DESEJA <a  class="alert-link" data-toggle="modal" data-target="#renegociar" data-whatever="@mdo" style=" font-size:1.2rem;">NEGOCIAR</a> O SALDO DEVEDOR ?
-
                                       </div>
                                       ';
                                     } else {
