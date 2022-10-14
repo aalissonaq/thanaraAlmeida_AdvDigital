@@ -1,4 +1,61 @@
 <?php
+// negotiateFinancialRelease
+$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+if (!empty($dados['active']) && $dados['active'] == "negotiateFinancialRelease") {
+  try {
+    $queryUpdateFinancialReleaseInstallments = "UPDATE financial_release_installments SET is_paid = '3', payday_installments = CURDATE() WHERE id_financial_release ='{$_GET['fr']}' AND is_paid = 0";
+
+    if ($conexao->exec($queryUpdateFinancialReleaseInstallments)) {
+      $typeFull = explode('-', $dados['type']);
+      $type = $typeFull[1] . '-' . $typeFull[2];
+      $id_process = $_GET['process'];
+      $id_financial_category = $typeFull[0];
+      $description = strip_tags(trim($dados['description']));
+      $vl = substr(tiraMascara(strip_tags(trim($dados['amount']))), 0, strlen(tiraMascara(strip_tags(trim($dados['amount'])))) - 2) . '.' . substr(tiraMascara(strip_tags(trim($dados['amount']))), -2);
+      $amount = $vl;
+      // $competence = $_POST['competence'];
+      $due_date = strip_tags(trim($dados['due_date']));
+      $installments = $dados['number_installments'] > 1 ? 1 : 0;
+      $number_installments = $dados['number_installments'];
+
+      $querySaveNegotiateFinancialRelease = "INSERT INTO financial_release (type, id_process, id_financial_category, description, amount, due_date, installments, number_installments) VALUES (:type, :id_process,:id_financial_category, :description, :amount, :due_date, :installments, :number_installments)";
+
+      $saveNegotiateFinancialRelease = $conexao->prepare($querySaveNegotiateFinancialRelease);
+      $saveNegotiateFinancialRelease->bindParam(':type', $type);
+      $saveNegotiateFinancialRelease->bindParam(':id_process', $id_process);
+      $saveNegotiateFinancialRelease->bindParam(':id_financial_category', $id_financial_category);
+      $saveNegotiateFinancialRelease->bindParam(':description', $description);
+      $saveNegotiateFinancialRelease->bindParam(':amount', $amount);
+      $saveNegotiateFinancialRelease->bindParam(':due_date', $due_date);
+      $saveNegotiateFinancialRelease->bindParam(':installments', $installments);
+      $saveNegotiateFinancialRelease->bindParam(':number_installments', $number_installments);
+
+      if ($saveNegotiateFinancialRelease->execute()) {
+        $id_financial_release = $_GET['fr'];
+        $installments_amount = $amount / $dados['number_installments'];
+        for ($i = 0; $i < $number_installments; $i++) {
+          $installments_due_date = date('Y-m-d', strtotime($due_date . "+ $i month"));
+          $competence = date('m/Y', strtotime($installments_due_date));
+
+          $querySaveFinancialReleaseInstallments = "INSERT INTO financial_release_installments (id_financial_release, due_date, installments_amount, competence) VALUES (:id_financial_release, :installments_due_date, :installments_amount, :competence)";
+
+          $saveFinancialReleaseInstallments = $conexao->prepare($querySaveFinancialReleaseInstallments);
+          $saveFinancialReleaseInstallments->bindParam(':id_financial_release', $id_financial_release);
+          $saveFinancialReleaseInstallments->bindParam(':due_date', $installments_due_date);
+          $saveFinancialReleaseInstallments->bindParam(':installments_amount', $installments_amount);
+          $saveFinancialReleaseInstallments->bindParam(':competence', $competence);
+
+          $saveFinancialReleaseInstallments->execute();
+        }
+        sweetalert('Sucesso', 'Lançamento gravado com suscesso', 'success', 2000);
+      }
+    }
+  } catch (PDOException $erro) {
+    echo $erro;
+  }
+}
+
+
 if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
 
   $typeFull = explode('-', $_POST['type']);
@@ -462,7 +519,8 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                   <div class="text-muted text-uppercase">
                                     <?php
                                     if ($total < $release['amount']) {
-                                      echo '<div style class="alert alert-danger" role="alert">NÃO É POSSÍVEL EDITAR POIS JÁ EXISTEM PARCELAS PAGAS, DESEJA <a href="#" class="alert-link" style=" font-size:1.2rem;">NEGOCIAR</a> O SALDO DEVEDOR ?
+                                      echo '<div style class="alert alert-danger" role="alert">NÃO É POSSÍVEL EDITAR POIS JÁ EXISTEM PARCELAS PAGAS, DESEJA <a  class="alert-link" data-toggle="modal" data-target="#renegociar" data-whatever="@mdo" style=" font-size:1.2rem;">NEGOCIAR</a> O SALDO DEVEDOR ?
+
                                       </div>
                                       ';
                                     } else {
@@ -537,6 +595,9 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                                     echo "Pendente";
                                                   } elseif ($installment['is_paid'] == '0' && $installment['due_date'] < date('Y-m-d', time())) {
                                                     echo "Atrasado";
+                                                  } elseif ($installment['is_paid'] == '3') {
+                                                    echo "Renegociado em <br/>";
+                                                    echo date('d/m/Y', strtotime($installment['payday_installments']));
                                                   } else {
                                                     echo "Pago em <br/>";
                                                     echo date('d/m/Y', strtotime($installment['payday_installments']));
@@ -837,20 +898,14 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
   <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
-<!-- modal EDITAR LANÇAMETO -->
-<div class="modal fade" id="modal-edtFinancialReleases">
+<!-- modal RENEGOCIAR LANÇAMETO -->
+<div class="modal fade" id="renegociar">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="modal-edtFinancialReleases" style="font-family: 'Advent Pro', sans-serif; font-weight: 500; letter-spacing: 1px;">
-          <span class="text-orange">Editar Lançamento no Proceso:</span>
-          <?php
-          $sql = "SELECT * FROM processos WHERE idprocesso = {$_GET['process']}";
-          $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-          foreach ($resultado as $value) {
-            echo '#' . $value['niprocesso'] . '<br/> <span class="text-uppercase">' . strtoupper($value['objprocesso']) . '</span>';
-          }
-          ?>
+          <span class="text-orange">NEGOCIAR SALDO DEVEDOR:</span>
+          <?= '#' . $release['niprocesso'] . " <br/>" . strtoupper($release['objprocesso']); ?>
         </h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -858,13 +913,8 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
       </div>
       <div class="modal-body">
         <!-- form novo Usuário -->
-
         <form class="needs-validation" novalidate action="" method="POST" enctype="multipart/form-data">
           <div class="form-row">
-            <div class="form-group">
-              <label for="recipient-name" class="col-form-label">Recipient:</label>
-              <input type="text" class="form-control" id="recipient-name">
-            </div>
             <div class="col-md-3 mb-3">
               <label for="nmPessoa">Tipo de Lançamento
                 <span class="text-orange">*</span>
@@ -875,8 +925,12 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                 $sql = "SELECT * FROM financial_categories ORDER BY financial_categories.type DESC";
                 $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                 foreach ($resultado as $value) {
+                  $selected = '';
+                  if ($release['id_financial_category'] ==  $value['id']) {
+                    $selected = 'selected';
+                  }
                 ?>
-                  <option value="<?= $value['id'] ?>-<?= $value['type'] ?>-<?= $value['category'] ?>">
+                  <option value="<?= $value['id'] ?>-<?= $value['type'] ?>-<?= $value['category'] ?>" <?= $selected; ?>>
                     <?= $value['type'] ?> - <?= $value['category'] ?></option>
                 <?php } ?>
               </select>
@@ -888,7 +942,7 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
               <label for="docPessoa">Descrição do Lançamento
                 <span class="text-orange">*</span>
               </label>
-              <input type="text" name="description" class="form-control text-uppercase" id="description" placeholder="Descrição do Lançamento" required />
+              <input type="text" name="description" class="form-control text-uppercase" id="description" placeholder="Descrição do Lançamento" required value="<?= $release['description'] ?>" />
               <div class="invalid-feedback">
                 Obrigatório !
               </div>
@@ -896,10 +950,10 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
           </div>
           <div class="form-row">
             <div class="col-md-4 mb-3">
-              <label for="dtNascPessoa">Valor Total do Lançamento
+              <label for="dtNascPessoa">Valor a ser negociado (R$)
                 <span class="text-orange">*</span>
               </label>
-              <input type="text" name="amount" class="form-control text-uppercase js_dinheiro" id="amount" maxlength="12" placeholder="R$ 0.000,00" required />
+              <input type="text" name="amount" class="form-control text-uppercase js_dinheiro" id="amount" maxlength="12" placeholder="R$ 0.000,00" required value="<?= $total ?>" />
               <div class="invalid-feedback">
                 Obrigatório !
               </div>
@@ -924,13 +978,13 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                 Obrigatório !
               </div>
             </div>
-
           </div>
 
       </div>
       <div class="modal-footer justify-content-between">
-        <input type="hidden" name="active" value="createFinancialRelease">
-        <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-times fa-fw fa-lg"></i>
+        <input type="hidden" name="active" value="negotiateFinancialRelease">
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">
+          <i class="fas fa-times fa-fw fa-lg"></i>
           Fechar </button>
         <button class="btn btn-lg btn-success" type="submit">
           <i class="far fa-save fa-fw fa-lg"></i>
@@ -1055,13 +1109,13 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
       limpa_formulário_cep();
     }
   }
-
-  $('#modal-edtFinancialReleases').on('show.bs.modal', function(event) {
+</script>
+<script>
+  $('#exampleModal').on('show.bs.modal', function(event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
     var recipient = button.data('whatever') // Extract info from data-* attributes
     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-    alert(recipient)
     var modal = $(this)
     modal.find('.modal-title').text('New message to ' + recipient)
     modal.find('.modal-body input').val(recipient)

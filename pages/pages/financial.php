@@ -516,6 +516,9 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                                     echo "Pendente";
                                                   } elseif ($installment['is_paid'] == '0' && $installment['due_date'] < date('Y-m-d', time())) {
                                                     echo "Atrasado";
+                                                  } elseif ($installment['is_paid'] == '3') {
+                                                    echo "Renegociado em <br/>";
+                                                    echo date('d/m/Y', strtotime($installment['payday_installments']));
                                                   } else {
                                                     echo "Pago em <br/>";
                                                     echo date('d/m/Y', strtotime($installment['payday_installments']));
@@ -568,7 +571,7 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                       <i class=\"mdi mdi-calendar-multiple\" title=\"Parcelamento\"></i>
                                       Parcelas
                                     </button>
-                                    <a href=\"?page=financialedt&id={$_GET['id']}&process= {$_GET['process']}&fr={$release['id']}\" class=\"dropdown-item\" type=\"button\">
+                                    <a href=\"?page=financialedt&id={$_GET['id']}&process={$_GET['process']}&fr={$release['id']}\" class=\"dropdown-item\" type=\"button\">
                                       <i class=\"mdi mdi-square-edit-outline\" title=\"Documentos\"></i>
                                       Editar
                                     </a>
