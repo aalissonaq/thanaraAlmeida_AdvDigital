@@ -47,12 +47,70 @@ if (!empty($dados['active']) && $dados['active'] == "negotiateFinancialRelease")
 
           $saveFinancialReleaseInstallments->execute();
         }
-        sweetalert('Sucesso', 'Lançamento gravado com suscesso', 'success', 2000);
+        echo "<script type='text/javascript'>
+          alert('O lançamento foi renegociado com Sucesso !');
+          history.go(-1);
+        </script>";
       }
     }
   } catch (PDOException $erro) {
     echo $erro;
   }
+} elseif (!empty($dados['active']) && $dados['active'] == "edtFinancialRelease") {
+  $queryDeleteFinancialReleaseInstallments = "DELETE FROM financial_release_installments WHERE id_financial_release ='{$_GET['fr']}'";
+
+  if ($conexao->exec($queryDeleteFinancialReleaseInstallments)) {
+    $typeFull = explode('-', $dados['type']);
+    $type = $typeFull[1] . '-' . $typeFull[2];
+    $id_process = $_GET['process'];
+    $id_financial_category = $typeFull[0];
+    $description = strip_tags(trim($dados['description']));
+    $vl = substr(tiraMascara(strip_tags(trim($dados['amount']))), 0, strlen(tiraMascara(strip_tags(trim($dados['amount'])))) - 2) . '.' . substr(tiraMascara(strip_tags(trim($dados['amount']))), -2);
+    $amount = $vl;
+    // $competence = $_POST['competence'];
+    $due_date = strip_tags(trim($dados['due_date']));
+    $installments = $dados['number_installments'] > 1 ? 1 : 0;
+    $number_installments = $dados['number_installments'];
+
+    $queryUpdateFinancialReleaseInstallments = "UPDATE financial_release_installments SET is_paid = '3', payday_installments = CURDATE() WHERE id_financial_release ='{$_GET['fr']}' AND is_paid = 0";
+
+    $querySaveUpdateFinancialRelease = "UPDATE financial_release SET type = :type, id_process = :id_process, id_financial_category = :id_financial_category, description = :description, amount = :amount, due_date = :due_date, installments = :installments, number_installments = :number_installments  WHERE id ='{$_GET['fr']}'";
+
+    $saveUpdateFinancialRelease = $conexao->prepare($querySaveUpdateFinancialRelease);
+    $saveUpdateFinancialRelease->bindParam(':type', $type);
+    $saveUpdateFinancialRelease->bindParam(':id_process', $id_process);
+    $saveUpdateFinancialRelease->bindParam(':id_financial_category', $id_financial_category);
+    $saveUpdateFinancialRelease->bindParam(':description', $description);
+    $saveUpdateFinancialRelease->bindParam(':amount', $amount);
+    $saveUpdateFinancialRelease->bindParam(':due_date', $due_date);
+    $saveUpdateFinancialRelease->bindParam(':installments', $installments);
+    $saveUpdateFinancialRelease->bindParam(':number_installments', $number_installments);
+
+    if ($saveUpdateFinancialRelease->execute()) {
+      $id_financial_release = $_GET['fr'];
+      $installments_amount = $amount / $dados['number_installments'];
+      for ($i = 0; $i < $number_installments; $i++) {
+        $installments_due_date = date('Y-m-d', strtotime($due_date . "+ $i month"));
+        $competence = date('m/Y', strtotime($installments_due_date));
+
+        $querySaveFinancialReleaseInstallments = "INSERT INTO financial_release_installments (id_financial_release, due_date, installments_amount, competence) VALUES (:id_financial_release, :installments_due_date, :installments_amount, :competence)";
+
+        $saveFinancialReleaseInstallments = $conexao->prepare($querySaveFinancialReleaseInstallments);
+        $saveFinancialReleaseInstallments->bindParam(':id_financial_release', $id_financial_release);
+        $saveFinancialReleaseInstallments->bindParam(':installments_due_date', $installments_due_date);
+        $saveFinancialReleaseInstallments->bindParam(':installments_amount', $installments_amount);
+        $saveFinancialReleaseInstallments->bindParam(':competence', $competence);
+
+        $saveFinancialReleaseInstallments->execute();
+      }
+      echo "<script type='text/javascript'>
+      alert('O lançamento foi Editado com Sucesso !');
+      history.go(-1);
+    </script>";
+    }
+  }
+  // echo "<script type='text/javascript'> alert('O lançamento foi EDITADO com Sucesso !');history.go(-1);</script>";
+  // header("Location: $_SERVER[].?page=financial&id={$_GET['id']}&process={$_GET['process']}");
 }
 
 
@@ -485,15 +543,10 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                       <table id="tabela" class="table table-sm table-striped table-hover">
                         <thead class="" style="font-weight: 300; font-family: 'Advent Pro', sans-serif;">
                           <tr>
-                            <th class="col-1 text-center align-middle">#</th>
                             <th class="col-9 text-center align-middle">Lançamento</th>
-                            <th class="col-auto text-center align-middle">
-                              <i class="fab fa-lg fa-fw fa-whmcs" title="Ações"></i>
-                            </th>
                           </tr>
                         </thead>
                         <tbody>
-
                           <?php
                           $sql = "SELECT * FROM financial_release as fr
                                   INNER JOIN processos as p ON fr.id_process = p.idprocesso
@@ -506,26 +559,30 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                           WHERE id_financial_release = '{$release['id']}' AND is_paid = 0";
                             $result = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                             $total = $result[0]['total'];
-
                           ?>
-
                             <tr class="">
-                              <td class="col-1 text-center align-middle">
-                                <?= str_pad($count, 3, "0", STR_PAD_LEFT);
-                                $count++ ?>
-                              </td>
                               <td class="col-9 text-left align-middle">
                                 <div class="d-flex flex-column">
-                                  <div class="text-muted text-uppercase">
+                                  <div class="text-muted text-uppercase  ">
                                     <?php
                                     if ($total < $release['amount']) {
-                                      echo '<div style class="alert alert-danger" role="alert">NÃO É POSSÍVEL EDITAR POIS JÁ EXISTEM PARCELAS PAGAS, DESEJA <a  class="alert-link" data-toggle="modal" data-target="#renegociar" data-whatever="@mdo" style=" font-size:1.2rem;">NEGOCIAR</a> O SALDO DEVEDOR ?
+                                      echo '<div style class="alert alert-light " role="alert">
+                                      NÃO É POSSÍVEL EDITAR POIS JÁ EXISTEM PARCELAS PAGAS, DESEJA
+                                      <button type="button" class="btn btn-warning mx-2" data-toggle="modal" data-target="#edtFinancialRelease" > <b>NEGOCIAR</b> </button>
+                                      O SALDO DEVEDOR ?
+                                      <button type="button" onclick="history.go(-1)" class="btn btn-outline-danger" style="margin-left: 20vw;"> <i class="mdi mdi-arrow-left-thick"></i> Voltar</button>
                                       </div>
                                       ';
                                     } else {
-                                      echo 'teste';
+                                      echo '<div style class="alert alert-light" role="alert">NÃO EXISTEM PARCELAS PAGAS, DESEJA
+                                      <button type="button" class="btn btn-warning mx-2" data-toggle="modal" data-target="#edtFinancialRelease" style="margin-ri:"> <b>EDITAR</b> </button>
+                                      O LANÇAMENTO FINANCEIRO ?
+                                      <button type="button" onclick="history.go(-1)" class="btn btn-outline-danger" style="margin-left: 28vw;"> <i class="mdi mdi-arrow-left-thick"></i> Voltar</button>
+                                      </div>';
                                     }
                                     ?>
+
+
                                   </div>
                                   <div class="text-muted text-uppercase">
                                     <strong class="text-primary">
@@ -558,7 +615,7 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                         VENCIMENTOS:&nbsp;
                                       </strong>
                                       <br />
-                                      <div class="d-flex justify-content-around flex-wrap ">
+                                      <div class="d-flex flex-wrap" style="min-width:50vw;">
                                         <?php
                                         // $sql = "SELECT * FROM financial_release_payments as frp
                                         //         INNER JOIN financial_release as fr ON frp.id_release = fr.id_release
@@ -567,11 +624,9 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                                 WHERE id_financial_release = '{$release['id']}'";
                                         $result = $conexao->query($sql);
                                         $i = 1;
-
                                         foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $installment) {
-
                                         ?>
-                                          <a href="<?= $installment['id'] ?>" class="p-1 <?= $result->rowCount() > 1 ? 'col-3' : '' ?>" data-toggle="modal" data-target="#modal-payment" style="font-family:'Advent Pro', sans-serif; font-weight: bold; font-size: 1rem; letter-spacing: 1px;" onclick="setarDadosModalProcesso(<?= $installment['id'] ?>)">
+                                          <a href="<?= $installment['id'] ?>" class="p-1 justify-content-around <?= $result->rowCount() > 1 ? 'col-3' : 'col-3' ?>" data-toggle="modal" data-target="#modal-payment" style="font-family:'Advent Pro', sans-serif; font-weight: bold; font-size: 1rem; letter-spacing: 1px; " onclick="setarDadosModalProcesso(<?= $installment['id'] ?>)">
                                             <div class=" mx-1 bg-primary text-center border " style="border-radius: 4px;">
                                               <span class="text-white">
                                                 <?= $i ?>ª Parcela
@@ -582,13 +637,19 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                                 <?php
                                                 if ($installment['is_paid'] == '0'  && $installment['due_date'] >= date('Y-m-d', time())) {
                                                   $colorStatus = 'warning';
+                                                  $padding = '1rem';
                                                 } elseif ($installment['is_paid'] == '0' && $installment['due_date'] < date('Y-m-d', time())) {
                                                   $colorStatus = 'danger';
+                                                  $padding = '1rem';
+                                                } elseif ($installment['is_paid'] == '3') {
+                                                  $colorStatus = 'info';
+                                                  $padding = '0.5rem';
                                                 } else {
                                                   $colorStatus = 'success';
+                                                  $padding = '0.5rem';
                                                 }
                                                 ?>
-                                                <span class="badge badge-<?= $colorStatus ?>" style='font-size: 12px; font-weight: 400; letter-spacing: 1px; width: 100%;'>
+                                                <span class="badge badge-<?= $colorStatus ?> " style='font-size: 0.9rem; padding:<?= $padding ?>; font-weight: 400; letter-spacing: 0.2em; line-height: 16px; width: 100%;'>
                                                   <?php
                                                   if ($installment['is_paid'] == '0'  && $installment['due_date'] >= date('Y-m-d', time())) {
                                                     echo "Pendente";
@@ -603,7 +664,6 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                                   }
                                                   ?>
                                                   <? $installment['is_paid'] == '0' ? 'Pendente' : 'Pago' ?>
-
                                                 </span>
                                               </div>
                                             </div>
@@ -623,33 +683,6 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                   </strong>
 
                                   <?= "R$ " . number_format($total, 2, ',', '.'); ?>
-                                </div>
-
-                              </td>
-
-
-                              <td class="col-2 text-center ">
-                                <div class="dropdown">
-                                  <button class="btn dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false">
-                                    <span class="h6">
-                                      <i class="mdi mdi-cog"></i>
-                                      AÇÕES
-                                    </span>
-                                  </button>
-                                  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                    <button class="dropdown-item" type="button">
-                                      <i class="mdi mdi-cash-register" title="Pagamento"></i>
-                                      Pagamento
-                                    </button>
-                                    <button class="dropdown-item" type="button">
-                                      <i class="mdi mdi-calendar-multiple" title="Parcelamento"></i>
-                                      Parcelas
-                                    </button>
-                                    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#modal-edtFinancialReleases" data-whatever="@mdo">
-                                      <i class="mdi mdi-square-edit-outline" title="Documentos"></i>
-                                      Editar
-                                    </button>
-                                  </div>
                                 </div>
                               </td>
                             </tr>
@@ -982,6 +1015,107 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
       </div>
       <div class="modal-footer justify-content-between">
         <input type="hidden" name="active" value="negotiateFinancialRelease">
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">
+          <i class="fas fa-times fa-fw fa-lg"></i>
+          Fechar </button>
+        <button class="btn btn-lg btn-success" type="submit">
+          <i class="far fa-save fa-fw fa-lg"></i>
+          Gravar Dados</button>
+        </form>
+        <!--/form novo Usuario -->
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!-- modal editar LANÇAMETO -->
+<div class="modal fade" id="edtFinancialRelease">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-edtFinancialReleases" style="font-family: 'Advent Pro', sans-serif; font-weight: 500; letter-spacing: 1px;">
+          <span class="text-orange">EDITAR LANÇAMENTO:</span>
+          <?= '#' . $release['niprocesso'] . " <br/>" . strtoupper($release['objprocesso']); ?>
+        </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- form novo Usuário -->
+        <form class="needs-validation" novalidate action="" method="POST" enctype="multipart/form-data">
+          <div class="form-row">
+            <div class="col-md-3 mb-3">
+              <label for="nmPessoa">Tipo de Lançamento
+                <span class="text-orange">*</span>
+              </label>
+              <select class="form-control" id="type" name="type" required>
+                <option value="" selected disabled>Selecione...</option>
+                <?php
+                $sql = "SELECT * FROM financial_categories ORDER BY financial_categories.type DESC";
+                $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($resultado as $value) {
+                  $selected = '';
+                  if ($release['id_financial_category'] ==  $value['id']) {
+                    $selected = 'selected';
+                  }
+                ?>
+                  <option value="<?= $value['id'] ?>-<?= $value['type'] ?>-<?= $value['category'] ?>" <?= $selected; ?>>
+                    <?= $value['type'] ?> - <?= $value['category'] ?></option>
+                <?php } ?>
+              </select>
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+            <div class="col-md-9 mb-3">
+              <label for="docPessoa">Descrição do Lançamento
+                <span class="text-orange">*</span>
+              </label>
+              <input type="text" name="description" class="form-control text-uppercase" id="description" placeholder="Descrição do Lançamento" required value="<?= $release['description'] ?>" />
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col-md-4 mb-3">
+              <label for="dtNascPessoa">Valor a ser negociado (R$)
+                <span class="text-orange">*</span>
+              </label>
+              <input type="text" name="amount" class="form-control text-uppercase js_dinheiro" id="amount" maxlength="12" placeholder="R$ 0.000,00" required value="<?= $total ?>" />
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <label for="due_date">Data do 1º Vencimento
+                <span class="text-orange">*</span>
+              </label>
+              <input type="date" name="due_date" class="form-control text-uppercase" id="due_date" placeholder="" required />
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="number_installments">Quantidade de Pascelas
+                <span class="text-orange">*</span>
+              </label>
+              <input type="number" name="number_installments" class="form-control text-uppercase" id="number_installments" placeholder="" required />
+
+              <div class="invalid-feedback">
+                Obrigatório !
+              </div>
+            </div>
+          </div>
+
+      </div>
+      <div class="modal-footer justify-content-between">
+        <input type="hidden" name="active" value="edtFinancialRelease">
         <button type="button" class="btn btn-outline-danger" data-dismiss="modal">
           <i class="fas fa-times fa-fw fa-lg"></i>
           Fechar </button>
