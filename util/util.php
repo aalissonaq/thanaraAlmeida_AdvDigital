@@ -1,22 +1,20 @@
 <?php
 
-function sweetalert($title, $message, $type, $time, $position=null,$question=null)
+function sweetalert($title, $message, $type, $time = null, $position = null)
 {
   $position = $position ? $position : 'center';
+  $time = $time ? $time : '3000';
   echo "<script type='text/javascript'>
   Swal.fire({
     icon: '$type',
     title: '$title',
     text: '$message',
-    showConfirmButton: true,
+    showConfirmButton: false,
     timer: $time,
     position: '$position',
-    question: '$question',
   });
   </script>";
 }
-
-
 
 function GetDirectorySize($path)
 {
@@ -81,4 +79,36 @@ function GetDirectoryPercentageUsed($path, $storage, $unit = null)
 
   $percentage = ($bytestotal  * 100) / $storage;
   return number_format($percentage, 2, '.', '');
+}
+
+function uuidv4($data = null)
+{
+  // Generate 16 bytes (128 bits) of random data or use the data passed into the function.
+  $data = $data ?? random_bytes(16);
+  assert(strlen($data) == 16);
+
+  // Set version to 0100
+  $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
+  // Set bits 6-7 to 10
+  $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
+
+  // Output the 36 character UUID.
+  return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+}
+function dataExtenso($prefix = '', $diaS = false,  $time = 'now')
+{
+  $hoje = strtotime($time);
+  $i = getdate($hoje); // Consegue informações data/hora
+  $data = $i['mday']; //Representação numérica do dia do mês (1 a 31)
+  $dia = $i['wday']; // representação numérica do dia da semana com 0 (para Domingo) a 6 (para Sabado)
+  $mes = $i['mon'] - 1; // Representação numérica de um mês (1 a 12)
+  $ano = $i['year']; // Ano com 4 digitos, lógico, né?
+  $data = str_pad($data, 2, "0", STR_PAD_LEFT); // só para colocar um zerinho à esquerda caso seja de 1 à 9, sacou?
+  $nomedia = array("Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado");
+  $nomemes = array("Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro");
+  if ($diaS) {
+    return "$prefix{$nomedia[$dia]}, $data de {$nomemes[$mes]} de $ano";
+  } else {
+    return "$prefix $data de {$nomemes[$mes]} de $ano";
+  }
 }

@@ -2,11 +2,17 @@
 date_default_timezone_set('America/Fortaleza');
 // require dirname(__DIR__, 1) . '/vendor/autoload.php';
 
-// require '../date/connection.php';
-// require '../util/util.php';
-// require '../date/outfunc.php';
+require '../data/conexao.php';
+require '../data/outfunc.php';
+require '../util/util.php';
 
-// $connection = novaConexao();
+$conexao = novaConexao();
+
+$sql = "SELECT * FROM processos as p
+INNER JOIN pessoa as c ON p.idcliente = c.idPessoa
+WHERE p.idprocesso = {$_GET['process']}";
+$result = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+$dprocesso = $result[0];
 
 
 
@@ -45,10 +51,7 @@ $refer = $result[0];
 
   <style>
     @page {
-      padding: 0px 0px;
-      padding-top: 400px;
-      padding-bottom: 30px;
-      /* margin: 0px 0px; */
+      margin: 130px 0px;
     }
 
     #header {
@@ -57,63 +60,58 @@ $refer = $result[0];
       top: -130px;
       right: 0px;
       height: 275px;
-      background: transparent;
-      /* background-image: url('<?= dirname(__DIR__, 1) ?>/pdfs/bg_pt.png');
+      background-image: url('<?= dirname(__DIR__, 1) ?>/pdfs/top2.png');
       background-repeat: no-repeat;
-      background-size: cover; */
+      background-size: 200pt 100pt;
+      background-position: center center;
       z-index: -1;
     }
-
 
     #footer {
       position: fixed;
       left: 0px;
-      bottom: -150px;
+      bottom: -110px;
       right: 0px;
-      height: 310px;
-      /* opacity: 0.6;
-      background-image: url('<?= dirname(__DIR__, 1) ?>/pdfs/bg_pt1.png');
+      height: 50px;
+      opacity: 0.6;
+      background-image: url('<?= dirname(__DIR__, 1) ?>/pdfs/base2.png');
       background-repeat: no-repeat;
-      background-size: cover;
-      background-position: bottom center; */
+      background-size: 500pt 17pt;
+      background-position: bottom center;
       z-index: -1;
     }
 
-
     #footer .page:after {
       content: counter(page, georgian);
+      margin-left: 30pt;
     }
 
     #content {
       position: relative;
-      left: 18%;
-      width: 85%;
-      box-sizing: border-box;
+      top: 83px;
+      left: 12%;
+      width: 78%;
     }
 
-    #conteudo {
-      position: relative;
-      top: 160;
-      width: 90%;
-      box-sizing: border-box;
+    /* --- dados dp processo --- */
+    #containerProcesso {
+      background-color: #f6f6f6;
 
-      border: #212761 1px solid;
+
     }
 
-
+    /* ------ */
 
     .title {
       font-size: 25px;
-      color: darkorange;
-      margin-top: 4rem;
-      text-align: right;
+      color: #59372c;
+      margin-top: 1rem;
+      text-align: center;
     }
 
     .title_p1 {
       font-size: 15px;
-      color: #212761;
-      margin-top: 4rem;
-      text-align: right;
+      color: #212761 text-align: center;
     }
 
     .dtCapa {
@@ -130,85 +128,172 @@ $refer = $result[0];
     }
   </style>
 
-<body style="background-image: url(<?= dirname(__DIR__, 1) ?>/pdfs/bg_pt.png); background-repeat: no-repeat; background-size:565pt 842pt;">
+<body style="background-image: url(<?= dirname(__DIR__, 1) ?>/pdfs/bg2.png); background-repeat: no-repeat; background-size:400pt 180pt; background-position: center center;">
   <div id="header">
+
   </div>
   <div id="footer">
     <p class="page">
     </p>
   </div>
-
   <div id="content">
-    <div id="conteudo">
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
 
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro aperiam quisquam, molestias assumenda sapiente laudantium architecto maxime tempore repellat reprehenderit? Voluptate ab voluptatem, dolores quas inventore qui sequi laudantium voluptas.
-      </p>
+    <!-- <p style="page-break-before: always;"></p> -->
 
+    <h2 class="title" style="text-transform: uppercase; text-align: center;">
+      <i class="mdi mdi-scale-balance mdi-24px fa fa-fw mr-1"></i>
+      demostrativo Financeiro
+    </h2>
+
+    <div class="containerProcesso">
+
+      <div class="">
+        <h3 class="" style="text-transform: uppercase;">
+          <i class="mdi mdi-scale-balance mdi-24px fa fa-fw mr-1"></i>
+          <?= $dprocesso['niprocesso'] . ' - ' . $dprocesso['objprocesso'] ?>
+          </h1>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <div class="d-flex">
+          <div class="mr-5 d-flex flex-column">
+            <span class="text-primary">
+              <i class="mdi mdi-pound mdi-18px fa fa-fw mr-1"></i>
+              Nº do Porcesso:
+            </span>
+            <span class="text-muted ml-4">
+              <?= MascaraCNJ(str_pad($dprocesso['numprocesso'], 20, "0", STR_PAD_LEFT)); ?>
+            </span>
+          </div>
+          <div class="mr-5 d-flex flex-column">
+            <span class="text-primary">
+              <i class="mdi mdi-state-machine mdi-18px fa fa-fw mr-1"></i>
+              Status do Porcesso:
+            </span>
+            <span class="text-muted text-uppercase ml-4">
+              <?= $dprocesso['statusprocesso'] != 'concluido' ? 'ATIVO' : 'INATIVO';  ?>
+            </span>
+          </div>
+
+          <div class="mr-5 d-flex flex-column">
+            <span class="text-primary">
+              <i class="mdi mdi-list-status mdi-18px fa fa-fw mr-1"></i>
+              Etapa do Processo:
+            </span>
+            <span class="text-muted text-uppercase ml-4">
+              <?php
+              switch ($dprocesso['statusprocesso']) {
+                case 'aguardando':
+                  echo 'Aguardando Documento';
+                  break;
+                case 'pericia':
+                  echo 'Perícia ou Agendamento';
+                  break;
+                case 'prorrogacao':
+                  echo 'Prorrogação';
+                  break;
+                case 'exigencia':
+                  echo 'Exigência';
+                  break;
+                case 'aguardandoINSS':
+                  echo 'Aguardando Resposta do INSS';
+                  break;
+                case 'justFederal':
+                  echo 'Justiça Federal';
+                  break;
+                case 'concluido':
+                  echo 'Concluído';
+                  break;
+                case 'analise':
+                  echo 'Análise';
+                  break;
+                case 'justComum':
+                  echo 'Justiça Comum';
+                  break;
+                case 'concluso':
+                  echo 'Concluso';
+                  break;
+
+                default:
+                  echo 'Aguardando Documento';
+                  break;
+              };
+              ?>
+            </span>
+          </div>
+        </div>
+        <br />
+        <div class="">
+          <div class="d-flex flex-column">
+            <span class="text-primary">
+              <i class="mdi mdi-file mdi-18px fa fa-fw mr-1"></i>
+              Descrição do Processo:
+            </span>
+            <span class="text-muted text-uppercase text-justify ml-4">
+              <?= $dprocesso['descricaoprocesso']; ?>
+            </span>
+          </div>
+        </div>
+        <br />
+        <div class="d-flex ">
+          <div class="d-flex flex-column mr-5">
+            <span class="text-primary">
+              <i class="mdi mdi-account mdi-18px fa fa-fw mr-1"></i>
+              Cliente:
+            </span>
+            <span class="" style="text-transform: uppercase;">
+              <?= $dprocesso['nmPessoa']; ?>
+            </span>
+          </div>
+
+          <div class="d-flex flex-column">
+            <span class="text-primary">
+              <i class="mdi mdi-account mdi-18px fa fa-fw mr-1"></i>
+              Contra Parte no Proceso:
+            </span>
+            <span class="text-muted text-uppercase ml-4">
+              <?= $dprocesso['contraparte']; ?>
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- /.card-body -->
+      <!--  <div class="card-footer">
+  The footer of the card
+</div> -->
+      <!-- /.card-footer -->
     </div>
+    <hr />
+
+    <table id="table_material" border="0" style=" width: 100%; border-style: solid; border-collapse:collapse; text-align: center;">
+      <thead style="color:#59372c; background-color:orange; border-bottom-color: indigo;">
+        <tr>
+          <th>#</th>
+          <th>data vencimnto</th>
+          <th>valor</th>
+          <th>status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+        for ($i = 1; $i < 50; $i++) {
+        ?>
+          <tr>
+            <td><?= $i ?></td>
+            <td>00/00/0000</td>
+            <td>R$ 000,00</td>
+            <td>pendente</td>
+          </tr>
+        <?php } ?>
+
+      </tbody>
+    </table>
+
 
 
   </div>
+
+
 </body>
 
 </html>
