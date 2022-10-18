@@ -568,7 +568,7 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                     if ($total < $release['amount']) {
                                       echo '<div style class="alert alert-light " role="alert">
                                       NÃO É POSSÍVEL EDITAR POIS JÁ EXISTEM PARCELAS PAGAS, DESEJA
-                                      <button type="button" class="btn btn-warning mx-2" data-toggle="modal" data-target="#edtFinancialRelease" > <b>NEGOCIAR</b> </button>
+                                      <button type="button" class="btn btn-warning mx-2" data-toggle="modal" data-target="#renegociar" > <b>NEGOCIAR</b> </button>
                                       O SALDO DEVEDOR ?
                                       <button type="button" onclick="history.go(-1)" class="btn btn-outline-danger" style="margin-left: 20vw;"> <i class="mdi mdi-arrow-left-thick"></i> Voltar</button>
                                       </div>
@@ -581,8 +581,6 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                       </div>';
                                     }
                                     ?>
-
-
                                   </div>
                                   <div class="text-muted text-uppercase">
                                     <strong class="text-primary">
