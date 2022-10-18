@@ -557,9 +557,10 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
 
                               <td class="col-2 text-center ">
                                 <?php
-                                if ($total <= 0) {
-                                  echo '<button type="button" class="btn btn-outline-success">Demostrativo</button>';
-                                } else {
+                                if ($total <= 0) { ?>
+                                  <a href="/pdfs/viewRelatorio.php?process=<?= $_GET['process'] ?>&fr=<?= $release['id'] ?>" class="btn btn-outline-success" target="_new">Demostrativo</a>
+
+                                <?php } else {
                                   echo "
                                   <div class=\"dropdown\">
                                   <button class=\"btn dropdown-toggle\" type=\"button\" id=\"dropdownMenu2\" data-toggle=\"dropdown\" aria-expanded=\"false\">
@@ -569,14 +570,11 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                     </span>
                                   </button>
                                   <div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu2\">
-                                    <button class=\"dropdown-item\" type=\"button\">
-                                      <i class=\"mdi mdi-cash-register\" title=\"Pagamento\"></i>
-                                      Pagamento
-                                    </button>
-                                    <button class=\"dropdown-item\" type=\"button\">
-                                      <i class=\"mdi mdi-calendar-multiple\" title=\"Parcelamento\"></i>
-                                      Parcelas
-                                    </button>
+
+                                    <a href=\"/pdfs/viewRelatorio.php?process={$_GET['process']}&fr={$release['id']}\" class=\"dropdown-item\" type=\"button\" target=\"_new\">
+                                      <i class=\"mdi mdi-file\" title=\"Documentos\"></i>
+                                      Demostrativo
+                                    </a>
                                     <a href=\"?page=financialedt&id={$_GET['id']}&process={$_GET['process']}&fr={$release['id']}\" class=\"dropdown-item\" type=\"button\">
                                       <i class=\"mdi mdi-square-edit-outline\" title=\"Documentos\"></i>
                                       Editar

@@ -73,7 +73,7 @@ $refer = $result[0];
       bottom: -110px;
       right: 0px;
       height: 50px;
-      opacity: 0.6;
+      opacity: 1;
       background-image: url('<?= dirname(__DIR__, 1) ?>/pdfs/base2.png');
       background-repeat: no-repeat;
       background-size: 500pt 17pt;
@@ -96,22 +96,21 @@ $refer = $result[0];
     /* --- dados dp processo --- */
     #containerProcesso {
       background-color: #f6f6f6;
-
-
     }
 
     /* ------ */
 
     .title {
-      font-size: 25px;
+      font-size: 1.3rem;
       color: #59372c;
-      margin-top: 1rem;
+      margin-top: 2.5rem;
       text-align: center;
     }
 
     .title_p1 {
       font-size: 15px;
-      color: #212761 text-align: center;
+      color: #212761;
+      text-align: center;
     }
 
     .dtCapa {
@@ -123,12 +122,13 @@ $refer = $result[0];
     }
 
     #table_material tbody tr:nth-child(2n+2) {
-      background: #FFE4B5;
-      opacity: 0.4;
+      /* background: #FFE4B5; */
+      background: rgb(255, 228, 181, .5);
+      text-transform: uppercase;
     }
   </style>
 
-<body style="background-image: url(<?= dirname(__DIR__, 1) ?>/pdfs/bg2.png); background-repeat: no-repeat; background-size:400pt 180pt; background-position: center center;">
+<body style="background-image: url(<?= dirname(__DIR__, 1) ?>/pdfs/bg3.png); background-repeat: no-repeat; background-size:420pt 212pt; background-position: center center;">
   <div id="header">
 
   </div>
@@ -139,7 +139,6 @@ $refer = $result[0];
   <div id="content">
 
     <!-- <p style="page-break-before: always;"></p> -->
-
     <h2 class="title" style="text-transform: uppercase; text-align: center;">
       <i class="mdi mdi-scale-balance mdi-24px fa fa-fw mr-1"></i>
       demostrativo Financeiro
@@ -151,32 +150,32 @@ $refer = $result[0];
         <h3 class="" style="text-transform: uppercase;">
           <i class="mdi mdi-scale-balance mdi-24px fa fa-fw mr-1"></i>
           <?= $dprocesso['niprocesso'] . ' - ' . $dprocesso['objprocesso'] ?>
-          </h1>
+        </h3>
       </div>
       <!-- /.card-header -->
       <div class="card-body">
         <div class="d-flex">
           <div class="mr-5 d-flex flex-column">
-            <span class="text-primary">
+            <span class="text-primary" style="text-transform: uppercase; font-weight: bold;">
               <i class="mdi mdi-pound mdi-18px fa fa-fw mr-1"></i>
               Nº do Porcesso:
             </span>
-            <span class="text-muted ml-4">
+            <span class="text-muted ml-4 " style="text-transform: uppercase;">
               <?= MascaraCNJ(str_pad($dprocesso['numprocesso'], 20, "0", STR_PAD_LEFT)); ?>
             </span>
           </div>
           <div class="mr-5 d-flex flex-column">
-            <span class="text-primary">
+            <span class="text-primary" style="text-transform: uppercase; font-weight: bold;">
               <i class="mdi mdi-state-machine mdi-18px fa fa-fw mr-1"></i>
               Status do Porcesso:
             </span>
-            <span class="text-muted text-uppercase ml-4">
+            <span class="text-muted text-uppercase ml-4" style="text-transform: uppercase;">
               <?= $dprocesso['statusprocesso'] != 'concluido' ? 'ATIVO' : 'INATIVO';  ?>
             </span>
           </div>
 
           <div class="mr-5 d-flex flex-column">
-            <span class="text-primary">
+            <span class="text-primary" style="text-transform: uppercase; font-weight: bold;">
               <i class="mdi mdi-list-status mdi-18px fa fa-fw mr-1"></i>
               Etapa do Processo:
             </span>
@@ -222,10 +221,9 @@ $refer = $result[0];
             </span>
           </div>
         </div>
-        <br />
         <div class="">
           <div class="d-flex flex-column">
-            <span class="text-primary">
+            <span class="text-primary" style="text-transform: uppercase; font-weight: bold;">
               <i class="mdi mdi-file mdi-18px fa fa-fw mr-1"></i>
               Descrição do Processo:
             </span>
@@ -234,10 +232,9 @@ $refer = $result[0];
             </span>
           </div>
         </div>
-        <br />
         <div class="d-flex ">
           <div class="d-flex flex-column mr-5">
-            <span class="text-primary">
+            <span class="text-primary" style="text-transform: uppercase; font-weight: bold;">
               <i class="mdi mdi-account mdi-18px fa fa-fw mr-1"></i>
               Cliente:
             </span>
@@ -247,7 +244,7 @@ $refer = $result[0];
           </div>
 
           <div class="d-flex flex-column">
-            <span class="text-primary">
+            <span class="text-primary" style="text-transform: uppercase; font-weight: bold;">
               <i class="mdi mdi-account mdi-18px fa fa-fw mr-1"></i>
               Contra Parte no Proceso:
             </span>
@@ -264,36 +261,113 @@ $refer = $result[0];
       <!-- /.card-footer -->
     </div>
     <hr />
+    <p style="text-transform: uppercase; font-weight: bold; text-align: center;">DADOS DO LANÇAMENTOS</p>
+    <hr />
+    <?php
+    $queryFinancialReleaseInstallments = "SELECT * FROM financial_release as fr
+                                          INNER JOIN processos as p ON fr.id_process = p.idprocesso
+                                          WHERE fr.id_process = '{$_GET['process']}' AND fr.id = '{$_GET['fr']}'";
+    $result = $conexao->query($queryFinancialReleaseInstallments)->fetchAll(PDO::FETCH_ASSOC);
+    $dadoFR = $result[0];
 
+    $subT = "SELECT SUM(installments_amount) as total FROM financial_release_installments
+    WHERE id_financial_release = '{$_GET['fr']}' AND is_paid = 0";
+    $result = $conexao->query($subT)->fetchAll(PDO::FETCH_ASSOC);
+    $subToral = $result[0]['total'];
+
+    ?>
+    <div class="d-flex flex-column">
+      <div class="text-muted text-uppercase">
+        <strong class="text-primary">
+          CATEGORIA:&nbsp;
+        </strong>
+        <?= $dadoFR['type']; ?>
+      </div>
+      <div class="text-muted text-uppercase">
+        <strong class="text-primary">
+          DESCRIÇÃO:&nbsp;
+        </strong>
+        <?= strtoupper($dadoFR['description']) ?>
+      </div>
+      <div class="text-muted">
+        <strong class="text-primary">
+          VALOR TOTAL:&nbsp;
+        </strong>
+        <?= "R$ " . number_format($dadoFR['amount'], 2, ',', '.'); ?>
+      </div>
+    </div>
+
+    <div class="text-muted">
+      <strong class="text-primary">
+        SALDO DEVEDOR:&nbsp;
+      </strong>
+      <?= "R$ " . number_format($subToral, 2, ',', '.'); ?>
+    </div>
+
+
+    <hr />
     <table id="table_material" border="0" style=" width: 100%; border-style: solid; border-collapse:collapse; text-align: center;">
-      <thead style="color:#59372c; background-color:orange; border-bottom-color: indigo;">
+      <thead style="color:#fff; background-color:#59372c; border-bottom-color: #123455; text-transform: uppercase;">
         <tr>
           <th>#</th>
           <th>data vencimnto</th>
           <th>valor</th>
           <th>status</th>
+          <th>
+            em
+          </th>
         </tr>
       </thead>
       <tbody>
         <?php
-        for ($i = 1; $i < 50; $i++) {
+
+        $count = 1;
+        // foreach ($result as  $release)
+
+        $sql = "SELECT * FROM financial_release_installments
+          WHERE id_financial_release = '{$dadoFR['id']}'";
+        $result = $conexao->query($sql);
+        $i = 1;
+
+        foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $installment) {
         ?>
           <tr>
-            <td><?= $i ?></td>
-            <td>00/00/0000</td>
-            <td>R$ 000,00</td>
-            <td>pendente</td>
+            <td>
+              <?= str_pad($i, 2, "0", STR_PAD_LEFT); ?>
+            </td>
+            <td>
+              <?= date('d/m/Y', strtotime($installment['due_date'])); ?>
+            </td>
+            <td><?= "R$ " . number_format($installment['installments_amount'], 2, ',', '.'); ?></td>
+            <td style="text-transform: uppercase;">
+
+              <span class="badge badge-<?= $colorStatus ?> " style='font-size: 0.9rem; padding:<?= $padding ?>; font-weight: 400; letter-spacing: 0.2em; line-height: 16px; width: 100%;'>
+                <?php
+                if ($installment['is_paid'] == '0'  && $installment['due_date'] >= date('Y-m-d', time())) {
+                  echo '<span style="color:#59372c; font-weight: lighter;">Pendente</span>';
+                } elseif ($installment['is_paid'] == '0' && $installment['due_date'] < date('Y-m-d', time())) {
+                  echo '<span style="color:red; font-weight: bold;">Atrasado</span>';
+                } elseif ($installment['is_paid'] == '3') {
+                  echo '<span style="color:blue; font-weight: lighter;">Renegociado</span>';
+                  //echo date('d/m/Y', strtotime($installment['payday_installments']));
+                } else {
+                  echo ' <span style="color:green; font-weight: bold;">Pago</span>';
+                  //echo date('d/m/Y', strtotime($installment['payday_installments']));
+                }
+                ?>
+                <? $installment['is_paid'] == '0' ? 'Pendente' : 'Pago' ?>
+              </span>
+            </td>
+            <td>
+              <?= $installment['is_paid'] != '0' ? date('d/m/Y', strtotime($installment['payday_installments'])) : '--' ?>
+            </td>
           </tr>
-        <?php } ?>
+        <?php $i++;
+        } ?>
 
       </tbody>
     </table>
-
-
-
   </div>
-
-
 </body>
 
 </html>
