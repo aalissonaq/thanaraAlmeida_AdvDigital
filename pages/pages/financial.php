@@ -312,7 +312,7 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                       <i class="mdi mdi-file mdi-18px fa fa-fw mr-1"></i>
                       Descrição do Processo:
                     </span>
-                    <span class="text-muted text-uppercase text-justify ml-4">
+                    <span class="text-muted text-uppercase! text-justify ml-4">
                       <?= $dprocesso['descricaoprocesso']; ?>
                     </span>
                   </div>
@@ -465,7 +465,9 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
                                     <strong class="text-primary">
                                       DESCRIÇÃO:&nbsp;
                                     </strong>
-                                    <?= strtoupper($release['description']) ?>
+                                    <? //strtoupper($release['description'])
+                                    ?>
+                                    <?= $release['description'] ?>
                                   </div>
                                   <div class="text-muted">
                                     <strong class="text-primary">
