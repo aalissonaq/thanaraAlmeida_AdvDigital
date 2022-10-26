@@ -1,10 +1,49 @@
 <!-- Content Header (Page header) -->
+<?php
+$mesAtual = date('m/Y', time());
+$dateAtualStart = date('Y-m-01', time()) . "<br/>";
+$dateAtualEnd = date('Y-m-30', time()) . "<br/>";
+
+$sql = "SELECT * FROM financial_release_installments WHERE  payday_installments BETWEEN '{$dateAtualStart}' AND '{$dateAtualEnd}' or competence = '{$mesAtual}' ";
+$result = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+$c = 0;
+
+foreach ($result as  $release) {
+  switch ($release['is_paid']) {
+    case 0:
+      $totalAReceber += $release['installments_amount'];
+      break;
+    case 1:
+      $totalRecebido += $release['installments_amount'];
+      break;
+    case 3:
+      $totalRenegociado += $release['installments_amount'];
+      break;
+
+    default:
+      // echo $release['installments_amount'] . "<br/>";
+      // $c++;
+
+      break;
+  }
+
+  // echo $release['installments_amount'] . "<br/>";
+
+  // $dados = explode('-',  $release['due_date']);
+}
+$totalMes = $totalRecebido + $totalAReceber;
+// echo $c . "<br/>";
+
+// var_dump($data);
+
+
+?>
 <div class="content-header">
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
         <h1 class="m-0 " style="font-family:'Advent Pro', sans-serif; font-weight: 300; ">
-          Lançamentos</h1>
+          Lançamentos <?= $mesAtual; ?></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right" style="font-family:'Advent Pro', sans-serif;  letter-spacing:.06rem">
@@ -21,31 +60,66 @@
 <section class="content">
   <div class="container-fluid">
     <!-- Info boxes -->
-
-
     <div class="row">
       <div class="col-12 col-sm-4 col-md-4">
         <a class="nav-link" href="#todayTask" data-toggle="tab" onclick="window.getElementById('todayTask').classList.add(' active');">
           <div class="small-box bg-default">
             <div class="inner mx-3">
               <?php
-              //$today = date("Y-m-d", time());
-              $initMonth = date("Y-m-01");
-              $endMonth = date("Y-m-t");
-              $competence = date('m/Y');
+              // $sql = "SELECT * FROM financial_release_installments WHERE competence = '{$mesAtual}' and is_paid = 1";
+              // // $sql = "SELECT * FROM financial_release_installments WHERE due_date >= '{$initMonth}' AND due_date <='{$endMonth}'";
+              // //$sql = "SELECT SUM(installments_amount) FROM financial_release_installments WHERE competence = '03/2022'";
+              // $resultado = $conexao->query($sql);
+              // $total = 0;
+              // while ($row = $resultado->fetch(PDO::FETCH_OBJ)) {
+              //   $total += $row->installments_amount;
+              // }
+              ?>
 
-              $sql = "SELECT * FROM financial_release_installments WHERE due_date >= '{$initMonth}' AND due_date <='{$endMonth}'";
-              //$sql = "SELECT SUM(installments_amount) FROM financial_release_installments WHERE competence = '03/2022'";
+              <h3 class="text-success">
+                <i class="mdi mdi-currency-brl"></i>
+                <?= formatMoedaBr($totalRecebido) ?>
+              </h3>
+              <p>Recebido</p>
+            </div>
+            <div class="icon">
+              <!-- <i class="fas fa-donate"></i> -->
+              <i class="mdi mdi-cash-plus text-success"></i>
+            </div>
 
-              $resultado = $conexao->query($sql);
-              $total = 0;
-              while ($row = $resultado->fetch(PDO::FETCH_OBJ)) {
-                $total += $row->installments_amount;
-              }              ?>
+          </div>
+        </a>
+        <!-- /.info-box -->
+      </div>
+      <!-- /.col -->
+      <div class="col-12 col-sm-4 col-md-4">
+        <a class="nav-link" href="#todayTask" data-toggle="tab" onclick="window.getElementById('todayTask').classList.add(' active');">
+          <div class="small-box bg-default">
+            <div class="inner mx-3">
 
+              <h3 class="text-danger">
+                <i class="mdi mdi-currency-brl"></i>
+                <?= formatMoedaBr($totalAReceber) ?>
+              </h3>
+              <p>Previsto</p>
+            </div>
+            <div class="icon">
+              <!-- <i class="fas fa-donate"></i> -->
+              <i class="mdi mdi-cash-minus text-danger"></i>
+            </div>
+
+          </div>
+        </a>
+        <!-- /.info-box -->
+      </div>
+      <!-- /.col -->
+      <div class="col-12 col-sm-4 col-md-4">
+        <a class="nav-link" href="#todayTask" data-toggle="tab" onclick="window.getElementById('todayTask').classList.add(' active');">
+          <div class="small-box bg-default">
+            <div class="inner mx-3">
               <h3 class="text-info">
                 <i class="mdi mdi-currency-brl"></i>
-                <?= formatMoedaBr($total) ?>
+                <?= formatMoedaBr($totalMes) ?>
               </h3>
               <p>Saldo previsto nesse mês</p>
             </div>
@@ -59,64 +133,7 @@
         <!-- /.info-box -->
       </div>
       <!-- /.col -->
-      <div class="col-12 col-sm-4 col-md-4">
-        <a class="nav-link" href="#allTask" data-toggle="tab" onclick="window.getElementById('todayTask').classList.add(' active');">
-          <div class="small-box bg-gradient-default">
-            <div class="inner mx-3">
-              <?php
 
-
-
-              if ($_SESSION['NIVEL'] > 1) {
-                $sql = "SELECT * FROM tarefas WHERE idResponsavel = {$_SESSION['ID']} AND finalizada = 0";
-              } else {
-                $sql = "SELECT * FROM tarefas WHERE finalizada = 0";
-              }
-
-              $resultado = $conexao->query($sql);
-              ?>
-              <h3 class="text-success">
-                <i class="mdi mdi-currency-brl"></i>
-                <?= formatMoedaBr(str_pad($resultado->rowCount(), 3, "0", STR_PAD_LEFT)); ?>
-              </h3>
-              <p>a receber esta semana</p>
-            </div>
-            <div class="icon ">
-              <i class="mdi mdi-cash-plus text-success"></i>
-            </div>
-
-          </div>
-        </a>
-        <!-- /.info-box -->
-      </div>
-      <!-- /.col -->
-
-      <div class="col-12 col-sm-4 col-md-4">
-        <a class="nav-link" href="#allTask" data-toggle="tab" onclick="window.getElementById('todayTask').classList.add(' active');">
-          <div class="small-box bg-gradient-default">
-            <div class="inner mx-3">
-              <?php
-              if ($_SESSION['NIVEL'] > 1) {
-                $sql = "SELECT * FROM tarefas WHERE idResponsavel = {$_SESSION['ID']} AND finalizada = 1";
-              } else {
-                $sql = "SELECT * FROM tarefas WHERE finalizada = 1";
-              }
-              $resultado = $conexao->query($sql);
-              ?>
-              <h3 class="text-danger">
-                <i class="mdi mdi-currency-brl"></i>
-                <?= formatMoedaBr(str_pad($resultado->rowCount(), 3, "0", STR_PAD_LEFT)); ?>
-              </h3>
-              <p>a pagar esta semana</p>
-            </div>
-            <div class="icon ">
-              <i class="mdi mdi-cash-minus text-danger"></i>
-            </div>
-          </div>
-        </a>
-        <!-- /.info-box -->
-      </div>
-      <!-- /.col -->
       <!-- fix for small devices only -->
       <div class="clearfix hidden-md-up"></div>
       <!-- /.col -->
