@@ -91,8 +91,6 @@ if (!isset($_GET['page']) || $_GET['page'] == null) {
       include "./pages/pages/listarTipoSolicitante.php";
       break;
 
-
-
       #GESTÃO FINANCEIRO
     case 'financial':
       include "./pages/pages/financial.php";
@@ -101,12 +99,11 @@ if (!isset($_GET['page']) || $_GET['page'] == null) {
       include "./pages/pages/financialCategories.php";
       break;
     case 'financialReleases':
-      include "./pages/pages/financialReleases.php";
+      include "./pages/pages/financialReleaseMonth.php";
       break;
     case 'financialedt':
       include "./pages/pages/financial_edt.php";
       break;
-
 
       #GESTÃO DE CONVÊNIO
     case 'listarConvenios':

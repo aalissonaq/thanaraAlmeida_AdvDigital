@@ -1,8 +1,19 @@
 <!-- Content Header (Page header) -->
 <?php
-$mesAtual = date('m/Y', time());
-$dateAtualStart = date('Y-m-01', time()) . "<br/>";
-$dateAtualEnd = date('Y-m-30', time()) . "<br/>";
+
+$mes = str_pad($_GET['mes'], 2, "0", STR_PAD_LEFT);
+$nomeMeses = array('Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junio', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',);
+if (!isset($_GET['mes'])) {
+  $m = date('m', time());
+  $mesAtual = date('m/Y', time());
+  $dateAtualStart = date('Y-m-01', time());
+  $dateAtualEnd = date('Y-m-30', time());
+} else {
+  $m = $_GET['mes'];
+  $mesAtual = date("{$mes}/Y", time());
+  $dateAtualStart = date("Y-{$mes}-01", time());
+  $dateAtualEnd = date("Y-{$mes}-30", time());
+}
 
 $sql = "SELECT * FROM financial_release_installments WHERE  payday_installments BETWEEN '{$dateAtualStart}' AND '{$dateAtualEnd}' or competence = '{$mesAtual}' ";
 $result = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
@@ -33,8 +44,28 @@ $totalMes = $totalRecebido + $totalAReceber;
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 " style="font-family:'Advent Pro', sans-serif; font-weight: 300; ">
-          Lançamentos <?= $mesAtual; ?></h1>
+        <h1 class="m-0 " style="font-family:'Advent Pro', sans-serif; font-weight: 500; ">
+          Lançamentos do mês de <?= $nomeMeses[$m - 1] . ' de ' . date("Y", time()); ?>
+        </h1>
+        <div class="d-none d-lg-block">
+          <div class="col-12 my-2 d-flex justify-content-between btn-group btn-group-sm" role="group">
+            <a href="?page=financialReleases&mes=<?= date('m', time()) ?>" class="btn btn-outline-primary">Mês Atual </a>
+            <a href="?page=financialReleases&mes=1" class="btn btn-outline-primary">Jan </a>
+            <a href="?page=financialReleases&mes=2" class="btn btn-outline-primary">Fev</a>
+            <a href="?page=financialReleases&mes=3" class="btn btn-outline-primary">Mar</a>
+            <a href="?page=financialReleases&mes=4" class="btn btn-outline-primary">Abr</a>
+            <a href="?page=financialReleases&mes=5" class="btn btn-outline-primary">Mai</a>
+            <a href="?page=financialReleases&mes=6" class="btn btn-outline-primary">Jun</a>
+            <a href="?page=financialReleases&mes=6" class="btn btn-outline-primary">Jul</a>
+            <a href="?page=financialReleases&mes=8" class="btn btn-outline-primary">Ago</a>
+            <a href="?page=financialReleases&mes=9" class="btn btn-outline-primary">Set</a>
+            <a href="?page=financialReleases&mes=10" class="btn btn-outline-primary">Out</a>
+            <a href="?page=financialReleases&mes=11" class="btn btn-outline-primary">Nov</a>
+            <a href="?page=financialReleases&mes=12" class="btn btn-outline-primary">Dez</a>
+
+
+          </div>
+        </div>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right" style="font-family:'Advent Pro', sans-serif;  letter-spacing:.06rem">

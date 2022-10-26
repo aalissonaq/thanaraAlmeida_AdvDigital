@@ -16,7 +16,6 @@
 
 <!-- Main content -->
 <section class="content">
-
   <!-- Default box -->
   <div class="card">
     <div class="card-header">
@@ -24,8 +23,6 @@
         <a href="?page=listarClientesCard" class="">
           <span class="mdi mdi-card-account-details-star-outline mdi-24px"></span></a>
       </h3>
-
-
       <div class="card-tools">
         <a href="" class="btn btn-tool text-orange" data-toggle="modal" data-target="#modal-novoUsuario" style="font-family:'Advent Pro', sans-serif; font-weight: bold; font: size 18px; letter-spacing: 1px;">
 
@@ -101,8 +98,7 @@
                     switch ($_SESSION['NIVEL']) {
                       case '0':
                         echo
-                        "
-                                        <li class=\"nav-item\">
+                        " <li class=\"nav-item\">
                                             <a href=\"?page=verCliente&id={$dados['idPassoaPessoa']}\" class=\"btn btn-tool\" target=\"\"
                                             title=\"Visializar Dados\" rel=\"noopener noreferrer\">
                                               <i class=\"mdi mdi-file-eye-outline mdi-24px \"></i>
@@ -127,7 +123,6 @@
 
                       default:
                         //TESTE DE STATUS
-
                         echo
                         "<li class=\"nav-item\">
                                               <a href=\"?page=verCliente&id={$dados['idPassoaPessoa']}\" class=\"btn btn-tool\" target=\"\"
@@ -160,10 +155,7 @@
                         break;
                     }
                     ?>
-
-
                   </ul>
-
                 </td>
               </tr>
             <?php } ?>
