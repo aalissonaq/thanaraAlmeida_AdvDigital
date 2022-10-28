@@ -1,6 +1,5 @@
 <!-- Content Header (Page header) -->
 <?php
-
 $mes = str_pad($_GET['mes'], 2, "0", STR_PAD_LEFT);
 $nomeMeses = array('Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junio', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',);
 if (!isset($_GET['mes'])) {
@@ -14,11 +13,8 @@ if (!isset($_GET['mes'])) {
   $dateAtualStart = date("Y-{$mes}-01", time());
   $dateAtualEnd = date("Y-{$mes}-30", time());
 }
-
 $sql = "SELECT * FROM financial_release_installments WHERE  payday_installments BETWEEN '{$dateAtualStart}' AND '{$dateAtualEnd}' or competence = '{$mesAtual}' ";
 $result = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-$c = 0;
-
 foreach ($result as  $release) {
   switch ($release['is_paid']) {
     case 0:
@@ -37,8 +33,7 @@ foreach ($result as  $release) {
   }
 }
 $totalMes = $totalRecebido + $totalAReceber;
-// echo $c . "<br/>";
-// var_dump($data);
+
 ?>
 <div class="content-header">
   <div class="container-fluid">
@@ -50,7 +45,7 @@ $totalMes = $totalRecebido + $totalAReceber;
         <div class="d-none d-lg-block">
           <div class="col-12 my-2 d-flex justify-content-between btn-group btn-group-sm" role="group">
             <a href="?page=financialReleases&mes=<?= date('m', time()) ?>" class="btn btn-outline-primary">Mês Atual </a>
-            <a href="?page=financialReleases&mes=1" class="btn btn-outline-primary">Jan </a>
+            <a href="?page=financialReleases&mes=1" class="btn btn-outline-primary">Jan</a>
             <a href="?page=financialReleases&mes=2" class="btn btn-outline-primary">Fev</a>
             <a href="?page=financialReleases&mes=3" class="btn btn-outline-primary">Mar</a>
             <a href="?page=financialReleases&mes=4" class="btn btn-outline-primary">Abr</a>
@@ -62,8 +57,6 @@ $totalMes = $totalRecebido + $totalAReceber;
             <a href="?page=financialReleases&mes=10" class="btn btn-outline-primary">Out</a>
             <a href="?page=financialReleases&mes=11" class="btn btn-outline-primary">Nov</a>
             <a href="?page=financialReleases&mes=12" class="btn btn-outline-primary">Dez</a>
-
-
           </div>
         </div>
       </div><!-- /.col -->
@@ -102,13 +95,12 @@ $totalMes = $totalRecebido + $totalAReceber;
                 <i class="mdi mdi-currency-brl"></i>
                 <?= formatMoedaBr($totalRecebido) ?>
               </h3>
-              <p>Recebido</p>
+              <p>Total dos Valores Recebidos</p>
             </div>
             <div class="icon">
               <!-- <i class="fas fa-donate"></i> -->
               <i class="mdi mdi-cash-plus text-success"></i>
             </div>
-
           </div>
         </a>
         <!-- /.info-box -->
@@ -118,32 +110,30 @@ $totalMes = $totalRecebido + $totalAReceber;
         <a class="nav-link" href="#todayTask" data-toggle="tab" onclick="window.getElementById('todayTask').classList.add(' active');">
           <div class="small-box bg-default">
             <div class="inner mx-3">
-
               <h3 class="text-danger">
                 <i class="mdi mdi-currency-brl"></i>
                 <?= formatMoedaBr($totalAReceber) ?>
               </h3>
-              <p>Previsto</p>
+              <p>Total de Valores Pendentes ou em Atraso</p>
             </div>
             <div class="icon">
               <!-- <i class="fas fa-donate"></i> -->
               <i class="mdi mdi-cash-minus text-danger"></i>
             </div>
-
           </div>
         </a>
         <!-- /.info-box -->
       </div>
       <!-- /.col -->
       <div class="col-12 col-sm-4 col-md-4">
-        <a class="nav-link" href="#todayTask" data-toggle="tab" onclick="window.getElementById('todayTask').classList.add(' active');">
+        <a class="nav-link" href="#allFinancelReleaseMonth" data-toggle="tab" onclick="window.getElementById('allFinancelReleaseMonth').classList.add(' active');">
           <div class="small-box bg-default">
             <div class="inner mx-3">
               <h3 class="text-info">
                 <i class="mdi mdi-currency-brl"></i>
                 <?= formatMoedaBr($totalMes) ?>
               </h3>
-              <p>Saldo previsto nesse mês</p>
+              <p>Total de previsto o mês</p>
             </div>
             <div class="icon">
               <!-- <i class="fas fa-donate"></i> -->
@@ -171,7 +161,7 @@ $totalMes = $totalRecebido + $totalAReceber;
           <!-- <h4>Tarefas</h4> -->
           <ul class="nav nav-pills mt-3 mb-1">
             <li class="nav-item ">
-              <a class="nav-link" href="#todayTask" data-toggle="tab">
+              <a class="nav-link" href="#allFinancelReleaseMonth" data-toggle="tab">
                 <i class="align-middle mdi mdi-calendar-multiple mdi-24px fa fa-fw"> </i>&nbsp;&nbsp;
                 <span class="align-middle">
                   Todos os Lançamentos
@@ -226,13 +216,13 @@ $totalMes = $totalRecebido + $totalAReceber;
               <div class="col-md-12">
 
                 <div class="tab-content" id="pills-tabContent">
-                  <div class="tab-pane fade show active" id="todayTask" role="tabpanel" aria-labelledby="todayTask-tab">
+                  <div class="tab-pane fade show active" id="allFinancelReleaseMonth" role="tabpanel" aria-labelledby="allFinancelReleaseMonth-tab">
                     <!-- Tarefas de hoje -->
                     <div class="table-responsive ">
                       <table id="tabela" class="table table-sm table-striped table-hover">
                         <thead class="" style="font-family: 'Advent Pro', sans-serif; font-weight: 100;">
                           <tr>
-                            <th class="col-md-auto text-center align-middle ">Tarefa</th>
+                            <th class="col-md-auto text-center align-middle ">Lançamentos</th>
                             <th class="col-md-2 text-center align-middle ">status</th>
                             <th class="col-md-2 text-center align-middle ">Responsável</th>
                             <th class="col-md-1 text-center align-middle ">Data e Hora</th>
@@ -249,6 +239,7 @@ $totalMes = $totalRecebido + $totalAReceber;
                                     ON tarefas.idProcesso = processos.idprocesso
                                     INNER JOIN pessoa
                                     ON tarefas.idpessoa = pessoa.idPessoa
+
                                     WHERE idResponsavel = {$_SESSION['ID']} AND (dtTarefa = CURDATE() OR dtTarefa < CURDATE()) AND finalizada = 0
                                     ORDER BY dtTarefa ASC";
                           } else {

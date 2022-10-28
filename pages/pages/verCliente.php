@@ -166,7 +166,7 @@
           <div class="col-md-5 mb-3">
             <label for="stCompleEndPessoa">Complemento</label>
             <br />
-            <span class="lead text-uppercase"><?= $dcliente['stCompleEndPessoa']; ?></span>
+            <span class="lead"><?= $dcliente['stCompleEndPessoa']; ?></span>
           </div>
 
           <div class="col-md-6 mb-3">

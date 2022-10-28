@@ -930,7 +930,7 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                     <div class="form-row">
                       <div class="col-md-4 ">
                         <label for="stCompleEndPessoa">Complemento</label>
-                        <input type="text" name="stCompleEndPessoa" class="form-control text-uppercase" id="stCompleEndPessoa" value="<?= $dcliente['stCompleEndPessoa']; ?>" placeholder="Ex: Apto. 101" />
+                        <input type="text" name="stCompleEndPessoa" class="form-control" id="stCompleEndPessoa" value="<?= $dcliente['stCompleEndPessoa']; ?>" placeholder="Ex: Apto. 101" />
                         <div class="invalid-feedback">
                           Obrigatório !
                         </div>
