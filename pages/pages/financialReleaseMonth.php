@@ -234,70 +234,46 @@ $totalMes = $totalRecebido + $totalAReceber;
                         <tbody>
                           <?php
                           if ($_SESSION['NIVEL'] > 1) {
-                            $sql = "SELECT * FROM tarefas
-                                    INNER JOIN processos
-                                    ON tarefas.idProcesso = processos.idprocesso
-                                    INNER JOIN pessoa
-                                    ON tarefas.idpessoa = pessoa.idPessoa
-
-                                    WHERE idResponsavel = {$_SESSION['ID']} AND (dtTarefa = CURDATE() OR dtTarefa < CURDATE()) AND finalizada = 0
-                                    ORDER BY dtTarefa ASC";
+                            $sql = "SELECT * FROM financial_release as fr
+                                    INNER JOIN financial_release_installments AS fri ON fri.id_financial_release = fr.id
+                                    INNER JOIN processos AS p ON fr.id_process = p.idprocesso
+                                    INNER JOIN pessoa as pers on pers.idPessoa = p.idcliente
+                                    INNER JOIN clientes AS cli ON cli.idPessoa = pers.idPessoa
+                                    WHERE idResponsavel = {$_SESSION['ID']} AND fri.competence = MONTH(CURDATE())
+                                    ORDER BY pers.nmPessoa ASC";
                           } else {
-                            $sql = "SELECT * FROM tarefas
-                                    INNER JOIN processos
-                                    ON tarefas.idProcesso = processos.idprocesso
-                                    INNER JOIN pessoa
-                                    ON tarefas.idpessoa = pessoa.idPessoa
-                                    WHERE (dtTarefa = CURDATE() OR dtTarefa < CURDATE()) AND finalizada = 0
-                                    ORDER BY dtTarefa ASC";
+                            $sql = "SELECT * FROM financial_release as fr
+                                    INNER JOIN financial_release_installments AS fri ON fri.id_financial_release = fr.id
+                                    INNER JOIN processos AS p ON fr.id_process = p.idprocesso
+                                    INNER JOIN pessoa as pers on pers.idPessoa = p.idcliente
+                                    INNER JOIN clientes AS cli ON cli.idPessoa = pers.idPessoa
+                                    WHERE (fri.competence = MONTH(CURDATE()))
+                                    ORDER BY pers.nmPessoa ASC";
                           }
-
-
                           $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                           $count = 1;
-                          foreach ($resultado as $task) {
+                          foreach ($resultado as $financialRelease) {
                           ?>
-
-                            <tr scope="row" class="" <?= $task['finalizada'] == '1' ? $colorBG = '#c6e5b1' : '' ?> style="background-color: <?= $colorBG ?>;">
-
+                            <tr scope="row" class="" <?= $financialRelease['is_paid'] == '1' ? $colorBG = '#c6e5b1' : '' ?> style="background-color: <?= $colorBG ?>;">
                               <td class="text-uppercase align-middle" style="font-size: .75rem; ">
                                 <div class="d-flex align-items-center">
-                                  <div class="mr-2 ">
-                                    <?php
-                                    switch ($task['prioridade']) {
-                                      case 'baixa':
-                                        echo '<i title="Baixa" class=" text-info mdi mdi-alert-circle-outline mdi-24px align-middle">&nbsp;</i>';
-                                        break;
 
-                                      case 'media':
-                                        echo '<i title="Média" class="text-orange mdi mdi-alert-octagon-outline mdi-24px align-middle">&nbsp;</i>';
-                                        break;
-
-                                      case 'alta':
-                                        echo '<i title="Alta" class="text-danger mdi mdi-car-brake-alert mdi-24px align-middle">&nbsp;</i>';
-                                        break;
-
-                                      default:
-                                        echo '<i class="mdi mdi-alert-box-outline mdi-18px align-middle">&nbsp;</i>';
-                                        break;
-                                    }
-                                    // echo str_pad($count, 3, "0", STR_PAD_LEFT);
-                                    // $count++;
-                                    ?>
-                                  </div>
                                   <div class="d-flex flex-column">
                                     <div class="text-muted">
-                                      <strong class="text-primary">Processo:&nbsp;</strong><?= $task['niprocesso'] . ' - ' .  $task['objprocesso']; ?>
+                                      <strong class="text-primary">Cliente:&nbsp;</strong><?= $financialRelease['nmPessoa']; ?>
                                     </div>
                                     <div class="text-muted">
-                                      <strong class="text-primary">Tarefa:&nbsp;</strong><?= lmWord($task['decricaoTarefa'], 100); ?>
+                                      <strong class="text-primary">Processo:&nbsp;</strong><?= $financialRelease['niprocesso'] . ' - ' .  $financialRelease['objprocesso']; ?>
+                                    </div>
+                                    <div class="text-muted">
+                                      <strong class="text-primary">Valor da da Parcela:&nbsp;</strong><?= formatMoedaBr($financialRelease['installments_amount']); ?>
                                     </div>
                                     <div class="d-flex justify-content-around">
                                       <div class="col-6 text-muted">
-                                        <strong class="text-primary">Parte:&nbsp;</strong><?= lmWord($task['nmPessoa'], 70); ?>
+                                        <strong class="text-primary">Parte:&nbsp;</strong><?= lmWord($financialRelease['nmPessoa'], 70); ?>
                                       </div>|&nbsp;
                                       <div class="col-6 text-muted">
-                                        <strong class="text-primary">Contra-Parte:&nbsp;</strong><?= lmWord($task['contraparte'], 70); ?>
+                                        <strong class="text-primary">Contra-Parte:&nbsp;</strong><?= lmWord($financialRelease['contraparte'], 70); ?>
                                       </div>
                                     </div>
                                   </div>
@@ -306,7 +282,7 @@ $totalMes = $totalRecebido + $totalAReceber;
                               <td class="text-uppercase align-middle text-center" style="font-weight: 300;">
                                 <?php
                                 $today = date("Y-m-d", time());
-                                if ($task['dtTarefa'] == $today) {
+                                if ($financialRelease['dtTarefa'] == $today) {
                                   echo "<span class='badge badge-pill badge-warning px-4 py-1'>Hoje</span>";
                                 } else {
                                   echo "<span class='badge badge-pill badge-danger px-2 py-1'>Atrasada</span>";
@@ -316,7 +292,7 @@ $totalMes = $totalRecebido + $totalAReceber;
 
                               <td class=" text-uppercase align-middle" style="font-size: .8rem; ">
                                 <?php
-                                $sql = "SELECT * FROM pessoa WHERE idPessoa = '" . $task['idResponsavel'] . "'";
+                                $sql = "SELECT * FROM pessoa WHERE idPessoa = '" . $financialRelease['idResponsavel'] . "'";
                                 $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($resultado as $pessoa) {
                                   echo $pessoa['nmPessoa'];
@@ -325,15 +301,15 @@ $totalMes = $totalRecebido + $totalAReceber;
                               </td>
                               <td class="text-uppercase align-middle text-center">
                                 <?php
-                                echo date('d/m/Y', strtotime($task['dtTarefa']));
+                                echo date('d/m/Y', strtotime($financialRelease['dtTarefa']));
                                 echo " AS ";
-                                echo date('H:i', strtotime($task['hora']));
+                                echo date('H:i', strtotime($financialRelease['hora']));
                                 ?>
                               </td>
                               <td class="text-uppercase align-middle  ">
                                 <ul class="nav justify-content-center d-flex justify-content-evenly">
                                   <li class="nav-item">
-                                    <a href="?page=task_detail&task=<?= $task['idtarefas'] ?>" class="btn btn-tool" target="" title="Visializar Processo" rel="noopener noreferrer">
+                                    <a href="?page=financialRelease_detail&financialRelease=<?= $financialRelease['idtarefas'] ?>" class="btn btn-tool" target="" title="Visializar Processo" rel="noopener noreferrer">
                                       <i class="mdi mdi-file-eye-outline mdi-24px "></i>
                                     </a>
                                   </li>

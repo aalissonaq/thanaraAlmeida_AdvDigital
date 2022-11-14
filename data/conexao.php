@@ -1,14 +1,15 @@
 <?php
 
-function novaConexao($banco = 'meb')
+function novaConexao()
 {
   $servidor = 'localhost';
-  $usuario = 'root';
-  $senha = 't5r4e3w2q1';
+  $usuario = 'ci';
+  $senha = '4l15s0n3aQ!';
+  $banco = 'advDigital';
 
   try {
     $conexao = new PDO(
-      "mysql:host=$servidor;dbname=$banco",
+      "mysql:host=$servidor;dbname=$banco;charset=utf8;",
       $usuario,
       $senha
     );

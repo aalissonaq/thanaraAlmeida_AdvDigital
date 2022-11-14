@@ -5,7 +5,7 @@ function connect()
   static $con = null;
   try {
     if ($con == null) {
-      $con = new PDO('mysql:host=localhost;dbname=meb', 'root', 't5r4e3w2q1');
+      $con = new PDO('mysql:host=localhost;dbname=advDigital;charset=utf8;', 'ci', '4l15s0n3aQ!');
     }
   } catch (PDOException $e) {
     echo "Erro encontrado" . $e->getMessage() . "com codigo" . $e->getCode();
