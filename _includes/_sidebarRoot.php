@@ -124,11 +124,23 @@
         <ul class="nav nav-treeview">
           <li class="nav-item " id="">
             <a href="?page=financialReleases" class="nav-link" id="LancamentosFinac">
-              <i class="nav-icon fas fa-file-invoice-dollar"></i>
+              <i class="nav-icon mdi mdi-cash-plus"></i>
               <p>
-                Lançamentos
+                Receitas
                 <!-- <span class="badge badge-info right">2</span> -->
               </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="?page=expenses" class="nav-link" id="expenses">
+              <i class="nav-icon mdi mdi-cash-minus"></i>
+              <p>Despesas</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="?page=financialStatement" class="nav-link" id="financialStatement">
+              <i class="nav-icon fas fa-file-invoice-dollar"></i>
+              <p>Receitas e Despesas</p>
             </a>
           </li>
           <li class="nav-item">

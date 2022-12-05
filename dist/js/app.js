@@ -65,7 +65,7 @@ $(".cpfOuCnpj").length > 11
 $(".table").DataTable({
   responsive: true,
   bLengthChange: true,
-  pageLength: 10,
+  pageLength: 6,
   bInfo: true,
   bFilter: true,
   bSort: false,

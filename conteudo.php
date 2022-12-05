@@ -104,6 +104,15 @@ if (!isset($_GET['page']) || $_GET['page'] == null) {
     case 'financialedt':
       include "./pages/pages/financial_edt.php";
       break;
+    case 'expenses':
+      include "./pages/pages/expensesMonth.php";
+      break;
+    case 'despesas':
+      include "./pages/pages/listarDespesas.php";
+      break;
+    case 'financialStatement':
+      include "./pages/pages/financialStatement.php";
+      break;
 
       #GESTÃO DE CONVÊNIO
     case 'listarConvenios':

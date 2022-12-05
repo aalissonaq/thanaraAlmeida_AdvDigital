@@ -1,5 +1,6 @@
 <?php
 session_start();
+date_default_timezone_set('America/Fortaleza');
 require_once './data/dbasys.php';
 require_once './data/conexao.php';
 $conexao = novaConexao();
@@ -74,7 +75,7 @@ if (isset($_POST['login']) && $_POST['login'] == 'entra') {
   <link rel="shortcut icon" href="./image/icon.png" type="image/x-icon" />
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="./plugins/fontawesome-free/css/all.min.css" />
   <!-- Ionicons -->

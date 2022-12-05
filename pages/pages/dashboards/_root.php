@@ -166,7 +166,7 @@
                             <th class="col-md-2 text-center align-middle ">status</th>
                             <th class="col-md-2 text-center align-middle ">Responsável</th>
                             <th class="col-md-1 text-center align-middle ">Data e Hora</th>
-                            <th class="col-md-1 text-center align-middle">
+                            <th class="col-md-2 text-center align-middle">
                               <i class="fab fa-lg fa-fw fa-whmcs" title="Ações"></i>
                             </th>
                           </tr>
@@ -190,13 +190,10 @@
                                     WHERE (dtTarefa = CURDATE() OR dtTarefa < CURDATE()) AND finalizada = 0
                                     ORDER BY dtTarefa ASC";
                           }
-
-
                           $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                           $count = 1;
                           foreach ($resultado as $task) {
                           ?>
-
                             <tr scope="row" class="" <?= $task['finalizada'] == '1' ? $colorBG = '#c6e5b1' : '' ?> style="background-color: <?= $colorBG ?>;">
 
                               <td class="text-uppercase align-middle" style="font-size: .75rem; ">
@@ -275,6 +272,9 @@
                                     <a href="?page=task_detail&task=<?= $task['idtarefas'] ?>" class="btn btn-tool" target="" title="Visializar Processo" rel="noopener noreferrer">
                                       <i class="mdi mdi-file-eye-outline mdi-24px "></i>
                                     </a>
+                                    <a href="?page=profileCliente&id=<?= $task['idPessoa'] ?>" class="btn btn-tool" target="" title="Perfil de Usúario" rel="noopener noreferrer">
+                                      <i class="mdi mdi-account-arrow-right mdi-24px "></i>
+                                    </a>
                                   </li>
                                 </ul>
                               </td>
@@ -302,8 +302,8 @@
                         </thead>
                         <tbody>
                           <?php
-                         if ($_SESSION['NIVEL'] > 1) {
-                          $sql = "SELECT * FROM tarefas
+                          if ($_SESSION['NIVEL'] > 1) {
+                            $sql = "SELECT * FROM tarefas
                                   INNER JOIN processos
                                   ON tarefas.idProcesso = processos.idprocesso
                                   INNER JOIN pessoa
@@ -312,8 +312,8 @@
                                   AND finalizada != 1
                                   AND  dtTarefa > CURDATE()
                                   ORDER BY dtTarefa ASC";
-                        } else {
-                          $sql = "SELECT * FROM tarefas
+                          } else {
+                            $sql = "SELECT * FROM tarefas
                                   INNER JOIN processos
                                   ON tarefas.idProcesso = processos.idprocesso
                                   INNER JOIN pessoa
@@ -321,7 +321,7 @@
                                   WHERE finalizada != 1
                                   AND  dtTarefa > CURDATE()
                                   ORDER BY dtTarefa ASC";
-                        }
+                          }
                           $resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                           $count = 1;
                           foreach ($resultado as $task) {

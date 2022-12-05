@@ -30,12 +30,12 @@
           <!-- <i class="fa fa-user-plus fa-fw fa-lg"></i> -->
           Nova Despensa </a>
 
-        <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
-                             title="Collapse">
-                             <i class="fas fa-minus"></i>ttt</button>
-                         <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip"
-                             title="Remove">
-                             <i class="fas fa-times"></i></button> -->
+        <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+              <i class="fas fa-minus"></i>ttt
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+              <i class="fas fa-times"></i>
+            </button> -->
       </div>
     </div>
     <div class="card-body">
@@ -76,30 +76,30 @@
           foreach ($listar as $dados) {
             $cont = $cont + 1;
           ?>
-          <tr>
-            <td class="text-center align-middle">
-              <?= date('d/m/Y', strtotime($dados['cadastroDespesa'])); ?>
-            </td>
+            <tr>
+              <td class="text-center align-middle">
+                <?= date('d/m/Y', strtotime($dados['cadastroDespesa'])); ?>
+              </td>
 
-            <td class="text-uppercase align-middle">
-              <?= $dados['descricaoDespesa'] ?>
-            </td>
+              <td class="text-uppercase align-middle">
+                <?= $dados['descricaoDespesa'] ?>
+              </td>
 
-            <td class="text-center1 text-uppercase align-middle">
-              R$ <?= formatMoedaBr($dados['vlDespesa']) ?>
-            </td>
-            <td class="text-center text-uppercase align-middle">
-              <?= $dados['tipoDespesa'] ?>
-            </td>
-            <td class="text-center text-uppercase align-middle">
-              <?= $dados['statusDespesa'] ?>
-            </td>
+              <td class="text-center1 text-uppercase align-middle">
+                R$ <?= formatMoedaBr($dados['vlDespesa']) ?>
+              </td>
+              <td class="text-center text-uppercase align-middle">
+                <?= $dados['tipoDespesa'] ?>
+              </td>
+              <td class="text-center text-uppercase align-middle">
+                <?= $dados['statusDespesa'] ?>
+              </td>
 
-            <td class="align-middle">
+              <td class="align-middle">
 
-              <ul class="nav justify-content-center">
+                <ul class="nav justify-content-center">
 
-                <?php
+                  <?php
                   switch ($_SESSION['NIVEL']) {
                     case '0':
 
@@ -137,12 +137,12 @@
                   }
                   ?>
 
-              </ul>
+                </ul>
 
-              </ul>
+                </ul>
 
-            </td>
-          </tr>
+              </td>
+            </tr>
           <?php } ?>
         </tbody>
       </table>
@@ -172,13 +172,11 @@
       <div class="modal-body">
 
         <!-- form novo Usuário -->
-        <form class="needs-validation" novalidate action="pages/pages/acoes/gravaNovoDespesa.php" method="POST"
-          enctype="multipart/form-data">
+        <form class="needs-validation" novalidate action="pages/pages/acoes/gravaNovoDespesa.php" method="POST" enctype="multipart/form-data">
           <div class="form-row">
             <div class="col-md-12 mb-3 ">
               <label for="descricaoDespesa">Despesa</label>
-              <input type="text" name="descricaoDespesa" class="form-control text-uppercase  " id="descricaoDespesa"
-                placeholder="Despesa" value="" required>
+              <input type="text" name="descricaoDespesa" class="form-control text-uppercase  " id="descricaoDespesa" placeholder="Despesa" value="" required>
               <div class="invalid-feedback">
                 Obrigatório !
               </div>
@@ -187,8 +185,7 @@
           <div class="form-row">
             <div class="col-md-2 mb-3">
               <label for="vlDespesa">Valor Gasto</label>
-              <input type="text" maxlength="12" name="vlDespesa" class="form-control text-uppercase js_dinheiro"
-                id="vlDespesa" placeholder="Somente Números" required>
+              <input type="text" maxlength="12" name="vlDespesa" class="form-control text-uppercase js_dinheiro" id="vlDespesa" placeholder="Somente Números" required>
               <div class="invalid-feedback">
                 Obrigatório !
               </div>
@@ -210,16 +207,14 @@
 
             <div class="col-md-2 mb-3">
               <label for="dtVencimentoDespesa">Data de Venvimento</label>
-              <input type="date" name="dtVencimentoDespesa" class="form-control text-uppercase "
-                id="dtVencimentoDespesa" placeholder="Somente Números" required>
+              <input type="date" name="dtVencimentoDespesa" class="form-control text-uppercase " id="dtVencimentoDespesa" placeholder="Somente Números" required>
               <div class="invalid-feedback">
                 Obrigatório !
               </div>
             </div>
             <div class="col-md-2 mb-3">
               <label for="dtPagamentoDespesa">Data do Pagamento</label>
-              <input type="date" name="dtPagamentoDespesa" class="form-control text-uppercase " id="dtPagamentoDespesa"
-                placeholder="Somente Números" onblur="isRequiredPaymentVoucher(this.value)">
+              <input type="date" name="dtPagamentoDespesa" class="form-control text-uppercase " id="dtPagamentoDespesa" placeholder="Somente Números" onblur="isRequiredPaymentVoucher(this.value)">
               <div class="invalid-feedback">
                 Obrigatório !
               </div>
@@ -229,8 +224,7 @@
             <div class="col-md-4 mb-3">
               <label for="strComprovanteDespesa">Comprovante de Pagameto <small>(imagem(jpg, png) ou PDF</small>
               </label>
-              <input type="file" name="strComprovanteDespesa" class="form-control text-uppercase"
-                id="strComprovanteDespesa" placeholder="imagem ou PDF">
+              <input type="file" name="strComprovanteDespesa" class="form-control text-uppercase" id="strComprovanteDespesa" placeholder="imagem ou PDF">
               <div class="invalid-feedback">
                 Comprovanete Obrigatório para despesas pagas !
               </div>
@@ -270,13 +264,11 @@
       </div>
       <div class="modal-body">
         <!-- form novo Usuário -->
-        <form class="needs-validation" novalidate action="pages/pages/acoes/gravaNovoDespesa.php" method="POST"
-          enctype="multipart/form-data">
+        <form class="needs-validation" novalidate action="pages/pages/acoes/gravaNovoDespesa.php" method="POST" enctype="multipart/form-data">
           <div class="form-row">
             <div class="col-md-12 mb-3 ">
               <label for="descricaoDespesa">Despesa</label>
-              <input type="text" name="descricaoDespesa" class="form-control text-uppercase  " id="descricaoDespesa"
-                placeholder="Despesa" value="" required>
+              <input type="text" name="descricaoDespesa" class="form-control text-uppercase  " id="descricaoDespesa" placeholder="Despesa" value="" required>
               <div class="invalid-feedback">
                 Obrigatório !
               </div>
@@ -285,8 +277,7 @@
           <div class="form-row">
             <div class="col-md-2 mb-3">
               <label for="vlDespesa">Valor Gasto</label>
-              <input type="text" maxlength="12" name="vlDespesa" class="form-control text-uppercase js_dinheiro"
-                id="vlDespesa" placeholder="Somente Números" required>
+              <input type="text" maxlength="12" name="vlDespesa" class="form-control text-uppercase js_dinheiro" id="vlDespesa" placeholder="Somente Números" required>
               <div class="invalid-feedback">
                 Obrigatório !
               </div>
@@ -308,16 +299,14 @@
 
             <div class="col-md-2 mb-3">
               <label for="dtVencimentoDespesa">Data de Venvimento</label>
-              <input type="date" name="dtVencimentoDespesa" class="form-control text-uppercase "
-                id="dtVencimentoDespesa" placeholder="Somente Números" required>
+              <input type="date" name="dtVencimentoDespesa" class="form-control text-uppercase " id="dtVencimentoDespesa" placeholder="Somente Números" required>
               <div class="invalid-feedback">
                 Obrigatório !
               </div>
             </div>
             <div class="col-md-2 mb-3">
               <label for="dtPagamentoDespesa">Data do Pagamento</label>
-              <input type="date" name="dtPagamentoDespesa" class="form-control text-uppercase " id="dtPagamentoDespesa"
-                placeholder="Somente Números" onblur="isRequiredPaymentVoucher(this.value)">
+              <input type="date" name="dtPagamentoDespesa" class="form-control text-uppercase " id="dtPagamentoDespesa" placeholder="Somente Números" onblur="isRequiredPaymentVoucher(this.value)">
               <div class="invalid-feedback">
                 Obrigatório !
               </div>
@@ -327,8 +316,7 @@
             <div class="col-md-4 mb-3">
               <label for="strComprovanteDespesa">Comprovante de Pagameto <small>(imagem(jpg, png) ou PDF</small>
               </label>
-              <input type="file" name="strComprovanteDespesa" class="form-control text-uppercase"
-                id="strComprovanteDespesa" placeholder="imagem ou PDF">
+              <input type="file" name="strComprovanteDespesa" class="form-control text-uppercase" id="strComprovanteDespesa" placeholder="imagem ou PDF">
               <div class="invalid-feedback">
                 Comprovanete Obrigatório para despesas pagas !
               </div>
@@ -358,127 +346,126 @@
 
 
 
-<script type="text/javascript"
-  src="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.20/b-1.6.1/b-html5-1.6.1/b-print-1.6.1/r-2.2.3/datatables.min.js">
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.20/b-1.6.1/b-html5-1.6.1/b-print-1.6.1/r-2.2.3/datatables.min.js">
 </script>
 
 <script src="./dist/js/app.js"></script>
 
 <script>
-function editar(valor) {
-  var t = getParam('idDesp').val();
-  var idDesp = valor;
-  console.log(t);
+  function editar(valor) {
+    var t = getParam('idDesp').val();
+    var idDesp = valor;
+    console.log(t);
 
-}
-
-document.getElementById('caixaMenu').classList.add("menu-open");
-//document.getElementById('gestaoMenuActive').classList.add("active");
-document.getElementById('dispesaActiva').classList.add("active");
-
-// DATATABLE
-// $(".table").DataTable({
-//   responsive: true,
-//   bLengthChange: false,
-//   pageLength: 20,
-//   bInfo: true,
-//   bFilter: true,
-//   bSort: false,
-//   language: {
-//     url: "https://cdn.datatables.net/plug-ins/1.10.19/i18n/Portuguese-Brasil.json"
-//   }
-// });
-
-// Example starter JavaScript for disabling form submissions if there are invalid fields
-(function() {
-  'use strict';
-  window.addEventListener('load', function() {
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.getElementsByClassName('needs-validation');
-    // Loop over them and prevent submission
-    var validation = Array.prototype.filter.call(forms, function(form) {
-      form.addEventListener('submit', function(event) {
-        if (form.checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        form.classList.add('was-validated');
-      }, false);
-    });
-  }, false);
-})();
-
-// Adicionando Javascript
-function limpa_formulário_cep() {
-  //Limpa valores do formulário de cep.
-  document.getElementById("logradouro").value = "";
-  document.getElementById("bairro").value = "";
-  document.getElementById("cidade").value = "";
-  document.getElementById("estado").value = "";
-  // document.getElementById("ibge").value = "";
-}
-
-function meu_callback(conteudo) {
-  if (!("erro" in conteudo)) {
-    //Atualiza os campos com os valores.
-    document.getElementById("logradouro").value =
-      conteudo.logradouro;
-    document.getElementById("bairro").value =
-      conteudo.bairro;
-    document.getElementById("cidade").value =
-      conteudo.localidade;
-    document.getElementById("estado").value =
-      conteudo.uf;
-    //document.getElementById("ibge").value =
-    //conteudo.ibge;
-  } //end if.
-  else {
-    //CEP não Encontrado.
-    limpa_formulário_cep();
-    alert("CEP não encontrado.");
   }
-}
 
-function pesquisacep(valor) {
-  //Nova variável "cep" somente com dígitos.
-  var cep = valor.replace(/\D/g, "");
+  document.getElementById('caixaMenu').classList.add("menu-open");
+  //document.getElementById('gestaoMenuActive').classList.add("active");
+  document.getElementById('dispesaActiva').classList.add("active");
 
-  //Verifica se campo cep possui valor informado.
-  if (cep != "") {
-    //Expressão regular para validar o CEP.
-    var validacep = /^[0-9]{8}$/;
+  // DATATABLE
+  // $(".table").DataTable({
+  //   responsive: true,
+  //   bLengthChange: false,
+  //   pageLength: 20,
+  //   bInfo: true,
+  //   bFilter: true,
+  //   bSort: false,
+  //   language: {
+  //     url: "https://cdn.datatables.net/plug-ins/1.10.19/i18n/Portuguese-Brasil.json"
+  //   }
+  // });
 
-    //Valida o formato do CEP.
-    if (validacep.test(cep)) {
-      //Preenche os campos com "..." enquanto consulta webservice.
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (function() {
+    'use strict';
+    window.addEventListener('load', function() {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+
+  // Adicionando Javascript
+  function limpa_formulário_cep() {
+    //Limpa valores do formulário de cep.
+    document.getElementById("logradouro").value = "";
+    document.getElementById("bairro").value = "";
+    document.getElementById("cidade").value = "";
+    document.getElementById("estado").value = "";
+    // document.getElementById("ibge").value = "";
+  }
+
+  function meu_callback(conteudo) {
+    if (!("erro" in conteudo)) {
+      //Atualiza os campos com os valores.
       document.getElementById("logradouro").value =
-        "...";
-      document.getElementById("bairro").value = "...";
-      document.getElementById("cidade").value = "...";
-      document.getElementById("estado").value = "...";
-      //document.getElementById("ibge").value = "...";
-
-      //Cria um elemento javascript.
-      var script = document.createElement("script");
-
-      //Sincroniza com o callback.
-      script.src =
-        "https://viacep.com.br/ws/" +
-        cep +
-        "/json/?callback=meu_callback";
-
-      //Insere script no documento e carrega o conteúdo.
-      document.body.appendChild(script);
+        conteudo.logradouro;
+      document.getElementById("bairro").value =
+        conteudo.bairro;
+      document.getElementById("cidade").value =
+        conteudo.localidade;
+      document.getElementById("estado").value =
+        conteudo.uf;
+      //document.getElementById("ibge").value =
+      //conteudo.ibge;
     } //end if.
     else {
-      //cep é inválido.
+      //CEP não Encontrado.
       limpa_formulário_cep();
-      alert("Formato de CEP inválido.");
+      alert("CEP não encontrado.");
     }
-  } //end if.
-  else {
-    //cep sem valor, limpa formulário.
-    limpa_formulário_cep();
   }
-}
+
+  function pesquisacep(valor) {
+    //Nova variável "cep" somente com dígitos.
+    var cep = valor.replace(/\D/g, "");
+
+    //Verifica se campo cep possui valor informado.
+    if (cep != "") {
+      //Expressão regular para validar o CEP.
+      var validacep = /^[0-9]{8}$/;
+
+      //Valida o formato do CEP.
+      if (validacep.test(cep)) {
+        //Preenche os campos com "..." enquanto consulta webservice.
+        document.getElementById("logradouro").value =
+          "...";
+        document.getElementById("bairro").value = "...";
+        document.getElementById("cidade").value = "...";
+        document.getElementById("estado").value = "...";
+        //document.getElementById("ibge").value = "...";
+
+        //Cria um elemento javascript.
+        var script = document.createElement("script");
+
+        //Sincroniza com o callback.
+        script.src =
+          "https://viacep.com.br/ws/" +
+          cep +
+          "/json/?callback=meu_callback";
+
+        //Insere script no documento e carrega o conteúdo.
+        document.body.appendChild(script);
+      } //end if.
+      else {
+        //cep é inválido.
+        limpa_formulário_cep();
+        alert("Formato de CEP inválido.");
+      }
+    } //end if.
+    else {
+      //cep sem valor, limpa formulário.
+      limpa_formulário_cep();
+    }
+  }
 </script>

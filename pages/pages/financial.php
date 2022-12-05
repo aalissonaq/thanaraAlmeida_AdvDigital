@@ -630,7 +630,7 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
   <!-- Control sidebar content goes here -->
 </aside>
 
-<!-- Modal -->
+<!-- Modal payment -->
 <div class="modal fade" id="modal-payment" tabindex="-1" aria-labelledby="modal-payment" aria-hidden="true">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
@@ -682,6 +682,7 @@ if (isset($_POST['active']) && $_POST['active'] == 'createFinancialRelease') {
     </div>
   </div>
 </div>
+<!-- Modal Paymants fin -->
 
 
 <!-- MODAL NOVO PAGAMENTO -->

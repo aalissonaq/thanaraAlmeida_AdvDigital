@@ -1,5 +1,6 @@
 <?php
 session_start();
+date_default_timezone_set('America/Fortaleza');
 require_once './data/dbasys.php';
 require_once './data/conexao.php';
 $conexao = novaConexao();
@@ -59,10 +60,11 @@ if (!isset($_SESSION['USUARIO'])) {
 
   <title>Dra Thanara Almeida | SISTEMA</title>
   <link rel="shortcut icon" href="./image/icon.png" type="image/x-icon" />
-<link rel="stylesheet" href="./plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css"/>
+  <link rel="stylesheet" href="./plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css" />
 
   <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css" />
+  <!-- <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css" /> -->
+  <script src="https://kit.fontawesome.com/3e97e20813.js" crossorigin="anonymous"></script>
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css" />
   <!-- Theme style -->
@@ -76,7 +78,7 @@ if (!isset($_SESSION['USUARIO'])) {
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.css" />
   <!-- <link rel="stylesheet" href="./dist/css/bootstrapCustun.css" /> -->
 
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
   <!-- <link rel="stylesheet" href="node_modules/@mdi/font/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.5.95/css/materialdesignicons.min.css"> -->
 
@@ -223,7 +225,6 @@ if (!isset($_SESSION['USUARIO'])) {
   <script src="https://cdn.jsdelivr.net/combine/npm/fullcalendar@5.10.1,npm/fullcalendar@5.10.1/locales/pt-br.min.js"></script>
 
   <script src="plugins/sweetalert2/sweetalert2.js"></script>
-
 
 
 </body>
