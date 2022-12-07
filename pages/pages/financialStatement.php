@@ -129,7 +129,7 @@ $totalMes = $totalRecebido + $totalAReceber;
             <a href="?page=financialStatement&mes=4" class="btn btn-outline-primary">Abr</a>
             <a href="?page=financialStatement&mes=5" class="btn btn-outline-primary">Mai</a>
             <a href="?page=financialStatement&mes=6" class="btn btn-outline-primary">Jun</a>
-            <a href="?page=financialStatement&mes=6" class="btn btn-outline-primary">Jul</a>
+            <a href="?page=financialStatement&mes=7" class="btn btn-outline-primary">Jul</a>
             <a href="?page=financialStatement&mes=8" class="btn btn-outline-primary">Ago</a>
             <a href="?page=financialStatement&mes=9" class="btn btn-outline-primary">Set</a>
             <a href="?page=financialStatement&mes=10" class="btn btn-outline-primary">Out</a>
