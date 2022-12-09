@@ -233,7 +233,8 @@ $totalMes = $totalRecebido + $totalAReceber;
               </a>
             </li> -->
             <li class="nav-item">
-              <a class="nav-link" href="pdfs/viewRevenueReport.php?mes=<?= $_GET['mes'] ?>" target="_new">
+
+              <a class="nav-link" href="pdfs/viewRevenueReport.php?mes=<?= isset($_GET['mes']) ? $_GET['mes'] : $mr = date("m", time()); ?>" target="_new">
                 <i class="align-middle mdi mdi-printer mdi-24px fa fa-fw"></i>&nbsp;&nbsp;
                 <span class="align-middle">
                   Imprimir Relatório Mês de <?= $nomeMeses[$m - 1] . ' de ' . date("Y", time()); ?>
