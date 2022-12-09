@@ -23,19 +23,19 @@ if (!isset($_GET['mes'])) {
 }
 
 
+// ---buscar dados---
+isset($_GET['mes']) ? $mr = $mes . '/' . date("Y") : $mr = date("m/Y", time());
+$sql = "SELECT * FROM financial_release as fr
+        INNER JOIN financial_release_installments AS fri ON fri.id_financial_release = fr.id
+        INNER JOIN processos AS p ON fr.id_process = p.idprocesso
+        INNER JOIN pessoa as pers on pers.idPessoa = p.idcliente
+        INNER JOIN clientes AS cli ON cli.idPessoa = pers.idPessoa
+        WHERE (fri.competence = '{$mr}') AND is_paid <'3'
+ORDER BY fri.due_date ASC";
 
-
-
-
-
-
-// $sql = "SELECT * FROM processos as p
-// INNER JOIN pessoa as c ON p.idcliente = c.idPessoa
-// WHERE p.idprocesso = {$_GET['process']}";
-// $result = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-// $dprocesso = $result[0];
-
-
+$resultado = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+$i = 1;
+// ----------------------------------------------------------------
 ?>
 <html>
 
@@ -81,8 +81,8 @@ if (!isset($_GET['mes'])) {
     #content {
       position: relative;
       top: 83px;
-      left: 12%;
-      width: 78%;
+      left: 7%;
+      width: 87%;
     }
 
     /* --- dados dp processo --- */
@@ -115,7 +115,7 @@ if (!isset($_GET['mes'])) {
 
     #table_material tbody tr:nth-child(2n+2) {
       /* background: #FFE4B5; */
-      background: rgb(255, 228, 181, .5);
+      background: rgba(255, 228, 181, .3);
       text-transform: uppercase;
     }
   </style>
@@ -138,65 +138,62 @@ if (!isset($_GET['mes'])) {
 
     <hr />
 
-    <table id="table_material" border="0" style=" width: 100%; border-style: solid; border-collapse:collapse; text-align: center;">
-      <thead style="color:#fff; background-color:#59372c; border-bottom-color: #123455; text-transform: uppercase;">
+    <table id="table_material" border="0" style=" width: 100%; border-style: solid; border-collapse:collapse; text-align: center; text-transform: uppercase;">
+      <thead style="color:#fff; background-color:#59372c; border-bottom-color: #123455; text-transform: uppercase; font-size: .8rem;">
         <tr>
-          <th>#</th>
-          <th>data vencimnto</th>
+          <!-- <th>#</th> -->
+          <th>Vencimnto</th>
+          <th>Dados da Receita </th>
           <th>valor</th>
           <th>status</th>
-          <th>
-            em
-          </th>
+          <th>em</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody style="font-size: .75rem;">
         <?php
-
-        $count = 1;
-        // foreach ($result as  $release)
-
-        $sql = "SELECT * FROM financial_release_installments
-          WHERE id_financial_release = '{$dadoFR['id']}'";
-        $result = $conexao->query($sql);
-        $i = 1;
-
-        foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $installment) {
+        foreach ($resultado as $release) {
         ?>
           <tr>
-            <td>
-              <?= str_pad($i, 2, "0", STR_PAD_LEFT); ?>
+            <td style="padding: .5rem;">
+              <?= date('d/m/Y', strtotime($release['due_date'])); ?>
             </td>
-            <td>
-              <?= date('d/m/Y', strtotime($installment['due_date'])); ?>
-            </td>
-            <td><?= "R$ " . number_format($installment['installments_amount'], 2, ',', '.'); ?></td>
-            <td style="text-transform: uppercase;">
 
-              <span class="badge badge-<?= $colorStatus ?> " style='font-size: 0.9rem; padding:<?= $padding ?>; font-weight: 400; letter-spacing: 0.2em; line-height: 16px; width: 100%;'>
-                <?php
-                if ($installment['is_paid'] == '0'  && $installment['due_date'] >= date('Y-m-d', time())) {
-                  echo '<span style="color:#59372c; font-weight: lighter;">Pendente</span>';
-                } elseif ($installment['is_paid'] == '0' && $installment['due_date'] < date('Y-m-d', time())) {
-                  echo '<span style="color:red; font-weight: bold;">Atrasado</span>';
-                } elseif ($installment['is_paid'] == '3') {
-                  echo '<span style="color:blue; font-weight: lighter;">Renegociado</span>';
-                  //echo date('d/m/Y', strtotime($installment['payday_installments']));
-                } else {
-                  echo ' <span style="color:green; font-weight: bold;">Pago</span>';
-                  //echo date('d/m/Y', strtotime($installment['payday_installments']));
-                }
-                ?>
-                <? $installment['is_paid'] == '0' ? 'Pendente' : 'Pago' ?>
-              </span>
+            <td style="text-align: left; padding: 5px; text-transform: uppercase;">
+              <div class="d-flex align-items-center">
+                <div class="d-flex flex-column">
+                  <div class="text-muted" style="padding-bottom: .3rem;">
+                    <strong class="text-primary">Cliente:&nbsp;</strong><br /><?= $release['nmPessoa']; ?>
+                  </div>
+                  <div class="text-muted">
+                    <strong class="text-primary">Processo:&nbsp;</strong><br /><?= $release['niprocesso'] . ' - ' .  $release['objprocesso']; ?>
+                  </div>
+
+                </div>
+              </div>
+            </td>
+
+            <td style="padding: 1rem;">
+              R$&nbsp;<?= formatMoedaBr($release['installments_amount']); ?>
+            </td>
+            <td style="padding: 1rem;">
+              <?php
+              if ($release['is_paid'] == 1) {
+                echo ' <span style="color:green; font-weight: bold;">Pago</span>';
+              } elseif ($release['is_paid'] == '0'  && $release['due_date'] >= date('Y-m-d', time())) {
+                echo '<span style="color:#59372c; font-weight: lighter;">Pendente</span>';
+              } elseif ($release['is_paid'] == '0' && $release['due_date'] < date('Y-m-d', time())) {
+                echo '<span style="color:red; font-weight: bold;">Atrasado</span>';
+              }
+              ?>
             </td>
             <td>
-              <?= $installment['is_paid'] != '0' ? date('d/m/Y', strtotime($installment['payday_installments'])) : '--' ?>
+              <?= $release['is_paid'] != '0' ? date('d/m/Y', strtotime($release['payday_installments'])) : '--' ?>
             </td>
           </tr>
-        <?php $i++;
-        } ?>
-
+        <?php
+          $i++;
+        }
+        ?>
       </tbody>
     </table>
   </div>

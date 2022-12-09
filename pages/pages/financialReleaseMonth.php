@@ -187,6 +187,7 @@ $totalMes = $totalRecebido + $totalAReceber;
     <div class="row">
 
       <div class="col-12">
+        <!-- links tab -->
         <div class="">
           <!-- <h4>Tarefas</h4> -->
           <ul class="nav nav-pills mt-3 mb-1">
@@ -232,7 +233,7 @@ $totalMes = $totalRecebido + $totalAReceber;
               </a>
             </li> -->
             <li class="nav-item">
-              <a class="nav-link" href="#allTask" data-toggle="tab">
+              <a class="nav-link" href="pdfs/viewRevenueReport.php?mes=<?= $_GET['mes'] ?>" target="_new">
                 <i class="align-middle mdi mdi-printer mdi-24px fa fa-fw"></i>&nbsp;&nbsp;
                 <span class="align-middle">
                   Imprimir Relatório Mês de <?= $nomeMeses[$m - 1] . ' de ' . date("Y", time()); ?>

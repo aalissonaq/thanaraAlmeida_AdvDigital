@@ -2,6 +2,8 @@
 // require __DIR__ . '/../vendor/autoload.php';
 require dirname(__DIR__, 1) . '/vendor/autoload.php';
 
+$nomeMeses = array('Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junio', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',);
+
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
@@ -23,5 +25,8 @@ $dompdf->loadHtml(ob_get_clean());
 $dompdf->setPaper('A4', 'portrait');
 $dompdf->render();
 
-$nane = date('Y-m-d_H-i-s');
-$dompdf->stream("proposta.$nane.pdf", array("Attachment" => false));
+$mes = $_GET['mes'];
+$currentDate = date('Y-m-d_H-i-s');
+$ano =  date("Y", time());
+
+$dompdf->stream("Relatório de Receitas {$nomeMeses[$m - 1]} de {$ano}.pdf", array("Attachment" => false));
