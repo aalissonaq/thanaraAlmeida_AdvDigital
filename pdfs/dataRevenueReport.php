@@ -115,7 +115,7 @@ $i = 1;
 
     #table_material tbody tr:nth-child(2n+2) {
       /* background: #FFE4B5; */
-      background: rgba(255, 228, 181, .3);
+      background: rgba(89, 55, 44, .2);
       text-transform: uppercase;
     }
   </style>
@@ -179,6 +179,7 @@ $i = 1;
               <?php
               if ($release['is_paid'] == 1) {
                 echo ' <span style="color:green; font-weight: bold;">Pago</span>';
+                $receirasConfirmada += $release['installments_amount'];
               } elseif ($release['is_paid'] == '0'  && $release['due_date'] >= date('Y-m-d', time())) {
                 echo '<span style="color:#59372c; font-weight: lighter;">Pendente</span>';
               } elseif ($release['is_paid'] == '0' && $release['due_date'] < date('Y-m-d', time())) {
@@ -191,10 +192,45 @@ $i = 1;
             </td>
           </tr>
         <?php
+          $receirasEsperada += $release['installments_amount'];
           $i++;
         }
         ?>
       </tbody>
+      <tfoot style="">
+        <tr style="color:#fff; background-color:rgba(89, 55,44,.8); border-bottom-color: #123455; text-transform: uppercase; font-size: .8rem; ">
+          <!-- <th>#</th> -->
+          <!-- <th>Vencimnto</th> -->
+          <th colspan="2" style="text-align: right; padding: .5rem 0;">Total de Receita esperada no mês </th>
+          <th style="text-align: right;">
+            R$&nbsp; <?= formatMoedaBr($receirasEsperada); ?>
+          </th>
+          <th></th>
+          <th></th>
+        </tr>
+        <tr style="color:#1a2a47; background-color:#f4f4f4; border-bottom-color: #123455; text-transform: uppercase; font-size: .8rem; text-align: right;">
+          <!-- <th>#</th> -->
+          <!-- <th>Vencimnto</th> -->
+          <th colspan="2" style="text-align: right;">Total de Receita confirmada no mês </th>
+          <th style="color: green; text-align: right;">
+            R$&nbsp; <?= formatMoedaBr($receirasConfirmada); ?>
+          </th>
+          <th></th>
+          <th></th>
+        </tr>
+        <tr style="color:#1a2a47; background-color:#f4f4f4; border-bottom-color: #123455; text-transform: uppercase; font-size: .8rem; text-align: right;">
+          <!-- <th>#</th> -->
+          <!-- <th>Vencimnto</th> -->
+          <th colspan="2" style="text-align: right;">Total de Receita Pendente no mês </th>
+          <th style="color: #fb7b24; text-align: right;">
+            <?php $receirasPendente = $receirasEsperada - $receirasConfirmada; ?>
+            R$&nbsp; <?= formatMoedaBr($receirasPendente); ?>
+          </th>
+          <th></th>
+          <th></th>
+        </tr>
+
+      </tfoot>
     </table>
   </div>
 </body>
