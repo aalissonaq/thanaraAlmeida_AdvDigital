@@ -374,11 +374,41 @@ $totalMes = $totalRecebido + $totalAReceber;
                               <td class="text-uppercase text-center align-middle">
                                 <ul class="nav justify-content-center d-flex justify-content-evenly">
                                   <li class="nav-item">
-
-
                                     <a href="?page=expenses&mes=<?= $_GET['mes'] ?>&id=<?= $expenses['idExpenses'] ?>" onclick="setarDadosPagamento(<?= $expenses['idExpenses'] ?>)" class="btn btn-tool" target="" title="Editar Despesas" rel="noopener noreferrer" data-toggle="modal" data-target="#modal-payment">
                                       <i class="mdi mdi-file-edit-outline mdi-24px "></i>
                                     </a>
+
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Open modal for @mdo</button>
+
+
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                            </button>
+                                          </div>
+                                          <div class="modal-body">
+                                            <form>
+                                              <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Recipient:</label>
+                                                <input type="text" class="form-control" id="recipient-name">
+                                              </div>
+                                              <div class="form-group">
+                                                <label for="message-text" class="col-form-label">Message:</label>
+                                                <textarea class="form-control" id="message-text"></textarea>
+                                              </div>
+                                            </form>
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Send message</button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
                                   </li>
                                 </ul>
                               </td>
@@ -464,7 +494,8 @@ $totalMes = $totalRecebido + $totalAReceber;
 
 
                                     <a href="?page=expenses&mes=<?= $_GET['mes'] ?>&id=<?= $expenses['idExpenses'] ?>" onclick="setarDadosPagamento(<?= $expenses['idExpenses'] ?>)" class="btn btn-tool" target="" title="Editar Despesas" rel="noopener noreferrer" data-toggle="modal" data-target="#modal-payment">
-                                      <i class="mdi mdi-file-edit-outline mdi-24px "></i>
+                                      <i class="mdi mdi-file-edit mdi-24px "></i>
+
                                     </a>
                                   </li>
                                 </ul>
@@ -523,6 +554,7 @@ $totalMes = $totalRecebido + $totalAReceber;
                             <tr>
                               <td class="text-center align-middle">
                                 <?= date('d/m/Y', strtotime($expenses['dueDateExpense'])) ?>
+                                asdasd
                               </td>
                               <td class="align-middle">
                                 <?= $expenses['descriptionExpense'] ?>
@@ -534,7 +566,6 @@ $totalMes = $totalRecebido + $totalAReceber;
                                 <?= $expenses['typeExpense']; ?>
                               </td>
                               <td class="text-uppercase text-center align-middle">
-
                                 <?php
                                 if ($expenses['isPaidExpense'] == 0) {
                                 ?>
@@ -544,16 +575,50 @@ $totalMes = $totalRecebido + $totalAReceber;
                                 ?>
                                   <div class="alert alert-success" role="alert">Pago<br /> <?= date('d/m/Y', strtotime($expenses['payDayExpense'])) ?></div>
                                 <?php } ?>
-
                               </td>
                               <td class="text-uppercase text-center align-middle">
                                 <ul class="nav justify-content-center d-flex justify-content-evenly">
                                   <li class="nav-item">
 
-
                                     <a href="?page=expenses&mes=<?= $_GET['mes'] ?>&id=<?= $expenses['idExpenses'] ?>" onclick="setarDadosPagamento(<?= $expenses['idExpenses'] ?>)" class="btn btn-tool" target="" title="Editar Despesas" rel="noopener noreferrer" data-toggle="modal" data-target="#modal-payment">
                                       <i class="mdi mdi-file-edit-outline mdi-24px "></i>
                                     </a>
+
+
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Open modal for @mdo</button>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">Open modal for @fat</button>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Open modal for @getbootstrap</button>
+
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                            </button>
+                                          </div>
+                                          <div class="modal-body">
+                                            <form>
+                                              <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Recipient:</label>
+                                                <input type="text" class="form-control" id="recipient-name">
+                                              </div>
+                                              <div class="form-group">
+                                                <label for="message-text" class="col-form-label">Message:</label>
+                                                <textarea class="form-control" id="message-text"></textarea>
+                                              </div>
+                                            </form>
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Send message</button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+
                                   </li>
                                 </ul>
                               </td>
@@ -673,8 +738,59 @@ $totalMes = $totalRecebido + $totalAReceber;
 <!-- /.modal -->
 <!-- Modal PAGAMENTO -->
 <div class="modal fade" id="modal-payment" tabindex="-1" aria-labelledby="modal-payment" aria-hidden="true">
-
-
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-payment" style="font-family: 'Advent Pro', sans-serif; font-weight: 500; letter-spacing: 1px;">
+          <span class="text-orange">Pagamento de Despesa:</span>
+        </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form class="needs-validation" novalidate action="" method="POST" enctype="multipart/form-data">
+        <div class="modal-body">
+          <div class="col-md-12 mb-3">
+            <label for="payDayExpense">Data de Pagamento <?= $_POST['id']; ?>
+              <span class="text-orange">*</span>
+            </label>
+            <input type="date" name="payDayExpense" class="form-control text-uppercase" id="description" placeholder="Data do Pagamento" required />
+            <div class="invalid-feedback">
+              Obrigatório !
+            </div>
+          </div>
+          <div class="col-md-12 mb-3">
+            <label for="isPaidExpense">Confima o Pagamento
+              <span class="text-orange">*</span>
+            </label>
+            <select class="form-control text-uppercase" name="isPaidExpense" id="isPaidExpense" required>
+              <option value="1">Sim</option>
+              <option value="0">Não</option>
+            </select>
+            <div class="invalid-feedback">
+              Obrigatório !
+            </div>
+          </div>
+        </div>
+        <input type="hidden" name="idDespesa" id="idDespesa">
+        <input type="hidden" name="active" value="payment">
+        <div class="modal-footer d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-danger" data-dismiss="modal">
+            <i class="mdi mdi-trash-can-outline mdi-18px"></i>
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-success">
+            <i class="mdi mdi-content-save-outline mdi-18px"></i>
+            Salvar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<!-- Modal PAGAMENTO -->
+<div class="modal fade" id="modal-payment" tabindex="-1" aria-labelledby="modal-payment" aria-hidden="true">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
@@ -745,4 +861,14 @@ $totalMes = $totalRecebido + $totalAReceber;
   function setarDadosPagamento(valor) {
     document.getElementById('idDespesa').value = valor;
   };
+
+  $('#exampleModal').on('show.bs.modal', function(event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var recipient = button.data('whatever') // Extract info from data-* attributes
+    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    var modal = $(this)
+    modal.find('.modal-title').text('New message to ' + recipient)
+    modal.find('.modal-body input').val(recipient)
+  })
 </script>
