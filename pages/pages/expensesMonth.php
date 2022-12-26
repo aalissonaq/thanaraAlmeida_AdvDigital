@@ -59,11 +59,6 @@ if (!empty($dados['acao']) && $dados['acao'] == 'criarDespesa') {
 // var_dump($dadoArquivo);
 
 
-
-
-
-
-
 $mes = str_pad($_GET['mes'], 2, "0", STR_PAD_LEFT);
 $nomeMeses = array('Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junio', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',);
 if (!isset($_GET['mes'])) {
@@ -374,41 +369,10 @@ $totalMes = $totalRecebido + $totalAReceber;
                               <td class="text-uppercase text-center align-middle">
                                 <ul class="nav justify-content-center d-flex justify-content-evenly">
                                   <li class="nav-item">
-                                    <a href="?page=expenses&mes=<?= $_GET['mes'] ?>&id=<?= $expenses['idExpenses'] ?>" onclick="setarDadosPagamento(<?= $expenses['idExpenses'] ?>)" class="btn btn-tool" target="" title="Editar Despesas" rel="noopener noreferrer" data-toggle="modal" data-target="#modal-payment">
+                                    <a href="?page=edtExpenses&id=<?= $expenses['idExpenses'] ?>" class="btn btn-tool" target="" title="Editar Despesas">
                                       <i class="mdi mdi-file-edit-outline mdi-24px "></i>
+
                                     </a>
-
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Open modal for @mdo</button>
-
-
-                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                      <div class="modal-dialog">
-                                        <div class="modal-content">
-                                          <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                              <span aria-hidden="true">&times;</span>
-                                            </button>
-                                          </div>
-                                          <div class="modal-body">
-                                            <form>
-                                              <div class="form-group">
-                                                <label for="recipient-name" class="col-form-label">Recipient:</label>
-                                                <input type="text" class="form-control" id="recipient-name">
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="message-text" class="col-form-label">Message:</label>
-                                                <textarea class="form-control" id="message-text"></textarea>
-                                              </div>
-                                            </form>
-                                          </div>
-                                          <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Send message</button>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
                                   </li>
                                 </ul>
                               </td>
@@ -848,27 +812,17 @@ $totalMes = $totalRecebido + $totalAReceber;
 
 </script> -->
 
-
-
 <script>
   document.getElementById('FinaceiroMenu').classList.add("menu-open");
   document.getElementById('FinaceiroMenuActive').classList.add("active");
   document.getElementById('expenses').classList.add("active");
 
-
-
-
   function setarDadosPagamento(valor) {
     document.getElementById('idDespesa').value = valor;
   };
 
-  $('#exampleModal').on('show.bs.modal', function(event) {
-    var button = $(event.relatedTarget) // Button that triggered the modal
-    var recipient = button.data('whatever') // Extract info from data-* attributes
-    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-    var modal = $(this)
-    modal.find('.modal-title').text('New message to ' + recipient)
-    modal.find('.modal-body input').val(recipient)
-  })
+  function setarDados(valor) {
+    alert(valor);
+    // document.getElementById('idDespesa').value = valor;
+  };
 </script>
