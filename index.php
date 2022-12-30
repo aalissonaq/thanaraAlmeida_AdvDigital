@@ -167,13 +167,8 @@ if (isset($_POST['login']) && $_POST['login'] == 'entra') {
         <!-- /.login-box -->
       </div>
       <!-- <div class="col-md-6"></div> -->
-
     </div>
-
   </div>
-
-
-
   <!-- jQuery -->
   <script src="./plugins/jquery/jquery.min.js"></script>
   <!-- Bootstrap 4 -->
@@ -185,8 +180,6 @@ if (isset($_POST['login']) && $_POST['login'] == 'entra') {
   <script src="./dist/js/jquery.mask.min.js" type="text/javascript"></script>
   <!-- JS DO APP-->
   <script src="./dist/js/app.js" type="text/javascript"></script>
-
-
 </body>
 
 </html>

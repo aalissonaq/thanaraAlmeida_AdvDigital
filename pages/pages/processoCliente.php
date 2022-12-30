@@ -111,8 +111,25 @@
                   <?= isset($dadosProcesso['numprocesso']) && $dadosProcesso['numprocesso'] > 0 ? MascaraCNJ(str_pad($dadosProcesso['numprocesso'], 19, "0", STR_PAD_LEFT)) : 'Processo sem Número'; ?>
                 </td>
                 <td class="text-uppercase align-middle d-flex justify-content-between align-items-center" style="font-size: .94rem; ">
-                  <?php
+
+                                 <?php
                   switch ($dadosProcesso['statusprocesso']) {
+
+                    case 'inicial':
+                      echo '>Protocolo inicial';
+                      break;
+                    case 'prazo':
+                      echo '>Prazo';
+                      break;
+                    case 'recurso':
+                      echo '>Recurso';
+                      break;
+                    case 'sentenca':
+                      echo '>Sentença';
+                      break;
+                    case 'cumprimento':
+                      echo '>Cumprimento';
+                      break;
                     case 'aguardando':
                       echo 'Aguardando Documento';
                       break;
@@ -279,12 +296,21 @@
                 <span class="text-orange">*</span>
               </label>
               <select class="form-control text-uppercase" required name="statusprocesso" id="statusprocesso">
-                <option value="aguardando">Aguardando Documento</option>
-                <option value="pericia">Perícia ou Agendamento</option>
-                <option value="prorrogacao">Prorrogação</option>
-                <option value="exigencia">Exigência</option>
-                <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
-                <option value="justFederal">Justiça Federal </option>
+              <option value="inicial">protocolo inicial </option>
+                    <option value="aguardando">Aguardando Documento</option>
+                    <option value="analise">Análise</option>
+                    <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
+                    <option value="concluso">Concluso </option>
+                    <option value="cumprimento">Cumprimento </option>
+                    <option value="concluido">Concluído </option>
+                    <option value="exigencia">Exigência</option>
+                    <option value="justComum">Justiça Comum</option>
+                    <option value="justFederal">Justiça Federal </option>
+                    <option value="pericia">Perícia ou Agendamento</option>
+                    <option value="prorrogacao">Prorrogação</option>
+                    <option value="prazo">Prazo</option>
+                    <option value="recurso">Recurso</option>
+                    <option value="sentenca">Sentença</option>
 
               </select>
               <div class="invalid-feedback">

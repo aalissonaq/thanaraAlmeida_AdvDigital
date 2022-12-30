@@ -1407,16 +1407,22 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
                     <span class="text-orange">*</span>
                   </label>
                   <select class="form-control text-uppercase" required name="statusprocesso" id="statusprocesso">
+                    <option value="inicial">protocolo inicial </option>
                     <option value="aguardando">Aguardando Documento</option>
                     <option value="analise">Análise</option>
                     <option value="aguardandoINSS">Aguardando Resposta do INSS</option>
                     <option value="concluso">Concluso </option>
+                    <option value="cumprimento">Cumprimento </option>
                     <option value="concluido">Concluído </option>
                     <option value="exigencia">Exigência</option>
                     <option value="justComum">Justiça Comum</option>
                     <option value="justFederal">Justiça Federal </option>
                     <option value="pericia">Perícia ou Agendamento</option>
                     <option value="prorrogacao">Prorrogação</option>
+                    <option value="prazo">Prazo</option>
+                    <option value="recurso">Recurso</option>
+                    <option value="sentença">sentença</option>
+
                   </select>
                   <div class="invalid-feedback">
                     Obrigatório !

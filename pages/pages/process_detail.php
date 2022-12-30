@@ -901,6 +901,23 @@ if (isset($_POST['gravarHistorico']) && $_POST['gravarHistorico'] == 'gravarHist
               <span class="text-orange">*</span>
             </label>
             <select class="form-control text-uppercase" required name="statusprocesso" id="statusprocesso">
+
+                    <option value="inicial" <?=$dadoProcesso['statusprocesso'] ='inicial'? 'selected':''  ?>>protocolo inicial </option>
+                    <option  value="aguardando" <?=$dadoProcesso['statusprocesso'] ='inicial'? 'selected':''  ?>>Aguardando Documento</option>
+                    <option value="analise" <?=$dadoProcesso['statusprocesso'] ='inicial'? 'selected':''  ?>>Análise</option>
+                    <option value="aguardandoINSS" <?=$dadoProcesso['statusprocesso'] ='inicial'? 'selected':''  ?>>Aguardando Resposta do INSS</option>
+                    <option value="concluso" <?=$dadoProcesso['statusprocesso'] ='inicial'? 'selected':''  ?>>Concluso </option>
+                    <option value="cumprimento" <?=$dadoProcesso['statusprocesso'] ='inicial'? 'selected':''  ?>>Cumprimento </option>
+                    <option value="concluido" <?=$dadoProcesso['statusprocesso'] ='inicial'? 'selected':''  ?>>Concluído </option>
+                    <option value="exigencia" <?=$dadoProcesso['statusprocesso'] ='inicial'? 'selected':''  ?>>Exigência</option>
+                    <option value="justComum" <?=$dadoProcesso['statusprocesso'] ='inicial'? 'selected':''  ?>>Justiça Comum</option>
+                    <option value="justFederal" <?=$dadoProcesso['statusprocesso'] ='inicial'? 'selected':''  ?>>Justiça Federal </option>
+                    <option value="pericia">Perícia ou Agendamento</option>
+                    <option value="prorrogacao">Prorrogação</option>
+                    <option value="prazo">Prazo</option>
+                    <option value="recurso">Recurso</option>
+                    <option value="sentença">sentença</option>
+
               <?php
               //               $process = $_GET['idprocess'];
               //               $sql = "SELECT * FROM processos WHERE idprocesso ='$process' ";
