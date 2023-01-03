@@ -1,5 +1,6 @@
 <!-- Content Header (Page header) -->
 <?php
+$busca = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
 $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 $amount = explode(',', $dados['amountExpense']);
@@ -58,18 +59,20 @@ if (!empty($dados['acao']) && $dados['acao'] == 'criarDespesa') {
 // var_dump($dados);
 // var_dump($dadoArquivo);
 
-$mes = str_pad($_GET['mes'], 2, "0", STR_PAD_LEFT);
+$mes = str_pad($busca['mes'], 2, "0", STR_PAD_LEFT);
 $nomeMeses = array('Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junio', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',);
-if (!isset($_GET['mes'])) {
+if (!isset($busca['mes'])) {
   $m = date('m', time());
+  $ano  = date('Y', time());
   $mesAtual = date('m/Y', time());
   $dateAtualStart = date('Y-m-01', time());
   $dateAtualEnd = date('Y-m-30', time());
 } else {
-  $m = $_GET['mes'];
-  $mesAtual = date("{$mes}/Y", time());
-  $dateAtualStart = date("Y-{$mes}-01", time());
-  $dateAtualEnd = date("Y-{$mes}-30", time());
+  $m = $busca['mes'];
+  $ano = $busca['ano'];
+  $mesAtual = date("{$mes}/{$ano}", time());
+  $dateAtualStart = date("{$ano}-{$mes}-01", time());
+  $dateAtualEnd = date("{$ano}-{$mes}-30", time());
 }
 $sqlExpenses = "SELECT * FROM expenses WHERE payDayExpense BETWEEN '{$dateAtualStart}' AND '{$dateAtualEnd}' or competenceExpense = '{$mesAtual}' ";
 $result = $conexao->query($sqlExpenses)->fetchAll(PDO::FETCH_ASSOC);
@@ -120,22 +123,42 @@ $totalMes = $totalRecebido + $totalAReceber;
         <h1 class="m-0 " style="font-family:'Advent Pro', sans-serif; font-weight: 500; ">
           Reletorio Financeiro do mês de <?= $nomeMeses[$m - 1] . ' de ' . date("Y", time()); ?>
         </h1>
-        <div class="d-none d-lg-block">
-          <div class="col-12 my-2 d-flex justify-content-between btn-group btn-group-sm" role="group">
-            <a href="?page=financialStatement&mes=<?= date('m', time()) ?>" class="btn btn-outline-primary">Mês Atual </a>
-            <a href="?page=financialStatement&mes=1" class="btn btn-outline-primary">Jan</a>
-            <a href="?page=financialStatement&mes=2" class="btn btn-outline-primary">Fev</a>
-            <a href="?page=financialStatement&mes=3" class="btn btn-outline-primary">Mar</a>
-            <a href="?page=financialStatement&mes=4" class="btn btn-outline-primary">Abr</a>
-            <a href="?page=financialStatement&mes=5" class="btn btn-outline-primary">Mai</a>
-            <a href="?page=financialStatement&mes=6" class="btn btn-outline-primary">Jun</a>
-            <a href="?page=financialStatement&mes=7" class="btn btn-outline-primary">Jul</a>
-            <a href="?page=financialStatement&mes=8" class="btn btn-outline-primary">Ago</a>
-            <a href="?page=financialStatement&mes=9" class="btn btn-outline-primary">Set</a>
-            <a href="?page=financialStatement&mes=10" class="btn btn-outline-primary">Out</a>
-            <a href="?page=financialStatement&mes=11" class="btn btn-outline-primary">Nov</a>
-            <a href="?page=financialStatement&mes=12" class="btn btn-outline-primary">Dez</a>
-          </div>
+        <div class="container-fluid">
+          <form class="needs-validation" method="post" action="" novalidate>
+            <div class="form-row">
+              <div class="col-md-2 mb-2">
+                <label for="validationTooltip04">Ano</label>
+                <select class="custom-select" name="ano" id="validationTooltip04" required>
+                  <?php
+                  for ($i = 2022; $i <= date('Y', time()); $i++) {
+                  ?>
+                    <option <?= date('Y', time()) == $i ? 'selected' : '' ?> value="<?= $i ?>"><?= $i; ?></option>
+                  <?php } ?>
+                </select>
+                <div class="invalid-tooltip">
+                  !
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <label for="validationTooltip04">Mês</label>
+                <select class="custom-select" name="mes" id="validationTooltip04" required>
+                  <?php
+                  for ($i = 1; $i <= 12; $i++) {
+                  ?>
+                    <option <?= date('m', time()) == $i ? 'selected' : '' ?> value="<?= $i ?>"><?= $nomeMeses[$i - 1]; ?></option>
+                  <?php } ?>
+                </select>
+                <div class="invalid-tooltip">
+                  !
+                </div>
+              </div>
+
+              <div class="col-md-3 mb-2" style="margin-top: 1.8rem;">
+                <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i>Buscar</button>
+              </div>
+            </div>
+          </form>
+
         </div>
       </div><!-- /.col -->
       <div class="col-sm-6">
@@ -288,7 +311,7 @@ $totalMes = $totalRecebido + $totalAReceber;
               <a class="nav-link" href="#allTask" data-toggle="tab">
                 <i class="align-middle mdi mdi-printer mdi-24px fa fa-fw"></i>&nbsp;&nbsp;
                 <span class="align-middle">
-                  Imprimir Despesas do Mês de <?= $nomeMeses[$m - 1] . ' de ' . date("Y", time()); ?>
+                  Imprimir Despesas do Mês de <?= $nomeMeses[$m - 1] ?> de <?= !isset($busca['ano']) ?  date('Y', time()) : $busca['ano']; ?>
                 </span>
               </a>
             </li>
@@ -346,7 +369,7 @@ $totalMes = $totalRecebido + $totalAReceber;
                         </thead>
                         <tbody>
                           <?php
-                          isset($_GET['mes']) ? $mr = $mes . '/' . date("Y") : $mr = date("m/Y", time());
+                          isset($busca['mes']) ? $mr = $mes . '/' . $busca['ano'] : $mr = date("m/Y", time());
 
                           $sql = "SELECT * FROM expenses
                                     WHERE expenses.competenceExpense = '{$mr}' AND isPaidExpense <'3'
@@ -384,7 +407,7 @@ $totalMes = $totalRecebido + $totalAReceber;
                               <td class="text-uppercase text-center align-middle">
                                 <ul class="nav justify-content-center d-flex justify-content-evenly">
                                   <li class="nav-item">
-                                    <a href="?page=expenses&mes=<?= $_GET['mes'] ?>&id=<?= $expenses['idExpenses'] ?>" onclick="setarDadosPagamento(<?= $expenses['idExpenses'] ?>)" class="btn btn-tool" target="" title="Editar Despesas" rel="noopener noreferrer" data-toggle="modal" data-target="#modal-payment">
+                                    <a href="?page=expenses&mes=<?= $busca['mes'] ?>&id=<?= $expenses['idExpenses'] ?>" onclick="setarDadosPagamento(<?= $expenses['idExpenses'] ?>)" class="btn btn-tool" target="" title="Editar Despesas" rel="noopener noreferrer" data-toggle="modal" data-target="#modal-payment">
                                       <i class="mdi mdi-file-edit-outline mdi-24px "></i>
                                     </a>
                                   </li>
@@ -414,7 +437,7 @@ $totalMes = $totalRecebido + $totalAReceber;
                         </thead>
                         <tbody>
                           <?php
-                          isset($_GET['mes']) ? $mr = $mes . '/' . date("Y") : $mr = date("m/Y", time());
+                          isset($busca['mes']) ? $mr = $mes . '/' . $busca['ano'] : $mr = date("m/Y", time());
                           if ($_SESSION['NIVEL'] > 1) {
                             $sql = "SELECT * FROM financial_release as fr
                                     INNER JOIN financial_release_installments AS fri ON fri.id_financial_release = fr.id
@@ -583,7 +606,7 @@ $totalMes = $totalRecebido + $totalAReceber;
                         </thead>
                         <tbody>
                           <?php
-                          isset($_GET['mes']) ? $mr = $mes . '/' . date("Y") : $mr = date("m/Y", time());
+                          isset($busca['mes']) ? $mr = $mes . '/' . $busca['ano'] : $mr = date("m/Y", time());
                           if ($_SESSION['NIVEL'] > 1) {
                             $sql = "SELECT * FROM financial_release as fr
                                     INNER JOIN financial_release_installments AS fri ON fri.id_financial_release = fr.id
@@ -752,7 +775,7 @@ $totalMes = $totalRecebido + $totalAReceber;
                         </thead>
                         <tbody>
                           <?php
-                          isset($_GET['mes']) ? $mr = $mes . '/' . date("Y") : $mr = date("m/Y", time());
+                          isset($busca['mes']) ? $mr = $mes . '/' .  $busca['ano'] : $mr = date("m/Y", time());
                           if ($_SESSION['NIVEL'] > 1) {
                             $sql = "SELECT * FROM financial_release as fr
                                     INNER JOIN financial_release_installments AS fri ON fri.id_financial_release = fr.id
@@ -1158,9 +1181,6 @@ $totalMes = $totalRecebido + $totalAReceber;
 <!-- <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js" >
 
 </script> -->
-
-
-
 <script>
   document.getElementById('FinaceiroMenu').classList.add("menu-open");
   document.getElementById('FinaceiroMenuActive').classList.add("active");
